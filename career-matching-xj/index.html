@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业匹配测试 - 专业职业评估量表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            background: #f4f7ff;
+            background-image: radial-gradient(at 0% 0%, rgba(102, 126, 234, 0.05) 0, transparent 50%), 
+                              radial-gradient(at 50% 0%, rgba(162, 102, 231, 0.05) 0, transparent 50%);
+            color: #334155;
+            line-height: 1.8;
+            scroll-behavior: smooth; /* 添加平滑滚动 */
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 20px; /* 只保留左右padding，上下padding由子元素控制 */
+            display: flex; /* 让container成为flex容器 */
+            flex-direction: column; /* 垂直排列子元素 */
+            min-height: 100vh; /* 保证container占据整个视口高度 */
+            box-sizing: border-box; /* 确保padding不影响宽度计算 */
+        }
+
+        /* 答题页面容器 */
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 220px; /* 增加margin-top，确保完全避开固定头部 */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        /* 结果页面和答案页面容器 */
+        .result-container, .answer-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 20px; /* 调整为正常的margin-top */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        .quiz-header-fixed {
+            background: white; /* 覆盖滚动时的背景 */
+            z-index: 1050; /* 进一步提高z-index，确保在最上层 */
+            padding: 20px 20px; /* 增加底部padding，确保完整覆盖，顶部也增加一点 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); /* 增加一点阴影，更明显 */
+            border-radius: 20px 20px; /* 固定头部只保留底部圆角 */
+            position: fixed; /* 固定在视口顶部 */
+            top: 0; /* 完全贴合顶部 */
+            left: 0;
+            right: 0;
+            max-width: 850px; /* 保持与container一致的max-width */
+            margin: 0 auto; /* 居中对齐 */
+            box-sizing: border-box; /* 确保padding不影响宽度计算 */
+        }
+
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部样式 */
+        .header {
+            margin-bottom: 8px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #3b82f6;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 2px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge-blue { background: #eff6ff; color: #3b82f6; border: 1px solid #dbeafe; }
+        .badge-green { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
+
+        .disclaimer {
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .disclaimer i {
+            color: #f59e0b;
+            margin-right: 3px;
+            font-style: normal;
+        }
+
+        /* 进度条区域 */
+        .progress-section {
+            background: white;
+            z-index: 9;
+            padding: 8px 20px 12px; /* 进一步减小上下padding */
+            margin-bottom: 0; /* 移除原来的margin-bottom */
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px; /* 减小间距 */
+        }
+
+        .progress-stats {
+            font-size: 14px; /* 调整字体大小 */
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .hint-tag {
+            background: #fffbeb;
+            color: #b45309;
+            padding: 4px 12px; /* 减小padding */
+            border-radius: 50px;
+            font-size: 11px; /* 减小字体 */
+            border: 1px solid #fef3c7;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 8px; /* 减小进度条高度 */
+            background: #f1f5f9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        /* 题目样式 */
+        .question-item {
+            padding: 15px 0; /* 减小垂直方向的内边距 */
+            margin-bottom: 15px; /* 减小题目之间的间距 */
+            border-bottom: 1px dashed #e2e8f0; /* 底部虚线分隔 */
+            transition: all 0.3s ease; /* 过渡动画 */
+            scroll-margin-top: 15px; /* 滚动到顶部时的留白 */
+            position: relative; /* 用于z-index */
+        }
+
+        .question-item:hover,
+        .question-item.active {
+            background: #f0f9ff; /* 活跃题目背景提亮 */
+            border-radius: 12px; /* 活跃题目添加圆角 */
+            padding: 15px 15px; /* 减小活跃题目左右padding */
+            margin: 5px -15px 15px; /* 调整margin以实现“提拉”效果，并与下一题保持间距 */
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.1);
+            transform: scale(1.005) translateY(-2px); /* 轻微放大和上浮 */
+            border: 1px solid #3b82f6; /* 强调边框 */
+            z-index: 2; /* 降低z-index，确保在固定头部下方 */
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        /* 避免活跃题目上浮后与下一题重叠，并调整间距 */
+        .question-item.active + .question-item {
+            margin-top: 15px; /* 减小间距 */
+        }
+
+        .question-title-row {
+            display: flex;
+            gap: 10px; /* 减小间距 */
+            margin-bottom: 15px; /* 减小间距 */
+            align-items: flex-start;
+        }
+
+        .question-index {
+            flex-shrink: 0;
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 800;
+            color: #6366f1;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .question-text {
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* 减小选项之间的间距 */
+            padding-left: 35px; /* 减小左侧padding */
+        }
+
+        .option-capsule {
+            padding: 10px 18px; /* 减小选项按钮padding */
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 13px; /* 减小选项字体大小 */
+            color: #64748b;
+            transition: all 0.3s ease;
+            user-select: none;
+            flex-grow: 1;
+            text-align: center;
+            min-width: 100px; /* 减小最小宽度 */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-capsule:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected:hover {
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .option-capsule input {
+            display: none;
+        }
+
+        .questions-scroll-wrapper {
+            /* 移除最大高度限制，让内容正常滚动 */
+            padding: 0; /* 移除padding，由quiz-container控制 */
+            overflow-y: visible; /* 允许正常溢出 */
+        }
+
+        /* 提交按钮 */
+        .submit-wrapper {
+            background: white; /* 保持白色背景 */
+            z-index: 10;
+            padding: 20px 40px; /* 调整padding，让按钮区域更大一些 */
+            box-shadow: none; /* 移除阴影 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* 两个按钮之间的间距 */
+            /* 移除固定定位，回到正常文档流 */
+            border-radius: 0; /* 移除底部圆角 */
+        }
+
+        .submit-btn {
+            padding: 14px 28px; /* 优化按钮padding */
+            border: none;
+            border-radius: 50px;
+            font-size: 15px; /* 优化按钮字体大小 */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 优化过渡效果 */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* 优化图标与文字间距 */
+            min-width: 170px; /* 优化最小宽度 */
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.3px; /* 优化字间距 */
+        }
+
+        /* 主按钮样式 */
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary) {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.45);
+        }
+
+        /* 回到顶部按钮样式 */
+        .btn-back-to-top {
+            background: #ffffff;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-back-to-top:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* 次要按钮样式 */
+        .btn-secondary {
+            background: #ffffff;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* 按钮图标样式 */
+        .btn-icon {
+            font-size: 18px; /* 优化图标大小 */
+            line-height: 1;
+        }
+
+        /* 按钮装饰效果 */
+        .btn-decoration {
+            font-size: 18px; /* 优化装饰图标大小 */
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Loading页面样式 */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px; /* Limit max width for a modal-like appearance */
+            background: white;
+            border-radius: 20px;
+            padding: 40px; /* Increase padding */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Consistent shadow */
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center; /* Center text inside */
+        }
+        .loading-container.show { display: flex; }
+        .loader {
+            width: 60px; /* Slightly larger loader */
+            height: 60px;
+            border: 4px solid #f1f5f9;
+            border-top-color: #3b82f6; /* Gradient start color */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); /* Consistent shadow */
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 结果页面布局 */
+        .score-display { text-align: center; margin-bottom: 20px; } /* 减小底部间距 */
+        
+        /* 结果主内容区 - 左右布局 */
+        .results-main-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* 减小间距 */
+            margin-bottom: 30px; /* 减小底部间距 */
+            flex-wrap: wrap;
+        }
+        
+        .score-circle-wrapper {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .score-circle-box {
+            position: relative;
+            width: 130px; /* 进一步缩小尺寸 */
+            height: 130px; /* 进一步缩小尺寸 */
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* 与按钮一致的渐变背景 */
+            border-radius: 50%; /* 圆形 */
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3); /* 与选中状态一致的阴影 */
+        }
+        
+        .score-value { 
+            font-size: 42px; /* 进一步缩小字体 */
+            font-weight: 800; 
+            color: white; /* 白色文字 */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 文字阴影 */
+        }
+        
+        .score-level { 
+            font-size: 22px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #3b82f6; /* 与主题色一致 */
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .score-desc { 
+            font-size: 14px; /* 缩小字体 */
+            color: #64748b; 
+            line-height: 1.5; /* 减小行高 */
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .chart-container { 
+            margin: 0; 
+            height: 250px; /* 进一步缩小高度 */
+            width: 300px; /* 进一步缩小宽度 */
+            max-width: 300px; /* 进一步缩小最大宽度 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex: 0 0 auto;
+        }
+        .section-title { 
+            font-size: 18px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #3b82f6; /* 与主题色一致 */
+            margin-bottom: 15px; /* 减小间距 */
+            padding: 8px 12px; /* 减小内边距 */
+            background: #dbeafe; /* 与悬停状态背景色一致 */
+            border-radius: 10px; /* 缩小圆角 */
+            border-left: 4px solid #3b82f6; /* 与主题色一致的左边框 */
+        }
+        .analysis-content { 
+            font-size: 14px; /* 缩小字体 */
+            line-height: 1.6; /* 减小行高 */
+            color: #475569; 
+            padding: 12px; /* 减小内边距 */
+            background: white; /* 白色背景 */
+            border-radius: 10px; /* 缩小圆角 */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); /* 轻微阴影 */
+            margin-bottom: 20px; /* 增加底部间距 */
+        }
+        .suggestion-list { list-style: none; padding: 0; }
+        .suggestion-list li { 
+            padding: 12px; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            background: white; /* 白色背景 */
+            border-radius: 10px; /* 缩小圆角 */
+            font-size: 13px; /* 缩小字体 */
+            color: #475569; 
+            border: 1px solid #e2e8f0; /* 边框 */
+            border-left: 4px solid #3b82f6; /* 与主题色一致的左边框 */
+            transition: all 0.3s ease; /* 过渡动画 */
+        }
+        
+        .suggestion-list li:hover {
+            transform: translateY(-2px); /* 轻微上浮 */
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.1); /* 与题目项一致的阴影 */
+            border-color: #60a5fa; /* 与主题色一致的边框 */
+        }
+
+        /* 答案查看项 */
+        .answer-item {
+            padding: 12px 0; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            border-bottom: 1px dashed #e2e8f0; /* 与题目项一致的底部虚线 */
+            transition: all 0.3s ease; /* 与题目项一致的过渡动画 */
+        }
+        
+        .answer-item:last-child {
+            border-bottom: none; /* 最后一项移除虚线 */
+        }
+        
+        .answer-q {
+            font-size: 14px; /* 缩小字体 */
+            font-weight: 600; /* 保持字重 */
+            color: #1e293b; /* 与题目文本一致的颜色 */
+            line-height: 1.4; /* 保持行高 */
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .answer-v {
+            color: #3b82f6; /* 仅使用主题色，去掉按钮样式 */
+            font-size: 13px; /* 缩小字体 */
+            font-weight: 600; /* 保持字重 */
+            margin-right: 8px; /* 减小间距 */
+        }
+
+        /* 平板设备 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px; /* 调整容器内边距 */
+            }
+            
+            .quiz-header-fixed {
+                max-width: 100%; /* 适应全屏宽度 */
+            }
+            
+            .quiz-container {
+                margin-top: 180px; /* 减小顶部边距 */
+            }
+        }
+        
+        /* 移动端 */
+        @media (max-width: 640px) {
+            /* 固定头部优化 */
+            .quiz-header-fixed {
+                padding: 15px 15px; /* 减小内边距 */
+                max-width: 100%; /* 适应全屏宽度 */
+                border-radius: 20px 20px; /* 保持四个角圆角 */
+            }
+            
+            .header h1 {
+                font-size: 20px; /* 减小标题字体 */
+            }
+            
+            .header-badges {
+                flex-direction: column; /* 徽章垂直排列 */
+                gap: 5px; /* 减小间距 */
+            }
+            
+            .badge {
+                font-size: 9px; /* 减小徽章字体 */
+                padding: 3px 8px; /* 减小徽章内边距 */
+            }
+            
+            .progress-section {
+                padding: 8px 15px; /* 减小进度条区域内边距 */
+            }
+            
+            /* 答题页面优化 */
+            .quiz-container {
+                margin-top: 220px; /* 增大顶部边距，确保内容不被遮挡 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .question-item {
+                margin: 5px -10px 12px; /* 调整margin，适应移动端 */
+                padding: 12px 12px; /* 调整内边距 */
+                scroll-margin-top: 200px; /* 增大滚动留白，确保滚动时不被头部遮挡 */
+            }
+            
+            .question-title-row {
+                gap: 8px; /* 减小间距 */
+            }
+            
+            .question-index {
+                font-size: 14px; /* 减小题号字体 */
+            }
+            
+            .question-text {
+                font-size: 15px; /* 减小题目字体 */
+            }
+            
+            .options-grid {
+                padding-left: 0; /* 移除左侧padding */
+                gap: 8px; /* 统一选项间距 */
+                display: flex;
+                flex-direction: column; /* 垂直排列 */
+            }
+            
+            .option-capsule {
+                padding: 10px 15px; /* 统一选项内边距 */
+                font-size: 13px; /* 统一选项字体 */
+                min-width: auto; /* 移除最小宽度限制 */
+                width: 100%; /* 所有按钮宽度一致 */
+                max-width: none; /* 移除最大宽度限制 */
+                flex: 1;
+            }
+            
+            /* 结果页面优化 */
+            .results-main-content {
+                flex-direction: column; /* 移动端改为上下布局 */
+                gap: 20px; /* 减小间距 */
+            }
+            
+            .chart-container {
+                width: 100%; /* 适应移动端宽度 */
+                max-width: 100%; /* 适应移动端宽度 */
+                height: 320px; /* 增大雷达图高度 */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .score-circle-box {
+                width: 140px; /* 增大分数圆形大小 */
+                height: 140px; /* 增大分数圆形大小 */
+                margin: 0 auto; /* 确保水平居中 */
+            }
+            
+            .score-value {
+                font-size: 40px; /* 增大分数字体大小 */
+            }
+            
+            .score-level {
+                font-size: 20px; /* 调整等级字体大小 */
+            }
+            
+            /* 答案页面优化 */
+            .answer-container {
+                margin-top: 15px; /* 减小顶部边距 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .answer-item {
+                padding: 10px 0; /* 减小内边距 */
+            }
+            
+            .answer-q {
+                font-size: 13px; /* 减小题目字体大小 */
+            }
+            
+            .answer-v {
+                font-size: 12px; /* 减小答案字体大小 */
+            }
+            
+            /* 按钮优化 */
+            .submit-btn {
+                padding: 12px 16px; /* 调整内边距，减小按钮大小 */
+                font-size: 13px; /* 调整字体大小 */
+                min-width: auto; /* 移除全屏宽度限制 */
+                width: calc(50% - 5px); /* 按钮宽度平分，减去间距 */
+                gap: 5px; /* 减小图标与文字间距 */
+            }
+            
+            .submit-wrapper {
+                padding: 15px 20px; /* 调整内边距 */
+                gap: 10px; /* 按钮间距 */
+                flex-direction: row; /* 按钮水平排列 */
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        /* 小屏手机 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px; /* 进一步减小标题字体 */
+            }
+            
+            .score-circle-box {
+                width: 130px; /* 适应小屏的分数圆形大小 */
+                height: 130px; /* 适应小屏的分数圆形大小 */
+            }
+            
+            .score-value {
+                font-size: 38px; /* 适应小屏的分数字体大小 */
+            }
+            
+            .chart-container {
+                height: 300px; /* 适应小屏的雷达图高度 */
+            }
+            
+            /* 小屏手机按钮优化 */
+            .submit-btn {
+                padding: 10px 12px; /* 进一步减小内边距 */
+                font-size: 12px; /* 进一步减小字体大小 */
+                width: calc(50% - 4px); /* 按钮宽度平分，减去间距 */
+            }
+            
+            .submit-wrapper {
+                gap: 8px; /* 减小按钮间距 */
+                padding: 10px 15px; /* 减小内边距 */
+            }
+        }
+
+        /* 抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.5s; }
+
+        /* 顶部Tip */
+        @keyframes tipFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quizPage">
+        <!-- 将quiz-header-fixed移出quiz-container -->
+        <div class="quiz-header-fixed">
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-left">
+                        <h1>🎯 职业匹配测试</h1>
+                        <p>探索您的职业倾向与适合方向</p>
+                    </div>
+                    <div class="header-badges">
+                        <div class="badge badge-blue">● 40 题 · 满分 100 分</div>
+                        <div class="badge badge-green">● 建议独立完成</div>
+                    </div>
+                </div>
+                <div class="disclaimer">
+                    <i>⚠</i> 免责声明：本测试仅用于职业倾向探索，不代表专业职业测评。测试结果仅供参考。
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-stats" id="progressText">已完成 0 / 40 题</div>
+                    <div class="hint-tag">请根据「你的真实情况」作答</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <form id="quizForm" style="display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="questions-scroll-wrapper">
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="submit-wrapper">
+                    <button type="button" class="submit-btn btn-back-to-top" onclick="scrollToTop()">
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        回到顶部
+                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-decoration">✨</span>
+                        生成职业报告
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading页面 -->
+    <div class="loading-container" id="loadingPage">
+        <div class="loader"></div>
+        <div style="margin-top: 25px; font-size: 22px; font-weight: 700; color: #334155; letter-spacing: -0.5px;">
+            智能评估生成中<span id="loadingDots">...</span>
+        </div>
+        <p style="margin-top: 10px; color: #64748b; font-size: 15px;">正在分析您的职业倾向维度</p>
+    </div>
+
+    <!-- 结果页面 -->
+    <div class="container" id="resultPage" style="display:none">
+        <div class="result-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #3b82f6;">
+                        <path d="M3 3v18h18"></path>
+                        <path d="M18 17V9"></path>
+                        <path d="M13 17V5"></path>
+                        <path d="M8 17v-3"></path>
+                    </svg>
+                    职业匹配报告
+                </h1>
+            </div>
+
+            <div class="score-display">
+                <div class="score-level" id="scoreLevel"></div>
+                <div class="score-desc" id="scoreDescription"></div>
+            </div>
+
+            <div class="results-main-content">
+                <div class="score-circle-wrapper">
+                    <div class="score-circle-box">
+                        <div class="score-value" id="scoreValue">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">详细分析</h2>
+                <div class="analysis-content" id="analysisContent"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">专家建议</h2>
+                <ul class="suggestion-list" id="suggestionList"></ul>
+            </div>
+
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="restartQuiz()">重新测试</button>
+                <button class="submit-btn btn-secondary" onclick="viewAnswers()">查看答案</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答案查看页面 -->
+    <div class="container" id="answerPage" style="display:none">
+        <div class="answer-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #3b82f6;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    我的测试答案
+                </h1>
+            </div>
+            <div id="answersContainer"></div>
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="showResultsPage()">返回职业报告</button>
+                <button class="submit-btn btn-secondary" onclick="restartQuiz()">重新测试</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        const questions = [
+            { id: 1, text: "我喜欢解决复杂的数学或逻辑问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 2, text: "我善于想出创新的点子和解决方案", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 3, text: "我喜欢与他人合作完成任务", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 4, text: "我擅长组织和规划活动或项目", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 5, text: "我喜欢动手制作或修理东西", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 6, text: "我善于领导和激励他人", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 7, text: "我喜欢分析数据和信息", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 8, text: "我擅长表达自己的想法和观点", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 9, text: "我喜欢细致、精确的工作", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 10, text: "我愿意尝试新的事物和挑战", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 11, text: "我擅长理解和解决技术问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 12, text: "我喜欢艺术创作，如绘画、音乐或写作", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 13, text: "我善于倾听和理解他人的感受", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 14, text: "我擅长管理时间和任务", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 15, text: "我喜欢户外活动和体力劳动", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 16, text: "我善于做出决策并承担责任", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 17, text: "我喜欢研究和学习新的知识", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 18, text: "我擅长说服和影响他人", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 19, text: "我喜欢按照规则和流程做事", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 20, text: "我愿意冒险尝试新的职业机会", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 21, text: "我擅长逻辑推理和分析", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 22, text: "我喜欢设计和创造新的产品或服务", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 23, text: "我善于与不同类型的人建立关系", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 24, text: "我擅长处理和解决冲突", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 25, text: "我喜欢实际操作和实验", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 26, text: "我善于设定目标并努力实现", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 27, text: "我喜欢阅读和学习新知识", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 28, text: "我擅长写作和表达", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 29, text: "我喜欢精确和准确的工作", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 30, text: "我愿意承担风险并面对挑战", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 31, text: "我擅长数学和统计分析", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 32, text: "我喜欢艺术和审美活动", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 33, text: "我善于团队合作和协调", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 34, text: "我擅长规划和组织大型项目", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 35, text: "我喜欢手工制作和工艺活动", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 36, text: "我善于指导和培训他人", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 37, text: "我喜欢研究和分析问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 38, text: "我擅长沟通和谈判", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 39, text: "我喜欢稳定和可预测的工作环境", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 40, text: "我愿意尝试新的工作方式和方法", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] }
+        ];
+
+        let userAnswers = {};
+        let totalScore = 0;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.sort((a,b) => a.id - b.id);
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.id = `question-${q.id}`;
+                const displayId = (index + 1).toString().padStart(2, '0');
+
+                questionDiv.innerHTML = `
+                    <div class="question-title-row">
+                        <div class="question-index">${displayId}.</div>
+                        <div class="question-text">${q.text}</div>
+                    </div>
+                    <div class="options-grid">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option-capsule">
+                                <input type="radio" name="q${q.id}" value="${optIndex}" onchange="selectOption(${q.id}, ${optIndex})">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qId, val) {
+            userAnswers[qId] = val;
+            const labels = document.querySelectorAll(`#question-${qId} .option-capsule`);
+            labels.forEach((l, idx) => {
+                l.classList.toggle('selected', idx === val);
+            });
+            updateProgress();
+            
+            const nextId = questions[questions.findIndex(q => q.id === qId) + 1]?.id;
+            // 移除所有active状态
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            if (nextId) {
+                setTimeout(() => {
+                    const nextEl = document.getElementById(`question-${nextId}`);
+                    if(nextEl) {
+                        // 添加下一题的active状态并滚动
+                        nextEl.classList.add('active');
+                        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else { // 如果是最后一题，且已作答，让当前题目保持active状态
+                document.getElementById(`question-${qId}`).classList.add('active');
+            }
+        }
+
+        function updateProgress() {
+            const count = Object.keys(userAnswers).length;
+            const percent = (count / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `已完成 ${count} / ${questions.length} 题`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (Object.keys(userAnswers).length < questions.length) {
+                const firstUn = questions.find(q => userAnswers[q.id] === undefined);
+                const el = document.getElementById(`question-${firstUn.id}`);
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('shake');
+                showUnansweredTip(firstUn.id);
+                setTimeout(() => el.classList.remove('shake'), 500);
+                return;
+            }
+            
+            calculateScore();
+            document.getElementById('loadingPage').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loadingPage').classList.remove('show');
+                showResultsPage();
+            }, 2000);
+        });
+
+        function calculateScore() {
+            let sum = 0;
+            Object.values(userAnswers).forEach(v => sum += v);
+            totalScore = Math.round((sum / (questions.length * 4)) * 100);
+        }
+
+        function showResultsPage() {
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            document.getElementById('scoreValue').textContent = totalScore;
+
+            // 确保移除所有active状态，避免结果页出现题目active
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const analysis = getScoreLevelDetails(totalScore);
+            document.getElementById('scoreLevel').textContent = analysis.level;
+            document.getElementById('scoreDescription').textContent = analysis.description;
+            document.getElementById('analysisContent').innerHTML = analysis.analysis;
+            
+            // 设置专家建议
+            const sList = document.getElementById('suggestionList');
+            sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            // 添加就业方向
+            const resultContainer = document.querySelector('.result-container');
+            
+            // 检查并移除已存在的就业方向部分
+            const existingCareerSection = document.getElementById('careerDirectionsSection');
+            if (existingCareerSection) {
+                existingCareerSection.remove();
+            }
+            
+            // 创建就业方向部分
+            const careerDiv = document.createElement('div');
+            careerDiv.className = 'analysis-section';
+            careerDiv.id = 'careerDirectionsSection';
+            
+            careerDiv.innerHTML = `
+                <h2 class="section-title">就业方向</h2>
+                <ul class="suggestion-list">
+                    ${analysis.careerDirections.map(dir => `<li>${dir}</li>`).join('')}
+                </ul>
+            `;
+            
+            // 找到专家建议部分并在其后添加就业方向
+            const expertAdviceSection = document.getElementById('suggestionList').parentElement;
+            expertAdviceSection.insertAdjacentElement('afterend', careerDiv);
+            
+            // 渲染雷达图
+            renderRadarChart();
+            
+            // 滚动到页面顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function getScoreLevelDetails(score) {
+            if (score <= 10) return { 
+                level: '🌟 技术研发型', 
+                description: '您具有强烈的逻辑思维和技术倾向，适合从事技术研发类职业。', 
+                analysis: '<p><b>核心特征：</b>您擅长逻辑推理、数据分析和问题解决，对技术领域充满兴趣。您喜欢独立思考，能够专注于复杂的技术问题，具有较强的创新能力和学习能力。您更倾向于通过实际成果来证明自己的价值，而非依赖社交互动。</p><p><b>优势分析：</b>您具有扎实的逻辑基础和学习能力，能够快速掌握新技术，适合在技术快速迭代的环境中工作。您的专注力和解决问题的能力使您在复杂项目中表现出色。</p><p><b>挑战与成长：</b>在团队协作和沟通方面可能需要进一步提升，以更好地将技术方案转化为业务价值。同时，需要保持对技术趋势的敏感度，避免技术栈过时。</p>', 
+                suggestions: [
+                    '<b>持续深耕技术领域：</b>保持对新技术的学习热情，定期更新知识体系，专注于自己感兴趣的技术方向（如人工智能、云计算、大数据等）。',
+                    '<b>培养团队协作能力：</b>在技术团队中，适当提升沟通和协作能力，以便更好地与团队成员合作完成项目。',
+                    '<b>关注行业发展趋势：</b>了解技术领域的最新发展趋势，提前规划自己的职业发展路径。',
+                    '<b>参与开源项目：</b>通过参与开源项目，提升技术水平，扩展人脉，建立个人技术品牌。'
+                ],
+                careerDirections: [
+                    '<b>软件开发方向：</b>后端开发工程师、前端开发工程师、全栈工程师、移动开发工程师、嵌入式开发工程师',
+                    '<b>数据与算法方向：</b>数据分析师、数据科学家、机器学习工程师、算法工程师、大数据工程师',
+                    '<b>系统与架构方向：</b>系统架构师、网络安全工程师、运维工程师、DevOps工程师、云计算工程师',
+                    '<b>技术研究方向：</b>人工智能研究员、区块链研究员、量子计算研究员'
+                ] 
+            };
+            if (score <= 20) return { 
+                level: '✨ 创新创意型', 
+                description: '您具有丰富的创造力和想象力，适合从事创意设计类职业。', 
+                analysis: '<p><b>核心特征：</b>您擅长发散思维，能够产生独特的想法和解决方案。您对艺术、设计和美学有较高的敏感度，喜欢尝试新的事物和表达方式。您更倾向于自由灵活的工作环境，能够在创造性的工作中找到满足感。</p><p><b>优势分析：</b>您具有出色的创造力和想象力，能够打破常规思维，提出新颖的解决方案。您对美学的敏感度使您的作品具有独特的视觉吸引力。</p><p><b>挑战与成长：</b>在商业化和落地能力方面可能需要加强，将创意转化为实际产品或服务。同时，需要学会在约束条件下进行创作，平衡创意与可行性。</p>', 
+                suggestions: [
+                    '<b>保持创作热情：</b>定期进行创作练习，不断提升自己的创意能力和表达技巧。',
+                    '<b>拓展跨领域知识：</b>学习相关领域的知识，如心理学、市场营销等，以丰富自己的创作视角。',
+                    '<b>建立个人品牌：</b>通过作品集或社交媒体展示自己的创意作品，建立个人品牌和影响力。',
+                    '<b>学习设计工具：</b>熟练掌握各种设计软件和工具，提升创作效率和专业度。'
+                ],
+                careerDirections: [
+                    '<b>视觉设计方向：</b>平面设计师、UI/UX设计师、插画师、动效设计师、包装设计师',
+                    '<b>产品设计方向：</b>产品设计师、工业设计师、交互设计师、服务设计师',
+                    '<b>创意内容方向：</b>广告创意总监、文案策划、创意导演、内容创作者',
+                    '<b>艺术创作方向：</b>艺术家、设计师、摄影师、音乐家、作家'
+                ] 
+            };
+            if (score <= 30) return { 
+                level: '🤝 人际交往型', 
+                description: '您擅长与人沟通和合作，适合从事与人打交道的职业。', 
+                analysis: '<p><b>核心特征：</b>您具有较强的沟通能力和同理心，善于理解他人的需求和感受。您喜欢团队合作，能够在社交场合中感到舒适和自信。您更倾向于通过帮助他人和建立关系来实现自我价值。</p><p><b>优势分析：</b>您具有出色的人际沟通能力和同理心，能够快速建立信任关系，擅长协调和解决人际冲突。您的团队合作精神使您在团队环境中表现出色。</p><p><b>挑战与成长：</b>在目标设定和结果导向方面可能需要加强，确保人际关系的建立能够转化为实际成果。同时，需要学会在复杂的人际关系中保持客观和中立。</p>', 
+                suggestions: [
+                    '<b>提升沟通技巧：</b>学习有效的沟通和谈判技巧，提升自己的影响力和说服力。',
+                    '<b>拓展人际关系网络：</b>积极参与行业活动和社交场合，建立广泛的人际关系网络。',
+                    '<b>培养领导力：</b>在团队中逐步提升领导能力，学会激励和引导他人完成目标。',
+                    '<b>学习心理学知识：</b>了解人类行为和心理机制，提升对他人的理解和影响力。'
+                ],
+                careerDirections: [
+                    '<b>人力资源方向：</b>HR专员、招聘经理、培训师、薪酬福利专员、员工关系专员',
+                    '<b>市场营销方向：</b>市场营销专员、品牌经理、客户关系经理、市场策划',
+                    '<b>公关与传播方向：</b>公关专员、媒体关系经理、危机公关专家',
+                    '<b>教育与咨询方向：</b>教育工作者、心理咨询师、职业规划师、家庭咨询师'
+                ] 
+            };
+            if (score <= 40) return { 
+                level: '🏢 组织管理型', 
+                description: '您具有较强的组织和管理能力，适合从事管理类职业。', 
+                analysis: '<p><b>核心特征：</b>您擅长规划、组织和协调各种资源，能够有效地管理项目和团队。您具有较强的责任感和决策能力，能够在复杂的情况下保持冷静和理性。您更倾向于通过实现组织目标来证明自己的价值。</p><p><b>优势分析：</b>您具有出色的组织协调能力和决策能力，能够有效地整合资源，推动项目进展。您的责任感和理性思维使您在管理岗位上表现可靠。</p><p><b>挑战与成长：</b>在创新思维和灵活性方面可能需要加强，以适应快速变化的市场环境。同时，需要学会授权和培养下属，提升团队整体能力。</p>', 
+                suggestions: [
+                    '<b>学习管理知识：</b>系统学习管理学知识，提升自己的管理理论水平和实践能力。',
+                    '<b>培养战略思维：</b>学会从宏观角度思考问题，制定长期的发展战略和计划。',
+                    '<b>提升团队建设能力：</b>学习如何打造高效团队，激励团队成员发挥最大潜力。',
+                    '<b>增强创新意识：</b>培养创新思维，鼓励团队提出新想法和解决方案。'
+                ],
+                careerDirections: [
+                    '<b>企业管理方向：</b>部门经理、项目经理、运营经理、生产经理、行政主管',
+                    '<b>项目管理方向：</b>PMP认证项目经理、敏捷教练、产品经理、项目协调员',
+                    '<b>行政管理方向：</b>行政经理、办公室主任、后勤经理',
+                    '<b>供应链管理方向：</b>采购经理、物流经理、供应链总监'
+                ] 
+            };
+            if (score <= 50) return { 
+                level: '🔧 实践操作型', 
+                description: '您喜欢实际操作和动手实践，适合从事技术操作类职业。', 
+                analysis: '<p><b>核心特征：</b>您擅长实际操作和动手能力，喜欢解决具体的技术问题。您具有较强的空间想象力和手眼协调能力，能够在实际操作中找到乐趣和满足感。您更倾向于通过实际成果来证明自己的价值。</p><p><b>优势分析：</b>您具有出色的动手能力和实践经验，能够快速掌握操作技能，解决实际问题。您的专注力和耐心使您在需要精细操作的工作中表现出色。</p><p><b>挑战与成长：</b>在理论知识和创新能力方面可能需要加强，以提升技术水平和解决复杂问题的能力。同时，需要关注行业技术发展，不断更新技能。</p>', 
+                suggestions: [
+                    '<b>提升专业技能：</b>持续提升自己的专业技能和操作水平，成为行业内的技术专家。',
+                    '<b>关注技术发展：</b>了解行业内的最新技术和设备，不断更新自己的技能储备。',
+                    '<b>培养创新能力：</b>在实际操作中，尝试创新方法和技术，提高工作效率和质量。',
+                    '<b>获取专业认证：</b>通过获取行业认可的专业认证，提升职业竞争力。'
+                ],
+                careerDirections: [
+                    '<b>工程技术方向：</b>机械工程师、电气工程师、土木工程工程师、自动化工程师',
+                    '<b>工艺技术方向：</b>工艺工程师、质量工程师、测试工程师',
+                    '<b>技能型职业方向：</b>高级技师、工匠、厨师、美容师、摄影师',
+                    '<b>维修与服务方向：</b>维修技师、设备工程师、售后服务工程师'
+                ] 
+            };
+            if (score <= 60) return { 
+                level: '🎯 目标成就型', 
+                description: '您具有强烈的目标导向和成就动机，适合从事高挑战性的职业。', 
+                analysis: '<p><b>核心特征：</b>您具有强烈的进取心和竞争意识，喜欢设定高目标并努力实现。您具有较强的抗压能力和韧性，能够在困难和挑战面前保持积极的态度。您更倾向于通过实现高目标来获得成就感和满足感。</p><p><b>优势分析：</b>您具有出色的目标设定和执行能力，能够在压力下保持高效工作。您的竞争意识和韧性使您在高挑战性环境中脱颖而出。</p><p><b>挑战与成长：</b>在团队协作和情绪管理方面可能需要加强，避免过度关注目标而忽略团队合作。同时，需要学会平衡工作和生活，避免 burnout。</p>', 
+                suggestions: [
+                    '<b>设定明确目标：</b>制定清晰的短期和长期目标，并有计划地逐步实现。',
+                    '<b>培养风险管理能力：</b>学习如何评估和管理风险，在追求目标的同时保持理性。',
+                    '<b>保持工作生活平衡：</b>在追求职业成就的同时，注意保持工作和生活的平衡，避免过度压力。',
+                    '<b>提升领导力：</b>学习如何带领团队共同实现目标，而非仅靠个人努力。'
+                ],
+                careerDirections: [
+                    '<b>商业与管理方向：</b>企业家、CEO、部门总监、销售经理、业务拓展经理',
+                    '<b>金融与投资方向：</b>投资顾问、基金经理、股票分析师、风险投资经理',
+                    '<b>专业服务方向：</b>律师、医生、会计师、咨询顾问',
+                    '<b>竞技与体育方向：</b>职业运动员、教练、体育经纪人'
+                ] 
+            };
+            if (score <= 70) return { 
+                level: '🔬 学术研究型', 
+                description: '您具有强烈的求知欲和研究精神，适合从事学术研究类职业。', 
+                analysis: '<p><b>核心特征：</b>您喜欢探索未知领域，具有较强的好奇心和求知欲。您擅长系统思考和深入分析，能够在研究工作中保持专注和耐心。您更倾向于通过发现和创新来推动知识的进步。</p><p><b>优势分析：</b>您具有出色的学习能力和研究方法，能够深入探索复杂问题。您的专注力和耐心使您在长期研究项目中表现出色。</p><p><b>挑战与成长：</b>在成果转化和商业价值方面可能需要加强，将研究成果应用于实际场景。同时，需要提升沟通能力，以便更好地传播研究成果。</p>', 
+                suggestions: [
+                    '<b>专注研究领域：</b>选择一个自己感兴趣的研究领域，深入钻研，成为该领域的专家。',
+                    '<b>发表研究成果：</b>积极发表研究论文和成果，提升自己在学术界的影响力。',
+                    '<b>保持学习热情：</b>持续学习和更新知识，关注领域内的最新研究成果。',
+                    '<b>寻求合作机会：</b>与其他研究者和机构合作，拓展研究视野和资源。'
+                ],
+                careerDirections: [
+                    '<b>学术研究方向：</b>大学教授、研究员、科学家、博士后',
+                    '<b>科研机构方向：</b>科研院所研究人员、实验室主管、技术研发专员',
+                    '<b>教育与培训方向：</b>大学讲师、教育研究员、课程开发者',
+                    '<b>图书与档案方向：</b>图书管理员、档案管理员、文献研究员'
+                ] 
+            };
+            if (score <= 80) return { 
+                level: '📢 沟通表达型', 
+                description: '您具有出色的沟通和表达能力，适合从事传播类职业。', 
+                analysis: '<p><b>核心特征：</b>您擅长口头和书面表达，能够清晰地传达信息和观点。您具有较强的说服力和影响力，能够有效地影响他人的想法和行为。您更倾向于通过沟通和表达来实现自己的价值。</p><p><b>优势分析：</b>您具有出色的语言表达能力和感染力，能够清晰地传达复杂信息。您的说服力和影响力使您在需要沟通和传播的工作中表现出色。</p><p><b>挑战与成长：</b>在深度思考和专业知识方面可能需要加强，以提升表达内容的深度和权威性。同时，需要学会适应不同的沟通场景和受众。</p>', 
+                suggestions: [
+                    '<b>提升表达技巧：</b>持续提升自己的口头和书面表达技巧，学习不同场合的沟通方式。',
+                    '<b>拓展知识面：</b>广泛涉猎不同领域的知识，丰富自己的表达内容和视角。',
+                    '<b>培养媒体素养：</b>了解各种媒体平台的特点和运营方式，提高自己的传播效果。',
+                    '<b>学习叙事技巧：</b>掌握有效的叙事方法，提升内容的吸引力和影响力。'
+                ],
+                careerDirections: [
+                    '<b>媒体与传播方向：</b>记者、主持人、编辑、制片人、内容策划',
+                    '<b>演讲与培训方向：</b>演讲家、培训师、企业讲师、公众表达教练',
+                    '<b>写作与创作方向：</b>作家、专栏作家、编剧、文案策划',
+                    '<b>翻译与本地化方向：</b>翻译、本地化专员、语言服务项目经理'
+                ] 
+            };
+            if (score <= 90) return { 
+                level: '🎨 艺术表现型', 
+                description: '您具有强烈的艺术天赋和表现力，适合从事艺术表演类职业。', 
+                analysis: '<p><b>核心特征：</b>您具有出色的艺术表现力和创造力，能够通过各种艺术形式表达自己的情感和想法。您具有较强的舞台表现力和感染力，能够在表演中找到自我价值和满足感。</p><p><b>优势分析：</b>您具有出色的艺术天赋和表现力，能够通过各种艺术形式传达情感和思想。您的创造力和独特性使您在艺术领域具有竞争力。</p><p><b>挑战与成长：</b>在商业运作和市场推广方面可能需要加强，以实现艺术价值的商业化。同时，需要保持对艺术的热情，不断提升专业水平。</p>', 
+                suggestions: [
+                    '<b>持续专业训练：</b>保持专业的训练和练习，不断提升自己的艺术表现力和技巧。',
+                    '<b>寻找展示机会：</b>积极寻找各种表演和展示机会，积累舞台经验和知名度。',
+                    '<b>培养个人风格：</b>形成自己独特的艺术风格和表演特色，提升自己的辨识度和竞争力。',
+                    '<b>学习艺术理论：</b>深入学习艺术理论和历史，提升艺术修养和创作深度。'
+                ],
+                careerDirections: [
+                    '<b>表演艺术方向：</b>演员、歌手、舞者、戏剧导演、配音演员',
+                    '<b>音乐艺术方向：</b>作曲家、编曲师、音乐制作人、乐器演奏家',
+                    '<b>影视艺术方向：</b>导演、编剧、摄影师、剪辑师、特效师',
+                    '<b>舞台艺术方向：</b>舞台导演、灯光设计师、音响设计师、服装设计师'
+                ] 
+            };
+            return { 
+                level: '🌐 综合发展型', 
+                description: '您具有多种职业倾向，适合从事跨领域的综合性职业。', 
+                analysis: '<p><b>核心特征：</b>您具有广泛的兴趣和能力，能够在多个领域表现出色。您擅长整合不同领域的知识和技能，能够灵活应对各种复杂情况。您更倾向于在多样化的工作环境中找到满足感和成就感。</p><p><b>优势分析：</b>您具有出色的跨领域整合能力和适应能力，能够在复杂多变的环境中表现出色。您的广泛兴趣和能力使您在跨界合作中具有优势。</p><p><b>挑战与成长：</b>在深度发展方面可能需要加强，避免知识和技能过于分散。同时，需要学会聚焦核心优势，形成独特的竞争壁垒。</p>', 
+                suggestions: [
+                    '<b>发挥综合优势：</b>充分发挥自己的综合能力，在跨领域的工作中展现价值。',
+                    '<b>聚焦核心领域：</b>在广泛兴趣的基础上，选择几个核心领域进行深入发展。',
+                    '<b>培养跨界思维：</b>学习如何在不同领域之间建立联系，创造新的价值和机会。',
+                    '<b>建立人脉网络：</b>拓展跨领域的人脉网络，获取更多合作和发展机会。'
+                ],
+                careerDirections: [
+                    '<b>项目管理方向：</b>跨领域项目经理、敏捷教练、产品经理、项目总监',
+                    '<b>咨询顾问方向：</b>管理咨询顾问、战略顾问、技术咨询顾问',
+                    '<b>创业与创新方向：</b>创业家、创新总监、孵化器运营者',
+                    '<b>跨界设计方向：</b>跨界设计师、体验设计师、服务设计师',
+                    '<b>教育与培训方向：</b>企业培训师、职业规划师、跨界教育专家'
+                ] 
+            };
+        }
+
+        function viewAnswers() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'block';
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+            questions.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'answer-item';
+                div.innerHTML = `<div class="answer-q">${q.id}. ${q.text}</div><div class="answer-v">您的选择：${q.options[userAnswers[q.id]]}</div>`;
+                container.appendChild(div);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderRadarChart() {
+            try {
+                const ctx = document.getElementById('radarChart');
+                if (!ctx) {
+                    console.error('雷达图容器未找到');
+                    return;
+                }
+                
+                const chartContext = ctx.getContext('2d');
+                if (!chartContext) {
+                    console.error('无法获取canvas上下文');
+                    return;
+                }
+                
+                // 销毁现有图表
+                if (window.myRadar) {
+                    window.myRadar.destroy();
+                    window.myRadar = null;
+                }
+                
+                // 计算维度得分
+                const techScore = getDimScore([1,7,11,17,21,27,31,37]);
+                const creativeScore = getDimScore([2,10,12,20,22,28,30,32]);
+                const socialScore = getDimScore([3,8,13,18,23,24,33,38]);
+                const manageScore = getDimScore([4,6,14,16,26,34,36,39]);
+                const practiceScore = getDimScore([5,9,15,19,25,29,35,40]);
+                
+                console.log('雷达图数据:', [techScore, creativeScore, socialScore, manageScore, practiceScore]);
+                
+                // 创建新图表
+                window.myRadar = new Chart(chartContext, {
+                    type: 'radar',
+                    data: {
+                        labels: ['技术能力', '创造力', '人际交往', '组织管理', '实践操作'],
+                        datasets: [{
+                            label: '维度评估',
+                            data: [techScore, creativeScore, socialScore, manageScore, practiceScore],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: '#3b82f6',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#3b82f6',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 1,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { display: false },
+                                grid: { color: '#e2e8f0' },
+                                angleLines: { color: '#e2e8f0' },
+                                pointLabels: {
+                                    color: '#475569',
+                                    font: {
+                                        size: 14,
+                                        weight: '600'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1,
+                                padding: 12,
+                                borderRadius: 8
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('雷达图渲染错误:', error);
+            }
+        }
+
+        function getDimScore(ids) {
+            let s = 0;
+            ids.forEach(id => s += (userAnswers[id] || 0));
+            return Math.round((s / (ids.length * 4)) * 100);
+        }
+
+        function showUnansweredTip(id) {
+            const existing = document.getElementById('unTip');
+            if(existing) existing.remove();
+            const tip = document.createElement('div');
+            tip.id = 'unTip';
+            tip.style.cssText = `position:fixed; top:40px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.9); backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; box-shadow:0 10px 30px rgba(0,0,0,0.1); border:1px solid #eee; z-index:10000; font-size:14px; animation:tipFadeIn 0.4s ease;`;
+            tip.innerHTML = `⚠️ 请先完成第 <b style="color:#6366f1">${id}</b> 题`;
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 3000);
+        }
+
+        function restartQuiz() {
+            // 重置用户答案和总分
+            userAnswers = {};
+            totalScore = 0;
+            
+            // 显示答题页面，隐藏其他页面
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+            
+            // 重新初始化测试
+            initQuiz();
+            updateProgress();
+            
+            // 滚动到页面顶部
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 回到顶部函数
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        initQuiz();
+    </script>
+    <footer style="text-align: center; padding: 20px; color: #334155; font-size: 1rem; font-weight: 500; margin-top: 20px;">
+        <p>Inner Peace | 专业·科学·客观</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>占有欲测试 - 探索你在关系中的掌控欲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            background: #121212;
+            color: #EAEAEA;
+            line-height: 1.8;
+            scroll-behavior: smooth; /* 添加平滑滚动 */
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 20px; /* 只保留左右padding，上下padding由子元素控制 */
+            display: flex; /* 让container成为flex容器 */
+            flex-direction: column; /* 垂直排列子元素 */
+            min-height: 100vh; /* 保证container占据整个视口高度 */
+            box-sizing: border-box; /* 确保padding不影响宽度计算 */
+        }
+
+        /* 答题页面容器 */
+        .quiz-container {
+            background: #1A1A1A;
+            border-radius: 20px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 220px; /* 增加margin-top，确保完全避开固定头部 */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        /* 结果页面和答案页面容器 */
+        .result-container, .answer-container {
+            background: #1A1A1A;
+            border-radius: 20px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 20px; /* 调整为正常的margin-top */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        .quiz-header-fixed {
+            background: #1A1A1A; /* 覆盖滚动时的背景 */
+            z-index: 1050; /* 进一步提高z-index，确保在最上层 */
+            padding: 20px 20px; /* 增加底部padding，确保完整覆盖，顶部也增加一点 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* 增加一点阴影，更明显 */
+            border-radius: 20px 20px; /* 固定头部只保留底部圆角 */
+            position: fixed; /* 固定在视口顶部 */
+            top: 0; /* 完全贴合顶部 */
+            left: 0;
+            right: 0;
+            max-width: 850px; /* 保持与container一致的max-width */
+            margin: 0 auto; /* 居中对齐 */
+            box-sizing: border-box; /* 确保padding不影响宽度计算 */
+        }
+
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部样式 */
+        .header {
+            margin-bottom: 8px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #7D0022;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 2px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #B0B0B0;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge-blue { background: #2B2B2B; color: #B0B0B0; border: 1px solid #444444; }
+        .badge-green { background: #2B2B2B; color: #4CAF50; border: 1px solid #444444; }
+
+        .disclaimer {
+            background: #2B2B2B;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #B0B0B0;
+            margin-bottom: 8px;
+        }
+
+        .disclaimer i {
+            color: #FFD700;
+            margin-right: 3px;
+            font-style: normal;
+        }
+
+        /* 进度条区域 */
+        .progress-section {
+            background: #1A1A1A;
+            z-index: 9;
+            padding: 8px 20px 12px; /* 进一步减小上下padding */
+            margin-bottom: 0; /* 移除原来的margin-bottom */
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px; /* 减小间距 */
+        }
+
+        .progress-stats {
+            font-size: 14px; /* 调整字体大小 */
+            color: #EAEAEA;
+            font-weight: 600;
+        }
+
+        .hint-tag {
+            background: #7D0022;
+            color: white;
+            padding: 4px 12px; /* 减小padding */
+            border-radius: 50px;
+            font-size: 11px; /* 减小字体 */
+            border: 1px solid #7D0022;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(125, 0, 34, 0.3);
+        }
+
+        .progress-bar {
+            height: 8px; /* 减小进度条高度 */
+            background: #2B2B2B;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7D0022 0%, #2E004B 100%);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(125, 0, 34, 0.4);
+        }
+
+        /* 题目样式 */
+        .question-item {
+            padding: 15px 0; /* 减小垂直方向的内边距 */
+            margin-bottom: 15px; /* 减小题目之间的间距 */
+            border-bottom: 1px dashed #e2e8f0; /* 底部虚线分隔 */
+            transition: all 0.3s ease; /* 过渡动画 */
+            scroll-margin-top: 15px; /* 滚动到顶部时的留白 */
+            position: relative; /* 用于z-index */
+        }
+
+        .question-item:hover,
+        .question-item.active {
+            background: #2B2B2B; /* 活跃题目背景提亮 */
+            border-radius: 12px; /* 活跃题目添加圆角 */
+            padding: 15px 15px; /* 减小活跃题目左右padding */
+            margin: 5px -15px 15px; /* 调整margin以实现“提拉”效果，并与下一题保持间距 */
+            box-shadow: 0 8px 25px rgba(125, 0, 34, 0.3), 0 0 0 1px rgba(125, 0, 34, 0.2);
+            transform: scale(1.005) translateY(-2px); /* 轻微放大和上浮 */
+            border: 1px solid #7D0022; /* 强调边框 */
+            z-index: 2; /* 降低z-index，确保在固定头部下方 */
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        /* 避免活跃题目上浮后与下一题重叠，并调整间距 */
+        .question-item.active + .question-item {
+            margin-top: 15px; /* 减小间距 */
+        }
+
+        .question-title-row {
+            display: flex;
+            gap: 10px; /* 减小间距 */
+            margin-bottom: 15px; /* 减小间距 */
+            align-items: flex-start;
+        }
+
+        .question-index {
+            flex-shrink: 0;
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 800;
+            color: #7D0022;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .question-text {
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 600;
+            color: #EAEAEA;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* 减小选项之间的间距 */
+            padding-left: 35px; /* 减小左侧padding */
+        }
+
+        .option-capsule {
+            padding: 10px 18px; /* 减小选项按钮padding */
+            background: #1A1A1A;
+            border: 2px solid #444444;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 13px; /* 减小选项字体大小 */
+            color: #B0B0B0;
+            transition: all 0.3s ease;
+            user-select: none;
+            flex-grow: 1;
+            text-align: center;
+            min-width: 100px; /* 减小最小宽度 */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-capsule:hover {
+            background: #2B2B2B;
+            border-color: #7D0022;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected {
+            background: linear-gradient(135deg, #7D0022 0%, #2E004B 100%);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(125, 0, 34, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected:hover {
+            box-shadow: 0 6px 20px rgba(125, 0, 34, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .option-capsule input {
+            display: none;
+        }
+
+        .questions-scroll-wrapper {
+            /* 移除最大高度限制，让内容正常滚动 */
+            padding: 0; /* 移除padding，由quiz-container控制 */
+            overflow-y: visible; /* 允许正常溢出 */
+        }
+
+        /* 提交按钮 */
+        .submit-wrapper {
+            background: #1A1A1A;
+            z-index: 10;
+            padding: 20px 40px; /* 调整padding，让按钮区域更大一些 */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* 两个按钮之间的间距 */
+            /* 移除固定定位，回到正常文档流 */
+            border-radius: 20px;
+        }
+
+        .submit-btn {
+            padding: 14px 28px; /* 优化按钮padding */
+            border: none;
+            border-radius: 50px;
+            font-size: 15px; /* 优化按钮字体大小 */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 优化过渡效果 */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* 优化图标与文字间距 */
+            min-width: 170px; /* 优化最小宽度 */
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.3px; /* 优化字间距 */
+        }
+
+        /* 主按钮样式 */
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary) {
+            background: linear-gradient(135deg, #7D0022 0%, #2E004B 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(125, 0, 34, 0.4);
+        }
+        
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(125, 0, 34, 0.6);
+        }
+
+        /* 回到顶部按钮样式 */
+        .btn-back-to-top {
+            background: #1A1A1A;
+            color: #B0B0B0;
+            border: 2px solid #444444;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-back-to-top:hover {
+            background: #2B2B2B;
+            border-color: #7D0022;
+            color: #7D0022;
+            box-shadow: 0 6px 20px rgba(125, 0, 34, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 次要按钮样式 */
+        .btn-secondary {
+            background: #1A1A1A;
+            color: #B0B0B0;
+            border: 2px solid #444444;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: #2B2B2B;
+            border-color: #7D0022;
+            color: #7D0022;
+            box-shadow: 0 6px 20px rgba(125, 0, 34, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 按钮图标样式 */
+        .btn-icon {
+            font-size: 18px; /* 优化图标大小 */
+            line-height: 1;
+        }
+
+        /* 按钮装饰效果 */
+        .btn-decoration {
+            font-size: 18px; /* 优化装饰图标大小 */
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Loading页面样式 */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px; /* Limit max width for a modal-like appearance */
+            background: #1A1A1A;
+            border-radius: 20px;
+            padding: 40px; /* Increase padding */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center; /* Center text inside */
+        }
+        .loading-container.show { display: flex; }
+        .loader {
+            width: 60px; /* Slightly larger loader */
+            height: 60px;
+            border: 4px solid #2B2B2B;
+            border-top-color: #7D0022; /* Gradient start color */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 4px 15px rgba(125, 0, 34, 0.4); /* Consistent shadow */
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 结果页面布局 */
+        .score-display { text-align: center; margin-bottom: 20px; } /* 减小底部间距 */
+        
+        /* 结果主内容区 - 左右布局 */
+        .results-main-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* 减小间距 */
+            margin-bottom: 30px; /* 减小底部间距 */
+            flex-wrap: wrap;
+        }
+        
+        .score-circle-wrapper {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .score-circle-box {
+            position: relative;
+            width: 130px; /* 进一步缩小尺寸 */
+            height: 130px; /* 进一步缩小尺寸 */
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #7D0022 0%, #2E004B 100%); /* 与按钮一致的渐变背景 */
+            border-radius: 50%; /* 圆形 */
+            box-shadow: 0 6px 20px rgba(125, 0, 34, 0.4); /* 与选中状态一致的阴影 */
+        }
+        
+        .score-value { 
+            font-size: 42px; /* 进一步缩小字体 */
+            font-weight: 800; 
+            color: white; /* 白色文字 */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 文字阴影 */
+        }
+        
+        .score-level { 
+            font-size: 22px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #7D0022; /* 与主题色一致 */
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .score-desc { 
+            font-size: 14px; /* 缩小字体 */
+            color: #B0B0B0; 
+            line-height: 1.5; /* 减小行高 */
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .chart-container { 
+            margin: 0; 
+            height: 250px; /* 进一步缩小高度 */
+            width: 300px; /* 进一步缩小宽度 */
+            max-width: 300px; /* 进一步缩小最大宽度 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex: 0 0 auto;
+        }
+        .section-title { 
+            font-size: 18px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #7D0022; /* 与主题色一致 */
+            margin-bottom: 15px; /* 减小间距 */
+            padding: 8px 12px; /* 减小内边距 */
+            background: #2B2B2B; /* 与悬停状态背景色一致 */
+            border-radius: 10px; /* 缩小圆角 */
+            border-left: 4px solid #7D0022; /* 与主题色一致的左边框 */
+        }
+        .analysis-content { 
+            font-size: 14px; /* 缩小字体 */
+            line-height: 1.6; /* 减小行高 */
+            color: #EAEAEA; 
+            padding: 12px; /* 减小内边距 */
+            background: #1A1A1A;
+            border-radius: 10px; /* 缩小圆角 */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
+            margin-bottom: 20px; /* 增加底部间距 */
+        }
+        .suggestion-list { list-style: none; padding: 0; }
+        .suggestion-list li { 
+            padding: 12px; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            background: #1A1A1A;
+            border-radius: 10px; /* 缩小圆角 */
+            font-size: 13px; /* 缩小字体 */
+            color: #EAEAEA; 
+            border: 1px solid #444444; /* 边框 */
+            border-left: 4px solid #7D0022; /* 与主题色一致的左边框 */
+            transition: all 0.3s ease; /* 过渡动画 */
+        }
+        
+        .suggestion-list li:hover {
+            transform: translateY(-2px); /* 轻微上浮 */
+            box-shadow: 0 8px 25px rgba(147, 51, 234, 0.1); /* 与题目项一致的阴影 */
+            border-color: #7D0022; /* 与主题色一致的边框 */
+        }
+
+        /* 答案查看项 */
+        .answer-item {
+            padding: 12px 0; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            border-bottom: 1px dashed #e2e8f0; /* 与题目项一致的底部虚线 */
+            transition: all 0.3s ease; /* 与题目项一致的过渡动画 */
+        }
+        
+        .answer-item:last-child {
+            border-bottom: none; /* 最后一项移除虚线 */
+        }
+        
+        .answer-q {
+            font-size: 14px; /* 缩小字体 */
+            font-weight: 600; /* 保持字重 */
+            color: #EAEAEA; /* 与题目文本一致的颜色 */
+            line-height: 1.4; /* 保持行高 */
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .answer-v {
+            color: #7D0022; /* 仅使用主题色，去掉按钮样式 */
+            font-size: 13px; /* 缩小字体 */
+            font-weight: 600; /* 保持字重 */
+            margin-right: 8px; /* 减小间距 */
+        }
+
+        /* 平板设备 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px; /* 调整容器内边距 */
+            }
+            
+            .quiz-header-fixed {
+                max-width: 100%; /* 适应全屏宽度 */
+            }
+            
+            .quiz-container {
+                margin-top: 220px; /* 增加顶部边距，确保内容不被遮挡 */
+            }
+        }
+        
+        /* 移动端 */
+        @media (max-width: 640px) {
+            /* 固定头部优化 */
+            .quiz-header-fixed {
+                padding: 15px 15px; /* 减小内边距 */
+                max-width: 100%; /* 适应全屏宽度 */
+                border-radius: 20px 20px; /* 保持四个角圆角 */
+            }
+            
+            .header h1 {
+                font-size: 20px; /* 减小标题字体 */
+            }
+            
+            .header-badges {
+                flex-direction: column; /* 徽章垂直排列 */
+                gap: 5px; /* 减小间距 */
+            }
+            
+            .badge {
+                font-size: 9px; /* 减小徽章字体 */
+                padding: 3px 8px; /* 减小徽章内边距 */
+            }
+            
+            .progress-section {
+                padding: 8px 15px; /* 减小进度条区域内边距 */
+            }
+            
+            /* 答题页面优化 */
+            .quiz-container {
+                margin-top: 220px; /* 增大顶部边距，确保内容不被遮挡 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .question-item {
+                margin: 5px -10px 12px; /* 调整margin，适应移动端 */
+                padding: 12px 12px; /* 调整内边距 */
+                scroll-margin-top: 200px; /* 增大滚动留白，确保滚动时不被头部遮挡 */
+            }
+            
+            .question-title-row {
+                gap: 8px; /* 减小间距 */
+            }
+            
+            .question-index {
+                font-size: 14px; /* 减小题号字体 */
+            }
+            
+            .question-text {
+                font-size: 15px; /* 减小题目字体 */
+            }
+            
+            .options-grid {
+                padding-left: 0; /* 移除左侧padding */
+                gap: 8px; /* 统一选项间距 */
+                display: flex;
+                flex-direction: column; /* 垂直排列 */
+            }
+            
+            .option-capsule {
+                padding: 10px 15px; /* 统一选项内边距 */
+                font-size: 13px; /* 统一选项字体 */
+                min-width: auto; /* 移除最小宽度限制 */
+                width: 100%; /* 所有按钮宽度一致 */
+                max-width: none; /* 移除最大宽度限制 */
+                flex: 1;
+            }
+            
+            /* 结果页面优化 */
+            .results-main-content {
+                flex-direction: column; /* 移动端改为上下布局 */
+                gap: 20px; /* 减小间距 */
+            }
+            
+            .chart-container {
+                width: 100%; /* 适应移动端宽度 */
+                max-width: 100%; /* 适应移动端宽度 */
+                height: 320px; /* 增大雷达图高度 */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .score-circle-box {
+                width: 140px; /* 增大分数圆形大小 */
+                height: 140px; /* 增大分数圆形大小 */
+                margin: 0 auto; /* 确保水平居中 */
+            }
+            
+            .score-value {
+                font-size: 40px; /* 增大分数字体大小 */
+            }
+            
+            .score-level {
+                font-size: 20px; /* 调整等级字体大小 */
+            }
+            
+            /* 答案页面优化 */
+            .answer-container {
+                margin-top: 15px; /* 减小顶部边距 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .answer-item {
+                padding: 10px 0; /* 减小内边距 */
+            }
+            
+            .answer-q {
+                font-size: 13px; /* 减小题目字体大小 */
+            }
+            
+            .answer-v {
+                font-size: 12px; /* 减小答案字体大小 */
+            }
+            
+            /* 按钮优化 */
+            .submit-btn {
+                padding: 12px 16px; /* 调整内边距，减小按钮大小 */
+                font-size: 13px; /* 调整字体大小 */
+                min-width: auto; /* 移除全屏宽度限制 */
+                width: calc(50% - 5px); /* 按钮宽度平分，减去间距 */
+                gap: 5px; /* 减小图标与文字间距 */
+            }
+            
+            .submit-wrapper {
+                padding: 15px 20px; /* 调整内边距 */
+                gap: 10px; /* 按钮间距 */
+                flex-direction: row; /* 按钮水平排列 */
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        /* 小屏手机 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px; /* 进一步减小标题字体 */
+            }
+            
+            .score-circle-box {
+                width: 130px; /* 适应小屏的分数圆形大小 */
+                height: 130px; /* 适应小屏的分数圆形大小 */
+            }
+            
+            .score-value {
+                font-size: 38px; /* 适应小屏的分数字体大小 */
+            }
+            
+            .chart-container {
+                height: 300px; /* 适应小屏的雷达图高度 */
+            }
+            
+            /* 小屏手机按钮优化 */
+            .submit-btn {
+                padding: 10px 12px; /* 进一步减小内边距 */
+                font-size: 12px; /* 进一步减小字体大小 */
+                width: calc(50% - 4px); /* 按钮宽度平分，减去间距 */
+            }
+            
+            .submit-wrapper {
+                gap: 8px; /* 减小按钮间距 */
+                padding: 10px 15px; /* 减小内边距 */
+            }
+        }
+
+        /* 抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.5s; }
+
+        /* 顶部Tip */
+        @keyframes tipFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quizPage">
+        <!-- 将quiz-header-fixed移出quiz-container -->
+        <div class="quiz-header-fixed">
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-left">
+                        <h1>🔗 占有欲测试</h1>
+                        <p>深入了解你在亲密关系中对伴侣的掌控欲</p>
+                    </div>
+                    <div class="header-badges">
+                        <div class="badge badge-blue">🔐 40 题 · 满分 100 分</div>
+                        <div class="badge badge-green">🕵️‍♀️ 建议真实作答</div>
+                    </div>
+                </div>
+                <div class="disclaimer">
+                    <i>⚠️</i> 免责声明：本测试旨在帮助您自我认知，不构成专业心理诊断。请客观作答。
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-stats" id="progressText">已完成 0 / 40 题</div>
+                    <div class="hint-tag">请根据「你在关系中的真实感受」作答</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <form id="quizForm" style="display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="questions-scroll-wrapper">
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="submit-wrapper">
+                    <button type="button" class="submit-btn btn-back-to-top" onclick="scrollToTop()">
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        回到顶部
+                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-decoration">✨</span>
+                        生成占有欲评估
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading页面 -->
+    <div class="loading-container" id="loadingPage">
+        <div class="loader"></div>
+        <div style="margin-top: 25px; font-size: 22px; font-weight: 700; color: #EAEAEA; letter-spacing: -0.5px;">
+            智能评估生成中<span id="loadingDots">...</span>
+        </div>
+        <p style="margin-top: 10px; color: #B0B0B0; font-size: 15px;">正在分析您的关系掌控倾向</p>
+    </div>
+
+    <!-- 结果页面 -->
+    <div class="container" id="resultPage" style="display:none">
+        <div class="result-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #7D0022;">
+                        <path d="M3 3v18h18"></path>
+                        <path d="M18 17V9"></path>
+                        <path d="M13 17V5"></path>
+                        <path d="M8 17v-3"></path>
+                    </svg>
+                    占有欲评估报告
+                </h1>
+            </div>
+
+            <div class="score-display">
+                <div class="score-level" id="scoreLevel" style="color: #7D0022;"></div>
+                <div class="score-desc" id="scoreDescription" style="color: #B0B0B0;"></div>
+            </div>
+
+            <div class="results-main-content">
+                <div class="score-circle-wrapper">
+                    <div class="score-circle-box">
+                        <div class="score-value" id="scoreValue">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">详细分析</h2>
+                <div class="analysis-content" id="analysisContent"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">专家建议</h2>
+                <ul class="suggestion-list" id="suggestionList"></ul>
+            </div>
+
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="restartQuiz()">重新评估</button>
+                <button class="submit-btn btn-secondary" onclick="viewAnswers()">查看我的回答</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答案查看页面 -->
+    <div class="container" id="answerPage" style="display:none">
+        <div class="answer-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #7D0022;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    我的占有欲答案
+                </h1>
+            </div>
+            <div id="answersContainer"></div>
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="showResultsPage()">返回评估报告</button>
+                <button class="submit-btn btn-secondary" onclick="restartQuiz()">重新评估</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const questions = [
+            { id: 1, text: "当伴侣没有及时回复消息时，我会感到焦虑，并猜测对方在做什么。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 2, text: "我希望伴侣的社交圈子是透明的，所有朋友我都要认识。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 3, text: "如果伴侣和异性（或同性密友）单独外出，我会感到不舒服和嫉妒。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 4, text: "我经常查看伴侣的手机、社交媒体或聊天记录，以确保他们没有隐瞒我。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 5, text: "我希望伴侣所有重要的决定都必须征求我的意见。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 6, text: "我很难接受伴侣有完全独立的兴趣爱好，希望他们能多参与我的活动。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 7, text: "如果伴侣没有及时向我汇报行踪，我会感到不被尊重或被忽视。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 8, text: "我倾向于限制伴侣的社交活动，希望他们更多时间陪伴我。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 9, text: "我会因为伴侣和旧爱有任何联系而感到极度不安。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 10, text: "我希望伴侣的一切都只属于我一个人，包括他们的时间和注意力。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 11, text: "当伴侣与其他朋友玩得很开心时，我会感到失落或被冷落。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 12, text: "我认为在亲密关系中，伴侣的隐私应该完全透明，没有秘密。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 13, text: "我会对伴侣的每一个细节都非常关注，希望能完全掌握他们的一切。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 14, text: "如果伴侣不按照我的意愿行事，我会感到沮丧和生气。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 15, text: "我很难信任伴侣，总是担心他们会离开我或背叛我。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 16, text: "我希望伴侣能够完全理解我的想法，并主动满足我的需求。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 17, text: "我会因为伴侣没有满足我的期望而感到失望和不满。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 18, text: "我觉得如果伴侣真正爱我，就应该时刻和我在一起。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 19, text: "我倾向于支配关系中的大小事，希望伴侣听从我的安排。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 20, text: "我很难忍受伴侣有不同于我的观点或爱好。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 21, text: "我总是担心伴侣会背着我做些什么。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 22, text: "我希望伴侣能为我放弃一些个人自由和空间。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 23, text: "当伴侣需要独处时，我会感到被排斥或不被重视。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 24, text: "我认为如果伴侣真的爱我，就不应该有任何秘密。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 25, text: "我会频繁地向伴侣确认他们的爱和忠诚度。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 26, text: "我很难接受伴侣有独立的社交活动或个人生活。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 27, text: "当伴侣对其他事物表现出热情时，我会感到嫉妒。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 28, text: "我希望能够掌控伴侣的财务支出和重大决定。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 29, text: "如果伴侣不听我的建议，我会感到沮丧和失去控制。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 30, text: "我害怕伴侣会因为认识了新朋友而疏远我。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 31, text: "我会通过频繁联系来确保伴侣一直在我的掌控之中。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 32, text: "我认为伴侣的未来计划应该与我完全一致。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 33, text: "当伴侣不开心时，我会认为一定是我的责任。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 34, text: "我难以忍受伴侣有任何我不了解的秘密。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 35, text: "我会经常提醒伴侣他们对我的重要性，希望他们离不开我。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 36, text: "我认为伴侣应该完全服从我的意愿，因为我是为他们好。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 37, text: "我会因为伴侣关注他人而感到被忽视和不被爱。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 38, text: "我倾向于支配伴侣的生活选择，例如穿衣风格、兴趣爱好等。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 39, text: "我害怕伴侣会与我之外的人分享亲密的心事。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 40, text: "我希望伴侣对我的需求和感受能够做到心领神会。", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] }
+        ];
+
+        let userAnswers = {};
+        let totalScore = 0;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.sort((a,b) => a.id - b.id);
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.id = `question-${q.id}`;
+                const displayId = (index + 1).toString().padStart(2, '0');
+
+                questionDiv.innerHTML = `
+                    <div class="question-title-row">
+                        <div class="question-index">${displayId}.</div>
+                        <div class="question-text">${q.text}</div>
+                    </div>
+                    <div class="options-grid">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option-capsule">
+                                <input type="radio" name="q${q.id}" value="${optIndex}" onchange="selectOption(${q.id}, ${optIndex})">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qId, val) {
+            userAnswers[qId] = val;
+            const labels = document.querySelectorAll(`#question-${qId} .option-capsule`);
+            labels.forEach((l, idx) => {
+                l.classList.toggle('selected', idx === val);
+            });
+            updateProgress();
+            
+            const nextId = questions[questions.findIndex(q => q.id === qId) + 1]?.id;
+            // 移除所有active状态
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            if (nextId) {
+                setTimeout(() => {
+                    const nextEl = document.getElementById(`question-${nextId}`);
+                    if(nextEl) {
+                        // 添加下一题的active状态并滚动
+                        nextEl.classList.add('active');
+                        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else { // 如果是最后一题，且已作答，让当前题目保持active状态
+                document.getElementById(`question-${qId}`).classList.add('active');
+            }
+        }
+
+        function updateProgress() {
+            const count = Object.keys(userAnswers).length;
+            const percent = (count / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `已完成 ${count} / ${questions.length} 题`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (Object.keys(userAnswers).length < questions.length) {
+                const firstUn = questions.find(q => userAnswers[q.id] === undefined);
+                const el = document.getElementById(`question-${firstUn.id}`);
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('shake');
+                showUnansweredTip(firstUn.id);
+                setTimeout(() => el.classList.remove('shake'), 500);
+                return;
+            }
+            
+            calculateScore();
+            document.getElementById('loadingPage').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loadingPage').classList.remove('show');
+                showResultsPage();
+            }, 2000);
+        });
+
+        function calculateScore() {
+            let sum = 0;
+            Object.values(userAnswers).forEach(v => sum += v);
+            totalScore = Math.round((sum / (questions.length * 4)) * 100);
+        }
+
+        function showResultsPage() {
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            document.getElementById('scoreValue').textContent = totalScore;
+
+            // 确保移除所有active状态，避免结果页出现题目active
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const analysis = getScoreLevelDetails(totalScore);
+            document.getElementById('scoreLevel').textContent = analysis.level;
+            document.getElementById('scoreDescription').textContent = analysis.description;
+            document.getElementById('analysisContent').innerHTML = analysis.analysis;
+            
+            const sList = document.getElementById('suggestionList');
+            sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            renderRadarChart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function getScoreLevelDetails(score) {
+            if (score <= 10) return { 
+                level: '🕊️ 自由和谐型 (低占有欲)', 
+                description: '您在亲密关系中展现出高度的独立和对他人的尊重，占有欲极低。', 
+                analysis: '<p><b>核心特征：</b>您深知每个人都是独立的个体，即便在最亲密的关系中，也充分尊重伴侣的个人空间、隐私和自主选择。您享受与伴侣的联结，但不会将其视为自身幸福的唯一来源，能够保持清晰的自我边界和独立性。</p><p><b>优势体现：</b>这种模式使您的关系充满信任与自由，伴侣在您身边能感受到被支持和被尊重。您能够促进关系的健康成长，避免因过度掌控而产生的摩擦和压力。您的关系通常建立在平等和开放沟通的基础上。</p>', 
+                suggestions: [
+                    '<b>保持真诚的开放沟通：</b>继续与伴侣保持坦诚的交流，分享彼此的感受和需求，确保双方都能在关系中感到舒适和满足。',
+                    '<b>共同探索新的体验：</b>鼓励与伴侣一起尝试新的活动或兴趣，这不仅能丰富两人的生活，也能加深情感联结。',
+                    '<b>享受独立与共享的平衡：</b>继续在个人生活与亲密关系之间找到最佳平衡点，享受独立带来的成长，也珍视共享的幸福。'
+                ] 
+            };
+            if (score <= 20) return { 
+                level: '🌿 适度信任型 (健康边界)', 
+                description: '您在亲密关系中信任伴侣，能保持健康的个人边界和适度的安全感。', 
+                analysis: '<p><b>核心特征：</b>您相信伴侣的独立性和判断力，并在给予自由的同时，也珍视彼此的联结。您拥有良好的自我调节能力，不会因伴侣的独立行动而感到过度不安。在关系中，您能够清晰表达自己的需求，也尊重伴侣的需求和选择。</p><p><b>优势体现：</b>这种模式有助于建立互信、互助且充满支持的关系。您和伴侣都能在关系中感到安全和自由，能够各自成长，同时为关系注入活力。</p>', 
+                suggestions: [
+                    '<b>持续培养共同兴趣：</b>通过共同的爱好和活动来加深彼此的理解和情感联结，同时也要保持个人独立空间。',
+                    '<b>定期进行情感交流：</b>即使关系稳定，也应定期分享内心感受、对关系的期待和任何可能存在的微小担忧，以预防潜在问题。',
+                    '<b>支持伴侣的个人发展：</b>鼓励并支持伴侣追求自己的梦想和目标，在他们需要时给予力量，这能让关系更加坚韧。'
+                ] 
+            };
+            if (score <= 30) return { 
+                level: '🔍 偶尔审视型 (边界浮动)', 
+                description: '您在亲密关系中对伴侣有适度的关注，但偶尔会因不确定性而审视对方。', 
+                analysis: '<p><b>核心特征：</b>您通常能信任伴侣，但在某些特定情境下（如伴侣长时间未回复、与其他异性互动较多），内心会涌现不安，可能会不自觉地观察或询问伴侣的行踪。您渴望安全感，但有时会通过“试探”的方式来获取确认。</p><p><b>潜在挑战：</b>这种“偶尔审视”若处理不当，可能让伴侣感到被质疑或不被信任，从而影响关系的透明度。您需要学习如何更好地管理自己的不安全感，避免将其投射到伴侣身上。</p>', 
+                suggestions: [
+                    '<b>提升内在安全感：</b>通过自我肯定、发展个人兴趣爱好等方式，增强自我价值感，减少对外部确认的依赖。',
+                    '<b>直接而温和地沟通：</b>当感到不安时，尝试与伴侣坦诚沟通自己的感受，而不是采取间接的审视行为。用“我感到……”的句式表达。',
+                    '<b>区分事实与想象：</b>在产生怀疑时，先冷静分析是否有实际证据，避免过度解读和负面猜测。'
+                ] 
+            };
+            if (score <= 40) return { 
+                level: '👀 密切关注型 (掌控萌芽)', 
+                description: '您在亲密关系中对伴侣的关注度较高，掌控欲开始显现。', 
+                analysis: '<p><b>核心特征：</b>您非常重视伴侣，希望能了解他们生活中的每一个细节。这可能表现为频繁询问伴侣的日程、社交活动，甚至对伴侣的穿衣风格、兴趣爱好提出建议。您内心深处渴望在关系中占据主导地位，确保一切都在自己的掌控之中，以获取安全感。</p><p><b>潜在挑战：</b>过度关注可能让伴侣感到没有个人空间和隐私，产生被束缚的感觉。您的“关心”在伴侣看来可能成为一种压力甚至控制，长期下去会削弱关系的自由度和伴侣的自主性。</p>', 
+                suggestions: [
+                    '<b>给予伴侣适当空间：</b>认识到每个人都需要独处和独立的空间。尝试减少询问频率，相信伴侣能够妥善安排自己的生活。',
+                    '<b>转移部分注意力：</b>将一部分精力投入到个人兴趣、工作或与朋友的社交中，丰富自己的生活，减少对伴侣的过度关注。',
+                    '<b>练习信任与放手：</b>有意识地练习信任伴侣，即使感到不安，也尝试不去干预或掌控。从小处开始，逐渐适应关系的开放性。'
+                ] 
+            };
+            if (score <= 50) return { 
+                level: '⛓️ 渐强控制型 (边界模糊)', 
+                description: '您在亲密关系中展现出较强的控制欲，个人边界可能已开始模糊。', 
+                analysis: '<p><b>核心特征：</b>您强烈希望伴侣的生活围绕您展开，对伴侣的社交、时间安排、甚至思想都试图施加影响。当伴侣表现出独立意愿时，您会感到不安或被挑战，可能会通过抱怨、施压等方式来“纠正”伴侣的行为。您将伴侣的顺从视为爱的证明。</p><p><b>潜在挑战：</b>这种控制倾向会逐渐侵蚀伴侣的自主权和个人空间，导致伴侣感到压抑和不自由。关系中的权力不平衡会加剧冲突，使伴侣产生逃离的念头，最终可能导致关系的紧张甚至破裂。</p>', 
+                suggestions: [
+                    '<b>明确个人责任边界：</b>认识到您只能掌控自己的行为和情绪，无法完全掌控伴侣。尊重伴侣的独立思考和行为模式。',
+                    '<b>学习健康的冲突解决：</b>当与伴侣意见不合时，练习通过平等对话而非强迫对方顺从的方式来解决问题。',
+                    '<b>培养非控制性互动方式：</b>尝试以建议、分享而非命令、要求的方式与伴侣交流，给予伴侣更多的选择权。',
+                    '<b>增强自我满足能力：</b>通过发展个人兴趣和成就，减少将个人满足感完全寄托于掌控伴侣的行为。'
+                ] 
+            };
+            if (score <= 60) return { 
+                level: '🚫 强力掌控型 (压制伴侣)', 
+                description: '您在亲密关系中展现出显著的掌控欲，常试图压制伴侣的自主性。', 
+                analysis: '<p><b>核心特征：</b>您深信自己对关系的看法和决定是正确的，并强烈要求伴侣按照您的意愿行事。这可能表现为严格限制伴侣的社交、频繁检查伴侣的通讯记录、强迫伴侣改变兴趣爱好甚至职业选择。您对伴侣的每一个行动都希望了如指掌，无法忍受任何脱离掌控的迹象。</p><p><b>潜在挑战：</b>这种强力掌控会极大地压抑伴侣的个人发展和幸福感，导致伴侣感到窒息、缺乏自由，甚至产生恐惧或反抗情绪。关系会逐渐失去平等和尊重的基础，演变为单方面的支配与服从，最终可能导致关系的彻底崩溃。</p>', 
+                suggestions: [
+                    '<b>反思掌控欲的根源：</b>尝试深入思考，您的掌控欲是否源于自身的不安全感、对被抛弃的恐惧或童年经历。了解根源是改变的第一步。',
+                    '<b>刻意练习放权与信任：</b>从一些小事开始，有意识地给予伴侣更多的自主权和信任，观察并接受关系中不确定性的存在。',
+                    '<b>尊重伴侣的独立个体性：</b>认识到伴侣是一个独立的成人，有自己的思想、感受和生活。尊重他们的选择，即使与您的期望不符。',
+                    '<b>寻求专业心理支持：</b>如果掌控欲已严重影响关系和您的心理健康，建议寻求心理咨询师的帮助，学习更健康的互动模式和情绪管理技巧。'
+                ] 
+            };
+            if (score <= 70) return { 
+                level: '🚨 边界侵蚀型 (情感勒索)', 
+                description: '您已将个人安全感与对伴侣的掌控深度绑定，常伴有情感勒索倾向。', 
+                analysis: '<p><b>核心特征：</b>您对伴侣的掌控欲已达到较高水平，不仅试图控制伴侣的行为，也开始尝试控制其思想和情感。当伴侣试图建立个人空间或维护自主权时，您可能会通过情绪化的反应（如冷战、指责、扮演受害者）来施加压力，让伴侣感到愧疚并妥协。您将伴侣的顺从视为爱和忠诚的唯一标准。</p><p><b>潜在挑战：</b>这种情感勒索和边界侵蚀会严重破坏关系的健康基础。伴侣可能会感到身心俱疲，失去自我，关系陷入恶性循环。长期下去，不仅会扼杀伴侣的个性和自由，也会让您自己深陷不安和焦虑之中。</p>', 
+                suggestions: [
+                    '<b>紧急审视互动模式：</b>立即反思您与伴侣的互动方式，特别是当您感到不安或愤怒时，是否无意中使用了情感勒索的手段。',
+                    '<b>学习健康的表达方式：</b>当有需求或不满时，尝试用非指责、非威胁的方式直接表达，例如“我希望……”而不是“你必须……”。',
+                    '<b>重建尊重与平等：</b>认识到真正的爱是建立在尊重和平等的基础之上。给予伴侣选择和拒绝的权利，即使结果不合您的心意。',
+                    '<b>寻求专业心理咨询：</b>强烈建议寻求心理咨询师的帮助，学习识别和改变情感勒索行为，重建健康的亲密关系模式。'
+                ] 
+            };
+            if (score <= 80) return { 
+                level: '💔 独占欲狂热型 (关系囚笼)', 
+                description: '您对伴侣的独占欲已达到狂热程度，可能将关系变成情感囚笼。', 
+                analysis: '<p><b>核心特征：</b>您对伴侣的独占欲已接近病态，无法忍受伴侣有任何脱离您掌控的行为或想法。您会频繁检查、跟踪伴侣的行踪，试图切断伴侣与其他人的联系，甚至用威胁、恐吓等手段来维持控制。您将伴侣视为私有财产，容不得他人染指。</p><p><b>潜在挑战：</b>这种狂热的独占欲会彻底摧毁关系的信任基础，将伴侣推入情感的囚笼。伴侣可能会感到极度恐惧、绝望和无助，身心受到严重伤害。您的行为不仅会破坏关系，也可能触犯法律和道德底线，对您自身的生活和声誉造成毁灭性影响。</p>', 
+                suggestions: [
+                    '<b>立即寻求专业心理治疗：</b>您的独占欲已达到危险水平，强烈建议立即寻求心理治疗师或精神科医生的专业帮助。这可能需要长期的心理干预和行为矫正。',
+                    '<b>认识行为的危害性：</b>正视您的行为对伴侣和关系造成的巨大伤害，理解这种独占欲的破坏性本质。',
+                    '<b>学习管理冲动与情绪：</b>在专业指导下，学习识别并控制导致独占行为的冲动和情绪，发展健康的应对机制。',
+                    '<b>重建道德与法律边界：</b>明确在关系中哪些行为是不可接受的，并严格遵守法律和道德底线。如有必要，寻求法律援助以确保您和伴侣的安全。'
+                ] 
+            };
+            if (score <= 90) return { 
+                level: '🚫🔪 极端控制型 (关系病态)', 
+                description: '您对伴侣的控制欲已达到极端病态的程度，关系岌岌可危。', 
+                analysis: '<p><b>核心特征：</b>您的占有欲已完全失控，对伴侣的行为、思想、社交乃至情感世界都试图进行绝对的控制。您可能采取跟踪、监听、威胁、恐吓甚至身体或精神虐待等极端手段来维持这种病态的控制。您将伴侣视为完全的附属品，剥夺其一切自由和尊严，容不得伴侣有丝毫的独立性。这已超越了正常亲密关系的范畴。</p><p><b>潜在挑战：</b>这种极端病态的控制欲不仅会对伴侣造成毁灭性的身心伤害，也可能引发法律纠纷和严重的社会后果。关系已完全失去健康和幸福可言，演变为一方对另一方的彻底奴役。如果不立即进行强制性干预，可能会导致悲剧性后果。</p>', 
+                suggestions: [
+                    '<b>立即寻求紧急专业干预：</b>请务必立即寻求专业的心理危机干预、精神科医生或相关法律援助机构的帮助。这可能需要强制性的心理治疗和法律介入。',
+                    '<b>强制性行为矫正：</b>在专业团队的严格监督下，进行系统的行为矫正治疗，学习如何管理情绪、控制冲动和尊重他人。',
+                    '<b>接受法律和道德约束：</b>认识到您的行为已严重越界，可能触犯法律。必须严格遵守法律和道德底线，停止一切对伴侣的伤害行为。',
+                    '<b>暂时隔离以保障安全：</b>在专业机构的协助下，与伴侣进行强制性的暂时隔离，以确保双方的人身安全。'
+                ] 
+            };
+            return { 
+                level: '💀 危险失控型 (毁灭边缘)', 
+                description: '您的占有欲已完全失控，对伴侣造成严重伤害，关系处于毁灭边缘。', 
+                analysis: '<p><b>核心特征：</b>您的占有欲已达到极致，完全丧失对自我行为的控制。您可能会对伴侣进行持续的精神折磨、人身限制、社交隔离，甚至施加身体暴力。您认为伴侣是您的全部，一旦伴侣试图反抗或离开，您可能会采取极端报复行为，给伴侣和您自己带来不可逆转的毁灭。这已是犯罪行为，而非亲密关系。</p><p><b>潜在挑战：</b>这种状态下的关系已彻底病变，对双方都构成巨大危险。伴侣的生命安全和心理健康受到严重威胁。您自己的行为也将导致严重的法律后果，并可能摧毁您的人生。必须立即寻求强制性的法律和医疗干预。</p>', 
+                suggestions: [
+                    '<b>立即报警并寻求法律保护：</b>如果您的行为已经构成或可能构成对伴侣的伤害或非法限制，请立即报警，并寻求法律援助。保护受害者，也保护您自己免于更严重的法律后果。',
+                    '<b>强制性心理治疗与药物干预：</b>请务必立即寻求精神专科医院的紧急介入。这可能需要强制住院治疗、药物干预以及长期的心理康复。',
+                    '<b>与伴侣彻底隔离：</b>在警方和专业机构的介入下，与伴侣进行彻底的物理隔离，以确保双方的安全，并为后续的干预创造条件。',
+                    '<b>亲友及社会支持系统介入：</b>告知信任的家人、朋友和社会支持组织您的状况，并寻求他们的全面协助和监督。'
+                ] 
+            };
+        }
+
+        function viewAnswers() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'block';
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+            questions.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'answer-item';
+                div.innerHTML = `<div class="answer-q">${q.id}. ${q.text}</div><div class="answer-v">您的选择：${q.options[userAnswers[q.id]]}</div>`;
+                container.appendChild(div);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            if (window.myRadar) window.myRadar.destroy();
+            window.myRadar = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['情感依赖', '边界感', '情绪敏感', '自我价值', '关系理想化'],
+                    datasets: [{
+                        label: '维度评估',
+                        data: [
+                            getDimScore([1,2,3,4,5,11,21,31]),
+                            getDimScore([6,7,8,12,13,22,23,32]),
+                            getDimScore([9,10,14,15,16,24,25,33]),
+                            getDimScore([17,18,19,20,26,27,28,34]),
+                            getDimScore([29,30,35,36,37,38,39,40])
+                        ],
+                        backgroundColor: 'rgba(147, 51, 234, 0.2)', // 主题色背景
+                        borderColor: '#7D0022', // 主题色边框
+                        borderWidth: 3, // 加粗边框
+                        pointBackgroundColor: '#7D0022', // 主题色点
+                        pointBorderColor: '#fff', // 白色点边框
+                        pointBorderWidth: 1, // 减小点边框宽度
+                        pointRadius: 3, // 减小点大小
+                        pointHoverRadius: 5 // 减小悬停时点大小
+                    }]
+                },
+                options: {
+                    scales: { 
+                        r: { 
+                            beginAtZero: true, 
+                            max: 100, 
+                            ticks: { display: false },
+                            grid: { color: '#444444' }, // 网格线颜色
+                            angleLines: { color: '#444444' }, // 角度线颜色
+                            pointLabels: { 
+                                color: '#EAEAEA', // 标签颜色
+                                font: { 
+                                    size: 14, // 标签字体大小
+                                    weight: '600' // 标签字重
+                                }
+                            }
+                        } 
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)', // 提示框背景
+                            titleColor: '#fff', // 提示框标题颜色
+                            bodyColor: '#fff', // 提示框内容颜色
+                            borderColor: '#7D0022', // 提示框边框颜色
+                            borderWidth: 1, // 提示框边框宽度
+                            padding: 12, // 提示框内边距
+                            borderRadius: 8 // 提示框圆角
+                        }
+                    }
+                }
+            });
+        }
+
+        function getDimScore(ids) {
+            let s = 0;
+            ids.forEach(id => s += (userAnswers[id] || 0));
+            return Math.round((s / (ids.length * 4)) * 100);
+        }
+
+        function showUnansweredTip(id) {
+            const existing = document.getElementById('unTip');
+            if(existing) existing.remove();
+            const tip = document.createElement('div');
+            tip.id = 'unTip';
+            tip.style.cssText = `position:fixed; top:40px; left:50%; transform:translateX(-50%); background:#1A1A1A; backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; box-shadow:0 10px 30px rgba(0,0,0,0.2); border:1px solid #7D0022; z-index:10000; font-size:14px; color:white; font-weight:500; animation:tipFadeIn 0.4s ease;`;
+            tip.innerHTML = `⚠️ 请先完成第 <b style="color:#FFD700">${id}</b> 题`;
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 3000);
+        }
+
+        function restartQuiz() {
+            // 重置用户答案和总分
+            userAnswers = {};
+            totalScore = 0;
+            
+            // 显示答题页面，隐藏其他页面
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+            
+            // 重新初始化测试
+            initQuiz();
+            updateProgress();
+            
+            // 滚动到页面顶部
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 回到顶部函数
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        initQuiz();
+    </script>
+    <footer style="text-align: center; padding: 20px; color: #EAEAEA; font-size: 1rem; font-weight: 500; margin-top: 20px;">
+        <p>Inner Peace | 专业·科学·客观</p>
+    </footer>
+</body>
+</html>

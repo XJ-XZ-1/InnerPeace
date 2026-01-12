@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恋爱人格测试 - 探索你的爱情模式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            background: linear-gradient(135deg, #FFF0F5 0%, #F5F5FF 100%);
+            background-image: radial-gradient(at 0% 0%, rgba(255, 192, 203, 0.1) 0, transparent 50%), radial-gradient(at 100% 0%, rgba(138, 43, 226, 0.1) 0, transparent 50%),radial-gradient(at 50% 100%, rgba(255, 160, 122, 0.1) 0, transparent 50%);
+            color: #5A3E65;
+            line-height: 1.8;
+            scroll-behavior: smooth; /* 添加平滑滚动 */
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 答题页面容器 */
+        .quiz-container {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 12px 48px rgba(138, 43, 226, 0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 220px; /* 增加margin-top，确保完全避开固定头部 */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        /* 结果页面和答案页面容器 */
+        .result-container, .answer-container {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 12px 48px rgba(138, 43, 226, 0.1);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 20px; /* 调整为正常的margin-top */
+            width: 100%; /* 确保与头部宽度一致 */
+            box-sizing: border-box; /* 确保padding不影响宽度 */
+            position: relative;
+            z-index: 1; /* 确保内容容器在头部下方 */
+        }
+
+        .quiz-header-fixed {
+            background: white; /* 覆盖滚动时的背景 */
+            z-index: 1050; /* 进一步提高z-index，确保在最上层 */
+            padding: 20px 20px;
+            box-shadow: 0 8px 24px rgba(138, 43, 226, 0.12);
+            border-radius: 24px 24px;
+            position: fixed; /* 固定在视口顶部 */
+            top: 0; /* 完全贴合顶部 */
+            left: 0;
+            right: 0;
+            max-width: 850px; /* 保持与container一致的max-width */
+            margin: 0 auto; /* 居中对齐 */
+            box-sizing: border-box; /* 确保padding不影响宽度计算 */
+        }
+
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部样式 */
+        .header {
+            margin-bottom: 8px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #8A2BE2;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 2px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #8B5CF6;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge-blue { background: #F3E8FF; color: #8B5CF6; border: 1px solid #E9D5FF; }
+        .badge-green { background: #ECFDF5; color: #10B981; border: 1px solid #D1FAE5; }
+
+        .disclaimer {
+            background: #FDF2F8;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #EC4899;
+            margin-bottom: 8px;
+            border-left: 3px solid #EC4899;
+        }
+
+        .disclaimer i {
+            color: #EC4899;
+            margin-right: 3px;
+            font-style: normal;
+        }
+
+        /* 进度条区域 */
+        .progress-section {
+            background: #F8FAFC;
+            z-index: 9;
+            padding: 8px 20px 12px; /* 进一步减小上下padding */
+            margin-bottom: 0; /* 移除原来的margin-bottom */
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px; /* 减小间距 */
+        }
+
+        .progress-stats {
+            font-size: 14px; /* 调整字体大小 */
+            color: #8B5CF6;
+            font-weight: 600;
+        }
+
+        .hint-tag {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: white;
+            padding: 4px 12px; /* 减小padding */
+            border-radius: 50px;
+            font-size: 11px; /* 减小字体 */
+            border: 1px solid #8B5CF6;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .progress-bar {
+            height: 8px; /* 减小进度条高度 */
+            background: #E2E8F0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+
+        /* 题目样式 */
+        .question-item {
+            padding: 15px 0; /* 减小垂直方向的内边距 */
+            margin-bottom: 15px; /* 减小题目之间的间距 */
+            border-bottom: 1px dashed #E9D5FF; /* 底部虚线分隔 */
+            transition: all 0.3s ease; /* 过渡动画 */
+            scroll-margin-top: 15px; /* 滚动到顶部时的留白 */
+            position: relative; /* 用于z-index */
+        }
+
+        .question-item:hover,
+        .question-item.active {
+            background: #F3E8FF;
+            border-radius: 16px; /* 活跃题目添加圆角 */
+            padding: 15px 15px; /* 减小活跃题目左右padding */
+            margin: 5px -15px 15px; /* 调整margin以实现“提拉”效果，并与下一题保持间距 */
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.2);
+            transform: scale(1.005) translateY(-2px); /* 轻微放大和上浮 */
+            border: 1px solid #D8B4FE;
+            z-index: 2; /* 降低z-index，确保在固定头部下方 */
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        /* 避免活跃题目上浮后与下一题重叠，并调整间距 */
+        .question-item.active + .question-item {
+            margin-top: 15px; /* 减小间距 */
+        }
+
+        .question-title-row {
+            display: flex;
+            gap: 10px; /* 减小间距 */
+            margin-bottom: 15px; /* 减小间距 */
+            align-items: flex-start;
+        }
+
+        .question-index {
+            flex-shrink: 0;
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 800;
+            color: #8B5CF6;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .question-text {
+            font-size: 16px; /* 减小字体大小 */
+            font-weight: 600;
+            color: #5A3E65;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px; /* 减小选项之间的间距 */
+            padding-left: 35px; /* 减小左侧padding */
+        }
+
+        .option-capsule {
+            padding: 10px 18px; /* 减小选项按钮padding */
+            background: white;
+            border: 2px solid #E9D5FF;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 13px; /* 减小选项字体大小 */
+            color: #6D28D9;
+            transition: all 0.3s ease;
+            user-select: none;
+            flex-grow: 1;
+            text-align: center;
+            min-width: 100px; /* 减小最小宽度 */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-capsule:hover {
+            background: #F3E8FF;
+            border-color: #8B5CF6;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected:hover {
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .option-capsule input {
+            display: none;
+        }
+
+        .questions-scroll-wrapper {
+            /* 移除最大高度限制，让内容正常滚动 */
+            padding: 0; /* 移除padding，由quiz-container控制 */
+            overflow-y: visible; /* 允许正常溢出 */
+        }
+
+        /* 提交按钮 */
+        .submit-wrapper {
+            background: white;
+            z-index: 10;
+            padding: 20px 40px; /* 调整padding，让按钮区域更大一些 */
+            box-shadow: 0 8px 24px rgba(138, 43, 226, 0.12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* 两个按钮之间的间距 */
+            /* 移除固定定位，回到正常文档流 */
+            border-radius: 20px;
+        }
+
+        .submit-btn {
+            padding: 14px 28px; /* 优化按钮padding */
+            border: none;
+            border-radius: 50px;
+            font-size: 15px; /* 优化按钮字体大小 */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 优化过渡效果 */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* 优化图标与文字间距 */
+            min-width: 170px; /* 优化最小宽度 */
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.3px; /* 优化字间距 */
+        }
+
+        /* 主按钮样式 */
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary) {
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* 回到顶部按钮样式 */
+        .btn-back-to-top {
+            background: white;
+            color: #8B5CF6;
+            border: 2px solid #E9D5FF;
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.1);
+        }
+        
+        .btn-back-to-top:hover {
+            background: #F3E8FF;
+            border-color: #8B5CF6;
+            color: #8B5CF6;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 次要按钮样式 */
+        .btn-secondary {
+            background: white;
+            color: #8B5CF6;
+            border: 2px solid #E9D5FF;
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: #F3E8FF;
+            border-color: #8B5CF6;
+            color: #8B5CF6;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 按钮图标样式 */
+        .btn-icon {
+            font-size: 18px; /* 优化图标大小 */
+            line-height: 1;
+        }
+
+        /* 按钮装饰效果 */
+        .btn-decoration {
+            font-size: 18px; /* 优化装饰图标大小 */
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3) rotate(10deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Loading页面样式 */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px; /* Limit max width for a modal-like appearance */
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 12px 48px rgba(138, 43, 226, 0.15);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .loading-container.show { display: flex; }
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #F3E8FF;
+            border-top-color: #8B5CF6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 结果页面布局 */
+        .score-display { text-align: center; margin-bottom: 20px; }
+        
+        /* 结果主内容区 - 左右布局 */
+        .results-main-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* 减小间距 */
+            margin-bottom: 30px; /* 减小底部间距 */
+            flex-wrap: wrap;
+        }
+        
+        .score-circle-wrapper {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .score-circle-box {
+            position: relative;
+            width: 130px; /* 进一步缩小尺寸 */
+            height: 130px; /* 进一步缩小尺寸 */
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+            border-radius: 50%;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .score-value { 
+            font-size: 42px; /* 进一步缩小字体 */
+            font-weight: 800; 
+            color: white; 
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .score-level { 
+            font-size: 22px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #8B5CF6; 
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .score-desc { 
+            font-size: 14px; /* 缩小字体 */
+            color: #8B5CF6; 
+            line-height: 1.5; /* 减小行高 */
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .chart-container { 
+            margin: 0; 
+            height: 250px; /* 进一步缩小高度 */
+            width: 300px; /* 进一步缩小宽度 */
+            max-width: 300px; /* 进一步缩小最大宽度 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex: 0 0 auto;
+        }
+        .section-title { 
+            font-size: 18px; /* 缩小字体 */
+            font-weight: 700; 
+            color: #8B5CF6; 
+            margin-bottom: 15px; /* 减小间距 */
+            padding: 8px 12px; /* 减小内边距 */
+            background: #F3E8FF; 
+            border-radius: 10px; /* 缩小圆角 */
+            border-left: 4px solid #8B5CF6; 
+        }
+        .analysis-content { 
+            font-size: 14px; /* 缩小字体 */
+            line-height: 1.6; /* 减小行高 */
+            color: #5A3E65; 
+            padding: 12px; /* 减小内边距 */
+            background: #F8FAFC; 
+            border-radius: 10px; /* 缩小圆角 */
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1); /* 轻微阴影 */
+            margin-bottom: 20px; /* 增加底部间距 */
+        }
+        .suggestion-list { list-style: none; padding: 0; }
+        .suggestion-list li { 
+            padding: 12px; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            background: #F8FAFC;
+            border-radius: 10px; /* 缩小圆角 */
+            font-size: 13px; /* 缩小字体 */
+            color: #5A3E65; 
+            border: 1px solid #E9D5FF;
+            border-left: 4px solid #8B5CF6; 
+            transition: all 0.3s ease; /* 过渡动画 */
+        }
+        
+        .suggestion-list li:hover {
+            transform: translateY(-2px); /* 轻微上浮 */
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15); 
+            border-color: #8B5CF6; 
+        }
+
+        /* 答案查看项 */
+        .answer-item {
+            padding: 12px 0; /* 减小内边距 */
+            margin-bottom: 12px; /* 减小间距 */
+            border-bottom: 1px dashed #E9D5FF;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-item:last-child {
+            border-bottom: none; 
+        }
+        
+        .answer-q {
+            font-size: 14px; /* 缩小字体 */
+            font-weight: 600;
+            color: #5A3E65;
+            line-height: 1.4;
+            margin-bottom: 8px; /* 减小间距 */
+        }
+        
+        .answer-v {
+            color: #8B5CF6;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px; /* 减小间距 */
+        }
+
+        /* 平板设备 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px; /* 调整容器内边距 */
+            }
+            
+            .quiz-header-fixed {
+                max-width: 100%; /* 适应全屏宽度 */
+            }
+            
+            .quiz-container {
+                margin-top: 220px; /* 增加顶部边距，确保内容不被遮挡 */
+            }
+        }
+        
+        /* 移动端 */
+        @media (max-width: 640px) {
+            /* 固定头部优化 */
+            .quiz-header-fixed {
+                padding: 15px 15px; /* 减小内边距 */
+                max-width: 100%; /* 适应全屏宽度 */
+                border-radius: 20px 20px; /* 保持四个角圆角 */
+            }
+            
+            .header h1 {
+                font-size: 20px; /* 减小标题字体 */
+            }
+            
+            .header-badges {
+                flex-direction: column; /* 徽章垂直排列 */
+                gap: 5px; /* 减小间距 */
+            }
+            
+            .badge {
+                font-size: 9px; /* 减小徽章字体 */
+                padding: 3px 8px; /* 减小徽章内边距 */
+            }
+            
+            .progress-section {
+                padding: 8px 15px; /* 减小进度条区域内边距 */
+            }
+            
+            /* 答题页面优化 */
+            .quiz-container {
+                margin-top: 220px; /* 增大顶部边距，确保内容不被遮挡 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .question-item {
+                margin: 5px -10px 12px; /* 调整margin，适应移动端 */
+                padding: 12px 12px; /* 调整内边距 */
+                scroll-margin-top: 200px; /* 增大滚动留白，确保滚动时不被头部遮挡 */
+            }
+            
+            .question-title-row {
+                gap: 8px; /* 减小间距 */
+            }
+            
+            .question-index {
+                font-size: 14px; /* 减小题号字体 */
+            }
+            
+            .question-text {
+                font-size: 15px; /* 减小题目字体 */
+            }
+            
+            .options-grid {
+                padding-left: 0; /* 移除左侧padding */
+                gap: 8px; /* 统一选项间距 */
+                display: flex;
+                flex-direction: column; /* 垂直排列 */
+            }
+            
+            .option-capsule {
+                padding: 10px 15px; /* 统一选项内边距 */
+                font-size: 13px; /* 统一选项字体 */
+                min-width: auto; /* 移除最小宽度限制 */
+                width: 100%; /* 所有按钮宽度一致 */
+                max-width: none; /* 移除最大宽度限制 */
+                flex: 1;
+            }
+            
+            /* 结果页面优化 */
+            .results-main-content {
+                flex-direction: column; /* 移动端改为上下布局 */
+                gap: 20px; /* 减小间距 */
+            }
+            
+            .chart-container {
+                width: 100%; /* 适应移动端宽度 */
+                max-width: 100%; /* 适应移动端宽度 */
+                height: 320px; /* 增大雷达图高度 */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .score-circle-box {
+                width: 140px; /* 增大分数圆形大小 */
+                height: 140px; /* 增大分数圆形大小 */
+                margin: 0 auto; /* 确保水平居中 */
+            }
+            
+            .score-value {
+                font-size: 40px; /* 增大分数字体大小 */
+            }
+            
+            .score-level {
+                font-size: 20px; /* 调整等级字体大小 */
+            }
+            
+            /* 答案页面优化 */
+            .answer-container {
+                margin-top: 15px; /* 减小顶部边距 */
+                padding: 15px 15px 30px; /* 减小内边距 */
+            }
+            
+            .answer-item {
+                padding: 10px 0; /* 减小内边距 */
+            }
+            
+            .answer-q {
+                font-size: 13px; /* 减小题目字体大小 */
+            }
+            
+            .answer-v {
+                font-size: 12px; /* 减小答案字体大小 */
+            }
+            
+            /* 按钮优化 */
+            .submit-btn {
+                padding: 12px 16px; /* 调整内边距，减小按钮大小 */
+                font-size: 13px; /* 调整字体大小 */
+                min-width: auto; /* 移除全屏宽度限制 */
+                width: calc(50% - 5px); /* 按钮宽度平分，减去间距 */
+                gap: 5px; /* 减小图标与文字间距 */
+            }
+            
+            .submit-wrapper {
+                padding: 15px 20px; /* 调整内边距 */
+                gap: 10px; /* 按钮间距 */
+                flex-direction: row; /* 按钮水平排列 */
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        /* 小屏手机 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px; /* 进一步减小标题字体 */
+            }
+            
+            .score-circle-box {
+                width: 130px; /* 适应小屏的分数圆形大小 */
+                height: 130px; /* 适应小屏的分数圆形大小 */
+            }
+            
+            .score-value {
+                font-size: 38px; /* 适应小屏的分数字体大小 */
+            }
+            
+            .chart-container {
+                height: 300px; /* 适应小屏的雷达图高度 */
+            }
+            
+            /* 小屏手机按钮优化 */
+            .submit-btn {
+                padding: 10px 12px; /* 进一步减小内边距 */
+                font-size: 12px; /* 进一步减小字体大小 */
+                width: calc(50% - 4px); /* 按钮宽度平分，减去间距 */
+            }
+            
+            .submit-wrapper {
+                gap: 8px; /* 减小按钮间距 */
+                padding: 10px 15px; /* 减小内边距 */
+            }
+        }
+
+        /* 抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.5s; }
+
+        /* 顶部Tip */
+        @keyframes tipFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quizPage">
+        <!-- 将quiz-header-fixed移出quiz-container -->
+        <div class="quiz-header-fixed">
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-left">
+                        <h1>💖 恋爱人格测试</h1>
+                        <p>了解你在亲密关系中的行为与情感</p>
+                    </div>
+                    <div class="header-badges">
+                        <div class="badge badge-blue">🔐 40 题 · 满分 100 分</div>
+                        <div class="badge badge-green">💝 建议真实作答</div>
+                    </div>
+                </div>
+                <div class="disclaimer">
+                    <i>⚠️</i> 免责声明：本测试旨在帮助您自我认知，不构成专业心理诊断。请客观作答。
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-stats" id="progressText">已完成 0 / 40 题</div>
+                    <div class="hint-tag">请根据「你在关系中的真实感受」作答</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <form id="quizForm" style="display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="questions-scroll-wrapper">
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="submit-wrapper">
+                    <button type="button" class="submit-btn btn-back-to-top" onclick="scrollToTop()">
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        回到顶部
+                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-decoration">✨</span>
+                        生成恋爱人格评估
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading页面 -->
+    <div class="loading-container" id="loadingPage">
+        <div class="loader"></div>
+        <div style="margin-top: 25px; font-size: 22px; font-weight: 700; color: #5A3E65; letter-spacing: -0.5px;">
+            智能评估生成中<span id="loadingDots">...</span>
+        </div>
+        <p style="margin-top: 10px; color: #8B5CF6; font-size: 15px;">正在分析您的恋爱人格特质</p>
+    </div>
+
+    <!-- 结果页面 -->
+    <div class="container" id="resultPage" style="display:none">
+        <div class="result-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #8B5CF6;">
+                        <path d="M3 3v18h18"></path>
+                        <path d="M18 17V9"></path>
+                        <path d="M13 17V5"></path>
+                        <path d="M8 17v-3"></path>
+                    </svg>
+                    恋爱人格评估报告
+                </h1>
+            </div>
+
+            <div class="score-display">
+                <div class="score-level" id="scoreLevel" style="color: #8B5CF6;"></div>
+                <div class="score-desc" id="scoreDescription" style="color: #8B5CF6;"></div>
+            </div>
+
+            <div class="results-main-content">
+                <div class="score-circle-wrapper">
+                    <div class="score-circle-box">
+                        <div class="score-value" id="scoreValue">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">详细分析</h2>
+                <div class="analysis-content" id="analysisContent"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">专家建议</h2>
+                <ul class="suggestion-list" id="suggestionList"></ul>
+            </div>
+
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="restartQuiz()">重新评估</button>
+                <button class="submit-btn btn-secondary" onclick="viewAnswers()">查看我的回答</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答案查看页面 -->
+    <div class="container" id="answerPage" style="display:none">
+        <div class="answer-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #8B5CF6;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    我的恋爱人格答案
+                </h1>
+            </div>
+            <div id="answersContainer"></div>
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="showResultsPage()">返回评估报告</button>
+                <button class="submit-btn btn-secondary" onclick="restartQuiz()">重新评估</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const questions = [
+            { id: 1, text: "在恋爱关系中，我更倾向于保持清晰的个人边界，尊重彼此的独立空间", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 2, text: "我会定期评估自己在关系中的需求是否得到满足，而非完全忽视自我", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 3, text: "当伴侣与异性朋友正常交往时，我会感到不安和嫉妒", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 4, text: "我能够理性分析关系中的问题，而不是被情绪完全主导", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 5, text: "我会因为伴侣的一句话或一个表情而过度解读，影响整天的心情", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 6, text: "我认为健康的关系需要双方都有各自的兴趣爱好和社交圈", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 7, text: "当伴侣表现出冷淡时，我会立即自我怀疑，认为是自己不够好", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 8, text: "我能够清晰地向伴侣表达自己的需求和感受，而非让对方猜测", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 9, text: "为了避免冲突，我会过度迁就伴侣，牺牲自己的真实想法", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 10, text: "我会客观看待伴侣的优点和缺点，不会过度理想化", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 11, text: "当关系出现问题时，我会与伴侣共同分析原因，而非独自承担所有责任", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 12, text: "我很难接受伴侣有自己的私人空间和时间", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 13, text: "我会支持伴侣追求个人目标，即使这意味着我们相处时间减少", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 14, text: "我认为爱情需要保持一定的距离感，才能长久保鲜", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 15, text: "当伴侣没有按照我的期望行事时，我会感到强烈的失望和受伤", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 16, text: "我会将关系的成功或失败视为双方共同作用的结果，而非个人责任", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 17, text: "我能够在情绪激动时保持冷静，避免说出伤害对方的话", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 18, text: "我会因为害怕失去关系而过度小心翼翼，不敢真实表达", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 19, text: "我认为每个人都有权利保留适当的个人隐私，即使在亲密关系中", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 20, text: "我的自我价值感不会因为伴侣的赞美或批评而大幅波动", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 21, text: "我会过度解读伴侣的行为，寻找潜在的拒绝或背叛信号", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 22, text: "当关系出现矛盾时，我会优先照顾自己的感受，再考虑修复关系", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 23, text: "我能够接受关系中存在的不确定性，相信关系会自然发展", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 24, text: "我不会将伴侣的认可视为自我价值的唯一来源", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 25, text: "我认为在关系中应该保持一定的独立性，而非完全依赖对方", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 26, text: "我会坦诚表达自己的不同意见，即使这可能引起冲突", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 27, text: "我会平衡关系和个人生活，不会将所有精力都投入到关系中", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 28, text: "当伴侣需要独处时，我会理解并给予空间", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 29, text: "我会理性看待关系中的小矛盾，不会过度放大或灾难化", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 30, text: "我认为爱情是生活的重要部分，但不是全部", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 31, text: "我会保持与家人朋友的联系，不会因为恋爱而疏远他们", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 32, text: "即使关系出现危机，我也能保持基本的生活正常运转", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 33, text: "我会坚持自己的核心价值观，不会因为伴侣而轻易改变", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 34, text: "我能够接受伴侣的不完美，理解人无完人", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 35, text: "我会享受当下的关系，不会过度规划和焦虑未来", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 36, text: "我认为健康的关系需要保持两个独立个体的完整性", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 37, text: "我会信任伴侣的承诺，不会无端怀疑", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 38, text: "我会将关系的失败视为成长机会，而非个人的完全失败", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 39, text: "我能够容忍关系中的不确定性，不会因此感到焦虑", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 40, text: "我认为在关系中应该保持平等，双方都应该为自己的幸福负责", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] }
+        ];
+
+        let userAnswers = {};
+        let totalScore = 0;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.sort((a,b) => a.id - b.id);
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.id = `question-${q.id}`;
+                const displayId = (index + 1).toString().padStart(2, '0');
+
+                questionDiv.innerHTML = `
+                    <div class="question-title-row">
+                        <div class="question-index">${displayId}.</div>
+                        <div class="question-text">${q.text}</div>
+                    </div>
+                    <div class="options-grid">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option-capsule">
+                                <input type="radio" name="q${q.id}" value="${optIndex}" onchange="selectOption(${q.id}, ${optIndex})">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qId, val) {
+            userAnswers[qId] = val;
+            const labels = document.querySelectorAll(`#question-${qId} .option-capsule`);
+            labels.forEach((l, idx) => {
+                l.classList.toggle('selected', idx === val);
+            });
+            updateProgress();
+            
+            const nextId = questions[questions.findIndex(q => q.id === qId) + 1]?.id;
+            // 移除所有active状态
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            if (nextId) {
+                setTimeout(() => {
+                    const nextEl = document.getElementById(`question-${nextId}`);
+                    if(nextEl) {
+                        // 添加下一题的active状态并滚动
+                        nextEl.classList.add('active');
+                        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else { // 如果是最后一题，且已作答，让当前题目保持active状态
+                document.getElementById(`question-${qId}`).classList.add('active');
+            }
+        }
+
+        function updateProgress() {
+            const count = Object.keys(userAnswers).length;
+            const percent = (count / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `已完成 ${count} / ${questions.length} 题`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (Object.keys(userAnswers).length < questions.length) {
+                const firstUn = questions.find(q => userAnswers[q.id] === undefined);
+                const el = document.getElementById(`question-${firstUn.id}`);
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('shake');
+                showUnansweredTip(firstUn.id);
+                setTimeout(() => el.classList.remove('shake'), 500);
+                return;
+            }
+            
+            calculateScore();
+            document.getElementById('loadingPage').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loadingPage').classList.remove('show');
+                showResultsPage();
+            }, 2000);
+        });
+
+        function calculateScore() {
+            let sum = 0;
+            // 正向计分题目ID列表（健康选项，得分越高越健康，需要转换为反向计分）
+            const positiveQuestions = [1,2,4,6,8,10,11,13,14,16,17,19,20,22,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40];
+            
+            Object.entries(userAnswers).forEach(([qId, value]) => {
+                const questionId = parseInt(qId);
+                // 如果是正向计分题目（健康选项），转换为反向计分（4-value）
+                // 这样得分越高，代表恋爱脑程度越高
+                if (positiveQuestions.includes(questionId)) {
+                    sum += (4 - value);
+                } else {
+                    sum += value;
+                }
+            });
+            
+            totalScore = Math.round((sum / (questions.length * 4)) * 100);
+        }
+
+        function showResultsPage() {
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            document.getElementById('scoreValue').textContent = totalScore;
+
+            // 确保移除所有active状态，避免结果页出现题目active
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const analysis = getScoreLevelDetails(totalScore);
+            document.getElementById('scoreLevel').textContent = analysis.level;
+            document.getElementById('scoreDescription').textContent = analysis.description;
+            document.getElementById('analysisContent').innerHTML = analysis.analysis;
+            
+            const sList = document.getElementById('suggestionList');
+            sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            renderRadarChart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function getScoreLevelDetails(score) {
+            if (score <= 20) return { 
+                level: '🌟 安全独立型', 
+                description: '您在亲密关系中展现出健康的独立性与安全感，拥有成熟的恋爱人格。', 
+                analysis: '<p><b>核心特征：</b>您拥有清晰的自我边界和稳定的自我价值感，不会将个人幸福完全寄托于亲密关系。您能够在保持独立的同时，享受与伴侣的亲密联结。您对关系持有理性的态度，能够客观分析问题，不会被情绪过度主导。您尊重伴侣的个人空间，信任对方的行为，不会无端产生嫉妒或焦虑。</p><p><b>心理学解读：</b>根据依恋理论，您属于安全型依恋风格，这是最健康的依恋类型。您在童年时期得到了足够的爱与安全感，因此在成年关系中能够信任他人，也能够信任自己。您的自我认知清晰，情绪调节能力强，这使得您的亲密关系更加稳定和健康。</p><p><b>优势体现：</b>您的关系模式有助于建立平等、尊重且充满活力的长期伴侣关系。您能够为伴侣提供稳定的情感支持，同时也能从关系中获得滋养。您的独立性和安全感会感染伴侣，促进双方共同成长。</p>', 
+                suggestions: [
+                    '<b>分享您的依恋风格：</b>与伴侣分享您的安全型依恋特质，帮助对方理解您的行为模式，促进彼此的理解与接纳。',
+                    '<b>支持伴侣成长：</b>利用您的情感稳定性，支持伴侣探索自己的依恋模式，共同创造更健康的关系动态。',
+                    '<b>保持自我成长：</b>继续培养个人兴趣和目标，不断丰富自己的内心世界，这将使您在关系中更具吸引力和活力。',
+                    '<b>定期关系检查：</b>尽管关系稳定，仍建议定期与伴侣进行深入沟通，分享彼此的需求和感受，确保关系持续健康发展。'
+                ] 
+            };
+            if (score <= 40) return { 
+                level: '🌱 平衡成长型', 
+                description: '您在亲密关系中展现出良好的平衡感，正在成长为更成熟的恋爱人格。', 
+                analysis: '<p><b>核心特征：</b>您基本能够保持个人边界和自我价值，但在某些情况下会表现出一定的情感依赖或焦虑。您重视关系，愿意为伴侣付出，但也会关注自己的需求。您能够理性处理大多数关系问题，但在情绪激动时可能会失去部分理性。您信任伴侣，但偶尔会产生不必要的怀疑或担心。</p><p><b>心理学解读：</b>您正处于安全型依恋的发展阶段，通过有意识的自我成长，可以进一步提升依恋安全性。您已经具备了健康关系的基本要素，只需在某些方面进行微调，就能发展出更加成熟的恋爱人格。</p><p><b>成长空间：</b>您的主要成长方向是增强情绪稳定性和信任能力，学会在关系中更加放松，减少不必要的担心和焦虑。通过自我觉察和有意识的练习，您可以进一步提升关系的质量。</p>', 
+                suggestions: [
+                    '<b>增强情绪觉察：</b>当感到焦虑或不安时，尝试暂停并观察自己的情绪，分析情绪的来源，而非立即反应。',
+                    '<b>建立信任锚点：</b>与伴侣约定一些信任仪式，如定期分享日常、坦诚沟通感受，增强彼此的信任感。',
+                    '<b>培养独处能力：</b>刻意安排独处时间，享受独立活动的乐趣，增强内心的安全感和独立性。',
+                    '<b>学习非暴力沟通：</b>通过学习有效的沟通技巧，更好地表达自己的需求和感受，避免冲突升级。'
+                ] 
+            };
+            if (score <= 60) return { 
+                level: '❤️ 情感依赖型', 
+                description: '您在亲密关系中情感投入度较高，存在一定的依赖倾向，需要关注自我边界。', 
+                analysis: '<p><b>核心特征：</b>您非常重视亲密关系，情感需求较为强烈，容易将个人价值与关系质量挂钩。您在关系中投入较多精力，可能会过度关注伴侣的行为和情绪。当伴侣不在身边或表现出冷淡时，您会感到不安和焦虑。您可能会为了维持关系而妥协自己的需求，难以坚持个人边界。</p><p><b>心理学解读：</b>您可能属于焦虑型依恋风格，这种依恋模式通常源于童年时期的情感需求未被充分满足。您对亲密关系有着强烈的渴望，但同时也充满了不确定感，害怕被拒绝或抛弃。</p><p><b>潜在挑战：</b>过度的情感依赖可能会给伴侣带来压力，也会让您在关系中失去自我。长期下去，可能会导致关系失衡，影响关系的健康发展。</p>', 
+                suggestions: [
+                    '<b>重建自我认同：</b>重新探索个人兴趣和目标，将注意力从关系转向自我成长，建立独立于关系的自我价值感。',
+                    '<b>设定健康边界：</b>明确自己的需求和底线，学会温和而坚定地表达拒绝，保护个人空间和利益。',
+                    '<b>发展多元支持系统：</b>除了伴侣外，积极与家人、朋友保持联系，建立广泛的情感支持网络。',
+                    '<b>练习情绪调节：</b>通过冥想、深呼吸等方式，学习在情绪激动时保持冷静，避免做出冲动的决定。',
+                    '<b>寻求专业支持：</b>如果依赖倾向较为严重，考虑咨询心理咨询师，探索依恋模式的深层原因。'
+                ] 
+            };
+            if (score <= 80) return { 
+                level: '😰 焦虑敏感型', 
+                description: '您在亲密关系中表现出明显的焦虑和敏感，需要关注情绪管理和安全感建设。', 
+                analysis: '<p><b>核心特征：</b>您对亲密关系持有强烈的不安感，经常担心被伴侣拒绝或抛弃。您对伴侣的行为过度敏感，容易过度解读对方的言行，产生不必要的怀疑和嫉妒。您的情绪波动较大，容易被伴侣的态度所左右。您可能会采取过度黏人或控制的行为来缓解内心的焦虑，这可能会给伴侣带来压力。</p><p><b>心理学解读：</b>您的依恋风格属于典型的焦虑型依恋，这种模式会导致您在关系中体验到较多的痛苦和不安。您的自我价值感不稳定，需要通过伴侣的持续关注和肯定来确认自己的价值。</p><p><b>风险提示：</b>长期的焦虑和敏感可能会导致关系冲突增加，甚至可能破坏亲密关系。如果不加以调整，可能会形成恶性循环：您越焦虑，越黏人，伴侣越感到压力，越想要疏远，这又会加剧您的焦虑。</p>', 
+                suggestions: [
+                    '<b>紧急情绪干预：</b>当感到强烈焦虑时，尝试采用5-4-3-2-1接地法：说出5个看到的事物，4个能触摸到的事物，3个能听到的声音，2个能闻到的气味，1个能尝到的味道，帮助自己回到当下。',
+                    '<b>记录情绪触发点：</b>记录下每次焦虑发作的情境和触发因素，寻找规律，提前做好应对准备。',
+                    '<b>建立安全基地：</b>与伴侣共同制定"安全协议"，如约定每天的沟通时间，明确表达彼此的需求和边界。',
+                    '<b>专业心理干预：</b>强烈建议寻求专业心理咨询，通过认知行为疗法或依恋取向治疗，重建安全的依恋模式。',
+                    '<b>自我关爱练习：</b>每天进行自我关爱活动，如运动、阅读、泡热水澡等，增强内心的安全感和自我接纳。'
+                ] 
+            };
+            return { 
+                level: '💔 极端恋爱脑型', 
+                description: '您在亲密关系中表现出极端的情感依赖和非理性行为，需要立即关注和调整。', 
+                analysis: '<p><b>核心特征：</b>您的生活重心完全被亲密关系占据，个人边界几乎完全消失。您将全部的自我价值和幸福感寄托于伴侣，失去了独立的自我认同。您对伴侣的控制欲强烈，难以容忍对方的任何独立行为。您的情绪极度不稳定，容易出现极端的情绪反应，如愤怒、绝望或自我伤害倾向。您可能会采取极端手段维持关系，即使这意味着牺牲自己的尊严和利益。</p><p><b>心理学解读：</b>您的状态已经超出了正常的恋爱状态，可能符合"病理性依恋"或"恋爱成瘾"的特征。这种模式通常与深层的心理创伤或低自尊有关，需要专业的心理干预。</p><p><b>严重警示：</b>这种极端的恋爱模式不仅会给伴侣带来巨大的压力和痛苦，也会对您的身心健康造成严重伤害。长期处于这种状态可能导致抑郁、焦虑等心理问题，甚至可能引发自我伤害行为。</p>', 
+                suggestions: [
+                    '<b>立即寻求专业帮助：</b>尽快联系心理咨询师或心理医生，进行全面的心理评估和治疗。如果出现自伤或伤人倾向，立即前往医院精神科就诊。',
+                    '<b>建立安全支持网络：</b>向信任的家人或朋友寻求支持，告知他们您的状况，避免独处时做出冲动行为。',
+                    '<b>暂时物理隔离：</b>在专业人士的指导下，考虑与伴侣进行暂时的物理隔离，给自己留出空间和时间进行自我修复。',
+                    '<b>重建生活结构：</b>从最基本的生活习惯开始，重建规律的生活，如固定的作息时间、饮食和运动。',
+                    '<b>自我认同重建：</b>在治疗师的帮助下，重新探索"我是谁"、"我的价值在哪里"等核心问题，重建独立的自我认同。',
+                    '<b>学习情绪管理：</b>通过专业指导，学习有效的情绪调节技巧，如正念冥想、情绪日记等，增强情绪的稳定性。'
+                ] 
+            };
+        }
+
+        function renderRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            if (window.myRadar) window.myRadar.destroy();
+            window.myRadar = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['安全依恋', '情绪稳定', '自我边界', '信任能力', '独立倾向', '情感投入'],
+                    datasets: [{
+                        label: '恋爱人格维度',
+                        data: [
+                            calculateAttachmentScore(),
+                            calculateEmotionScore(),
+                            calculateBoundaryScore(),
+                            calculateTrustScore(),
+                            calculateIndependenceScore(),
+                            calculateEmotionInvestmentScore()
+                        ],
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)', // 主题色背景
+                        borderColor: '#8B5CF6', // 主题色边框
+                        borderWidth: 3, // 加粗边框
+                        pointBackgroundColor: '#8B5CF6', // 主题色点
+                        pointBorderColor: '#fff', // 白色点边框
+                        pointBorderWidth: 1, // 减小点边框宽度
+                        pointRadius: 3, // 减小点大小
+                        pointHoverRadius: 5 // 减小悬停时点大小
+                    }]
+                },
+                options: {
+                    scales: { 
+                        r: { 
+                            beginAtZero: true, 
+                            max: 100, 
+                            ticks: { display: false },
+                            grid: { color: '#e2e8f0' }, // 网格线颜色
+                            angleLines: { color: '#e2e8f0' }, // 角度线颜色
+                            pointLabels: { 
+                                color: '#5A3E65', // 标签颜色
+                                font: { 
+                                    size: 14, // 标签字体大小
+                                    weight: '600' // 标签字重
+                                }
+                            }
+                        } 
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(26, 26, 26, 0.9)', // 提示框背景
+                            titleColor: '#fff', // 提示框标题颜色
+                            bodyColor: '#fff', // 提示框内容颜色
+                            borderColor: '#8B5CF6', // 提示框边框颜色
+                            borderWidth: 1, // 提示框边框宽度
+                            padding: 12, // 提示框内边距
+                            borderRadius: 8, // 提示框圆角
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = ['安全依恋', '情绪稳定', '自我边界', '信任能力', '独立倾向', '情感投入'];
+                                    const value = context.raw;
+                                    let interpretation = '';
+                                    if (value >= 80) interpretation = '非常强';
+                                    else if (value >= 60) interpretation = '较强';
+                                    else if (value >= 40) interpretation = '中等';
+                                    else if (value >= 20) interpretation = '较弱';
+                                    else interpretation = '非常弱';
+                                    return `${labels[context.dataIndex]}: ${value}分 (${interpretation})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 计算安全依恋得分 (反向计分：得分越高越不安全)
+        function calculateAttachmentScore() {
+            const safeIds = [3,5,7,12,15,18,21,23,33,37]; // 不安全依恋相关题目
+            let score = 0;
+            safeIds.forEach(id => score += (userAnswers[id] || 0));
+            const rawScore = Math.round((score / (safeIds.length * 4)) * 100);
+            return 100 - rawScore; // 转换为安全依恋得分
+        }
+
+        // 计算情绪稳定得分 (反向计分：得分越高越不稳定)
+        function calculateEmotionScore() {
+            const stableIds = [4,17,29,32,35,39]; // 情绪不稳定相关题目
+            let score = 0;
+            stableIds.forEach(id => score += (userAnswers[id] || 0));
+            const rawScore = Math.round((score / (stableIds.length * 4)) * 100);
+            return 100 - rawScore; // 转换为情绪稳定得分
+        }
+
+        // 计算自我边界得分 (正向计分：得分越高边界越清晰)
+        function calculateBoundaryScore() {
+            const boundaryIds = [1,2,6,8,13,22,25,26,30,36,40]; // 边界清晰相关题目
+            let score = 0;
+            boundaryIds.forEach(id => score += (userAnswers[id] || 0));
+            return Math.round((score / (boundaryIds.length * 4)) * 100);
+        }
+
+        // 计算信任能力得分 (正向计分：得分越高信任能力越强)
+        function calculateTrustScore() {
+            const trustIds = [14,16,19,20,24,27,31,38]; // 信任能力相关题目
+            let score = 0;
+            trustIds.forEach(id => score += (userAnswers[id] || 0));
+            return Math.round((score / (trustIds.length * 4)) * 100);
+        }
+
+        // 计算独立倾向得分 (正向计分：得分越高独立性越强)
+        function calculateIndependenceScore() {
+            const independenceIds = [1,2,10,13,14,16,20,22,25,30,36]; // 独立倾向相关题目
+            let score = 0;
+            independenceIds.forEach(id => score += (userAnswers[id] || 0));
+            return Math.round((score / (independenceIds.length * 4)) * 100);
+        }
+
+        // 计算情感投入得分 (正向计分：得分越高情感投入越多)
+        function calculateEmotionInvestmentScore() {
+            const investmentIds = [9,11,15,18,21,23,28,33,34,37]; // 情感投入相关题目
+            let score = 0;
+            investmentIds.forEach(id => score += (userAnswers[id] || 0));
+            return Math.round((score / (investmentIds.length * 4)) * 100);
+        }
+
+        function viewAnswers() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'block';
+            renderAnswers();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderAnswers() {
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+            
+            questions.sort((a,b) => a.id - b.id);
+            questions.forEach((q, index) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-item';
+                const displayId = (index + 1).toString().padStart(2, '0');
+                const selectedValue = userAnswers[q.id];
+                const selectedText = selectedValue !== undefined ? q.options[selectedValue] : '未作答';
+                
+                answerDiv.innerHTML = `
+                    <div class="answer-q">
+                        <strong>${displayId}.</strong> ${q.text}
+                    </div>
+                    <div class="answer-a">
+                        <span class="answer-v">您的选择：</span>
+                        <span style="color: ${selectedValue !== undefined ? '#8B5CF6' : '#9CA3AF'}">${selectedText}</span>
+                    </div>
+                `;
+                
+                container.appendChild(answerDiv);
+            });
+        }
+
+        function restartQuiz() {
+            userAnswers = {};
+            totalScore = 0;
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+            updateProgress();
+            initQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showUnansweredTip(id) {
+            const existing = document.getElementById('unTip');
+            if(existing) existing.remove();
+            const tip = document.createElement('div');
+            tip.id = 'unTip';
+            tip.style.cssText = `position:fixed; top:40px; left:50%; transform:translateX(-50%); background:#FDF2F8; backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; box-shadow:0 10px 30px rgba(236, 72, 153, 0.2); border:1px solid #FBCFE8; z-index:10000; font-size:14px; color:#EC4899; font-weight:500; animation:tipFadeIn 0.4s ease;`;
+            tip.innerHTML = `⚠️ 请先完成第 <b style="color:#8B5CF6">${id}</b> 题`;
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 3000);
+        }
+
+        // 初始化测验
+        initQuiz();
+        
+        // 处理加载点动画
+        setInterval(() => {
+            const dots = document.getElementById('loadingDots');
+            if (dots) {
+                dots.textContent = dots.textContent.length < 3 ? dots.textContent + '.' : '';
+            }
+        }, 500);
+    </script>
+    <footer style="text-align: center; padding: 20px; color: #5A3E65; font-size: 1rem; font-weight: 500; margin-top: 20px;">
+        <p>Inner Peace | 专业·科学·客观</p>
+    </footer>
+</body>
+</html>

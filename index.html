@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Peace - 探索内心，遇见更好的自己</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #2d3748;
+            position: relative;
+            overflow-x: hidden;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* 背景装饰元素 */
+        .background-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .decoration-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: #2196f3;
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
+        }
+
+        .decoration-circle:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            background: #9c27b0;
+            top: 50%;
+            right: -100px;
+            animation-delay: 5s;
+        }
+
+        .decoration-circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: #f44336;
+            bottom: -50px;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        .decoration-circle:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            background: #e91e63;
+            bottom: 100px;
+            right: 20%;
+            animation-delay: 15s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* 波浪装饰 */
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255, 255, 255, 0.1)" fill-opacity="1" d="M0,256L48,245.3C96,235,192,213,288,202.7C384,192,480,192,576,213.3C672,235,768,277,864,266.7C960,256,1056,192,1152,165.3C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 80px;
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #fff8dc;
+            margin-bottom: 30px;
+            font-weight: 600;
+            opacity: 0.95;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .description {
+            font-size: 1.2rem;
+            color: #f0f8ff;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            max-width: 100%;
+        }
+
+        .nav-card {
+            border-radius: 24px;
+            padding: 45px 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 顶部渐变条 */
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .nav-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* 卡片悬停光晕效果 */
+        .nav-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: 0;
+        }
+
+        .nav-card:hover::after {
+            transform: translateX(100%);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .nav-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nav-card-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-card-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border-radius: 50%;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-card:hover .nav-card-icon {
+            transform: scale(1.2) rotate(15deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1.2) rotate(15deg);
+            }
+            50% {
+                transform: scale(1.25) rotate(15deg);
+            }
+        }
+
+        .nav-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-card:hover h2 {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .nav-card p {
+            margin-bottom: 35px;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-card:hover p {
+            transform: translateY(-3px);
+        }
+
+        .nav-card a {
+            display: inline-block;
+            padding: 20px 50px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .nav-card a:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-card a span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-card a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 职业匹配 - 蓝色主题 */
+        .nav-card-career {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        .nav-card-career::before {
+            background: #3b82f6;
+        }
+        .nav-card-career .nav-card-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        .nav-card-career h2 {
+            color: white;
+        }
+        .nav-card-career p {
+            color: white;
+        }
+        .nav-card-career a {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        /* 恋爱脑 - 蓝色主题 */
+        .nav-card-lovebrain {
+            background: rgba(79, 70, 229, 0.5);
+        }
+        .nav-card-lovebrain::before {
+            background: #4f46e5;
+        }
+        .nav-card-lovebrain .nav-card-icon {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+        }
+        .nav-card-lovebrain h2 {
+            color: white;
+        }
+        .nav-card-lovebrain p {
+            color: white;
+        }
+        .nav-card-lovebrain a {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+        }
+
+        /* 占有欲 - 深红色主题 */
+        .nav-card-possessiveness {
+            background: rgba(125, 0, 34, 0.5);
+        }
+        .nav-card-possessiveness::before {
+            background: #7D0022;
+        }
+        .nav-card-possessiveness .nav-card-icon {
+            background: linear-gradient(135deg, #7D0022 0%, #5a001a 100%);
+        }
+        .nav-card-possessiveness h2 {
+            color: white;
+        }
+        .nav-card-possessiveness p {
+            color: white;
+        }
+        .nav-card-possessiveness a {
+            background: linear-gradient(135deg, #7D0022 0%, #5a001a 100%);
+        }
+
+        /* 恋爱人格 - 紫色主题 */
+        .nav-card-romantic {
+            background: rgba(138, 43, 226, 0.5);
+        }
+        .nav-card-romantic::before {
+            background: #8A2BE2;
+        }
+        .nav-card-romantic .nav-card-icon {
+            background: linear-gradient(135deg, #8A2BE2 0%, #7b1fa2 100%);
+        }
+        .nav-card-romantic h2 {
+            color: white;
+        }
+        .nav-card-romantic p {
+            color: white;
+        }
+        .nav-card-romantic a {
+            background: linear-gradient(135deg, #8A2BE2 0%, #7b1fa2 100%);
+        }
+
+        footer {
+            text-align: center;
+            color: #fff8dc;
+            margin-top: auto;
+            padding: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+                margin-bottom: 12px;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+
+            .description {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .header {
+                margin-bottom: 30px;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .nav-card {
+                padding: 30px 20px;
+            }
+
+            .nav-card-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2.8rem;
+                margin-bottom: 20px;
+            }
+
+            .nav-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .nav-card p {
+                font-size: 0.95rem;
+                margin-bottom: 25px;
+            }
+
+            .nav-card a {
+                padding: 14px 35px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .description {
+                font-size: 0.9rem;
+            }
+
+            .header {
+                margin-bottom: 25px;
+            }
+
+            .nav-card {
+                padding: 25px 18px;
+            }
+
+            .nav-card-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 2.5rem;
+            }
+
+            .nav-card h2 {
+                font-size: 1.3rem;
+            }
+
+            .nav-card p {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .nav-card a {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景装饰元素 -->
+    <div class="background-decoration">
+        <div class="decoration-circle"></div>
+        <div class="decoration-circle"></div>
+        <div class="decoration-circle"></div>
+        <div class="decoration-circle"></div>
+    </div>
+    
+    <!-- 波浪装饰 -->
+    <div class="wave-decoration"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Inner Peace</h1>
+            <p class="subtitle">探索内心，遇见更好的自己</p>
+            <p class="description">通过专业有趣的心理评估，帮助你深入了解自己的职业倾向、恋爱模式和性格特质，在自我探索中找到内心的平静与力量。</p>
+        </div>
+        
+        <div class="nav-grid">
+            <div class="nav-card nav-card-career">
+                <div class="nav-card-inner">
+                    <div class="nav-card-icon">🎯</div>
+                    <h2>职业匹配</h2>
+                    <p>专业职业评估量表</p>
+                    <a href="career-matching-xj/index.html"><span>进入测试</span></a>
+                </div>
+            </div>
+            <div class="nav-card nav-card-lovebrain">
+                <div class="nav-card-inner">
+                    <div class="nav-card-icon">🧠</div>
+                    <h2>恋爱脑</h2>
+                    <p>专业心理评估量表</p>
+                    <a href="live-brain-xj/index.html"><span>进入测试</span></a>
+                </div>
+            </div>
+            <div class="nav-card nav-card-possessiveness">
+                <div class="nav-card-inner">
+                    <div class="nav-card-icon">💖</div>
+                    <h2>占有欲</h2>
+                    <p>探索你在关系中的掌控欲</p>
+                    <a href="possessiveness-xj/index.html"><span>进入测试</span></a>
+                </div>
+            </div>
+            <div class="nav-card nav-card-romantic">
+                <div class="nav-card-inner">
+                    <div class="nav-card-icon">💕</div>
+                    <h2>恋爱人格</h2>
+                    <p>探索你的爱情模式</p>
+                    <a href="romantic-presonality-xj/index.html"><span>进入测试</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Inner Peace | 专业·科学·客观</p>
+    </footer>
+</body>
+</html>
