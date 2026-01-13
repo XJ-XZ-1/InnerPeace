@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>恋爱脑测试 - 专业心理评估量表</title>
+    <title>天赋测试 - 专业能力评估量表</title>
     <style>
         * {
             margin: 0;
@@ -13,10 +13,10 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', 'Microsoft YaHei', serif;
-            background: #fdf2f8;
-            background-image: radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.05) 0, transparent 50%), 
-                              radial-gradient(at 50% 0%, rgba(168, 85, 247, 0.05) 0, transparent 50%);
-            color: #334155;
+            background: #f0f8ff;
+            background-image: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0, transparent 50%), 
+                              radial-gradient(at 50% 0%, rgba(34, 197, 94, 0.05) 0, transparent 50%);
+            color: #1e293b;
             line-height: 1.7;
             letter-spacing: 0.01em;
             scroll-behavior: smooth; /* 添加平滑滚动 */
@@ -101,16 +101,16 @@
             font-weight: 600;
             letter-spacing: -0.5px;
             margin-bottom: 2px;
-            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .header p {
             font-size: 13px;
-            color: #7c3aed;
+            color: #64748b;
             font-weight: 400;
         }
 
@@ -190,10 +190,10 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #9333ea 0%, #ec4899 100%);
+            background: linear-gradient(90deg, #3b82f6 0%, #22c55e 100%);
             width: 0%;
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
         }
 
         /* 题目样式 */
@@ -208,13 +208,13 @@
 
         .question-item:hover,
         .question-item.active {
-            background: #f8faff; /* 活跃题目背景提亮 */
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%); /* 降低背景渐变透明度 */
             border-radius: 12px; /* 活跃题目添加圆角 */
             padding: 15px 15px; /* 减小活跃题目左右padding */
             margin: 5px -15px 15px; /* 调整margin以实现“提拉”效果，并与下一题保持间距 */
-            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.1), 0 0 0 1px rgba(168, 85, 247, 0.1);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.08), 0 0 0 1px rgba(59, 130, 246, 0.2);
             transform: scale(1.005) translateY(-2px); /* 轻微放大和上浮 */
-            border: 1px solid #a855f7; /* 强调边框 */
+            border: 2px solid rgba(59, 130, 246, 0.3); /* 半透明边框 */
             z-index: 2; /* 降低z-index，确保在固定头部下方 */
         }
 
@@ -245,7 +245,7 @@
         .question-text {
             font-size: 16px;
             font-weight: 500;
-            color: #4c1d95;
+            color: #1e293b;
             line-height: 1.5;
             flex-grow: 1;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
@@ -265,7 +265,7 @@
             border-radius: 50px;
             cursor: pointer;
             font-size: 13px; /* 减小选项字体大小 */
-            color: #7c3aed;
+            color: #475569;
             font-weight: 400;
             transition: all 0.3s ease;
             user-select: none;
@@ -284,16 +284,16 @@
         }
 
         .option-capsule.selected {
-            background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
             border-color: transparent;
             color: white;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
             transform: translateY(-1px);
         }
 
         .option-capsule.selected:hover {
-            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
         }
 
@@ -341,45 +341,45 @@
 
         /* 主按钮样式 */
         .submit-btn:not(.btn-back-to-top):not(.btn-secondary) {
-            background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
             color: white;
-            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
         }
         
         .submit-btn:not(.btn-back-to-top):not(.btn-secondary):hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(147, 51, 234, 0.45);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.45);
         }
 
         /* 回到顶部按钮样式 */
         .btn-back-to-top {
             background: #ffffff;
-            color: #64748b;
+            color: #94a3b8;
             border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: none;
         }
         
         .btn-back-to-top:hover {
-            background: #f8fafc;
-            border-color: #9333ea;
-            color: #9333ea;
-            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.15);
+            background: #f0f8ff;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
             transform: translateY(-2px);
         }
 
         /* 次要按钮样式 */
         .btn-secondary {
             background: #ffffff;
-            color: #64748b;
+            color: #94a3b8;
             border: 2px solid #e2e8f0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: none;
         }
         
         .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #9333ea;
-            color: #9333ea;
-            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.15);
+            background: #f0f8ff;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
             transform: translateY(-2px);
         }
 
@@ -430,10 +430,10 @@
             width: 60px; /* Slightly larger loader */
             height: 60px;
             border: 4px solid #f1f5f9;
-            border-top-color: #9333ea; /* Gradient start color */
+            border-top-color: #3b82f6; /* Gradient start color */
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3); /* Consistent shadow */
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); /* Consistent shadow */
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -466,9 +466,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #9333ea 0%, #ec4899 100%); /* 与按钮一致的渐变背景 */
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%); /* 与按钮一致的渐变背景 */
             border-radius: 50%; /* 圆形 */
-            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.3); /* 与选中状态一致的阴影 */
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3); /* 与选中状态一致的阴影 */
         }
         
         .score-value { 
@@ -481,21 +481,18 @@
         .score-level { 
             font-size: 22px; /* 缩小字体 */
             font-weight: 600; 
-            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #6366f1; /* 与主题色一致 */
             margin-bottom: 8px; /* 减小间距 */
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
         
         .score-desc { 
             font-size: 15px; /* 调整字体大小 */
-            color: #7c3aed; 
+            color: #64748b; 
             line-height: 1.6; /* 调整行高 */
             max-width: 500px; 
             margin: 0 auto; 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
         
         .chart-container { 
@@ -513,38 +510,50 @@
             font-weight: 600; 
             margin-bottom: 15px; /* 减小间距 */
             padding: 8px 12px; /* 减小内边距 */
-            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%); /* 粉色紫色渐变背景 */
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%); /* 蓝绿色渐变背景 */
             color: white; /* 白色文字 */
             border-radius: 10px; /* 缩小圆角 */
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
         .analysis-content { 
-            font-size: 14px; /* 缩小字体 */
-            line-height: 1.6; /* 减小行高 */
+            font-size: 15px; /* 调整字体大小 */
+            line-height: 1.7; /* 调整行高 */
             color: #475569; 
             padding: 12px; /* 减小内边距 */
             background: white; /* 白色背景 */
             border-radius: 10px; /* 缩小圆角 */
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); /* 轻微阴影 */
             margin-bottom: 20px; /* 增加底部间距 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
         .suggestion-list { list-style: none; padding: 0; }
         .suggestion-list li { 
-            padding: 12px; /* 减小内边距 */
+            padding: 12px 12px 12px 20px; /* 调整内边距，为前面的小框留出空间 */
             margin-bottom: 12px; /* 减小间距 */
             background: white; /* 白色背景 */
             border-radius: 10px; /* 缩小圆角 */
             font-size: 13px; /* 缩小字体 */
             color: #475569; 
             border: 1px solid #e2e8f0; /* 边框 */
-            border-left: 4px solid #9333ea; /* 与主题色一致的左边框 */
             transition: all 0.3s ease; /* 过渡动画 */
+            position: relative;
+        }
+        
+        .suggestion-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%); /* 蓝绿色渐变小框 */
+            border-radius: 10px 0 0 10px;
         }
         
         .suggestion-list li:hover {
             transform: translateY(-2px); /* 轻微上浮 */
-            box-shadow: 0 8px 25px rgba(147, 51, 234, 0.1); /* 与题目项一致的阴影 */
-            border-color: #a855f7; /* 与主题色一致的边框 */
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.1); /* 与题目项一致的阴影 */
+            border-color: #3b82f6; /* 与主题色一致的边框 */
         }
 
         /* 答案查看项 */
@@ -568,10 +577,21 @@
         }
         
         .answer-v {
-            color: #9333ea; /* 仅使用主题色，去掉按钮样式 */
+            background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); /* 绿色渐变 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 13px; /* 缩小字体 */
             font-weight: 600; /* 保持字重 */
-            margin-right: 8px; /* 减小间距 */
+        }
+        
+        /* 答案选项样式 */
+        #answersContainer .answer-v + span {
+            background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); /* 绿色渐变 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
         }
 
         /* 平板设备 */
@@ -776,8 +796,8 @@
             <div class="header">
                 <div class="header-top">
                     <div class="header-left">
-                        <h1>💕 恋爱脑测试</h1>
-                        <p>探索您在亲密关系中的心理边界</p>
+                        <h1>🌟 天赋测试</h1>
+                        <p>探索您的核心能力与潜在优势</p>
                     </div>
                     <div class="header-badges">
                         <div class="badge badge-blue">● 40 题 · 满分 100 分</div>
@@ -785,7 +805,7 @@
                     </div>
                 </div>
                 <div class="disclaimer">
-                    <i>⚠</i> 免责声明：本测试仅用于自我觉察，不代表临床诊断。测试结果仅供参考。
+                    <i>⚠</i> 免责声明：本测试仅用于自我认知，不代表专业能力认证。测试结果仅供参考。
                 </div>
             </div>
 
@@ -836,13 +856,13 @@
         <div class="result-container">
             <div class="header">
                 <h1>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #9333ea;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                         <path d="M3 3v18h18"></path>
                         <path d="M18 17V9"></path>
                         <path d="M13 17V5"></path>
                         <path d="M8 17v-3"></path>
                     </svg>
-                    评估报告
+                    <span style="background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">评估报告</span>
                 </h1>
             </div>
 
@@ -881,19 +901,19 @@
     </div>
 
     <!-- 答案查看页面 -->
-    <div class="container" id="answerPage" style="display:none">
-        <div class="answer-container">
-            <div class="header">
-                <h1>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #9333ea;">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    我的答案回执
-                </h1>
-            </div>
+        <div class="container" id="answerPage" style="display:none">
+            <div class="answer-container">
+                <div class="header">
+                    <h1>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <span style="background: linear-gradient(135deg, #86efac 0%, #22c55e 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">我的答案回执</span>
+                    </h1>
+                </div>
             <div id="answersContainer"></div>
             <div class="submit-wrapper">
                 <button class="submit-btn" onclick="showResultsPage()">返回评估报告</button>
@@ -905,46 +925,46 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const questions = [
-            { id: 1, text: "当伴侣没有及时回复消息时，我会频繁查看手机并感到焦虑", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 2, text: "我认为真爱应该是不计回报的完全付出", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 3, text: "我会因为伴侣的一句话或一个表情而影响整天的心情", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 4, text: "在关系中，我倾向于完全信任伴侣，很少质疑对方的行为", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 5, text: "我经常在脑海中反复回忆和伴侣的每一次互动细节", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 6, text: "为了维持关系，我愿意放弃自己的重要目标和计划", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 7, text: "当伴侣表现出冷淡时，我会立即怀疑是否自己做错了什么", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 8, text: "我认为伴侣应该完全理解我的所有想法和需求", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 9, text: "我会因为担心失去对方而过度迁就和妥协", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 10, text: "我倾向于将伴侣理想化，忽略对方的缺点和不足", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 11, text: "当关系出现问题时，我会首先反思自己的问题，即使错不在我", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 12, text: "我很难接受关系中存在适当的个人空间和独立性", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 13, text: "我会因为伴侣的社交活动而感到不安和嫉妒", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 14, text: "我认为真正的爱情应该是时时刻刻都想在一起的", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 15, text: "当伴侣没有按照我的期望行事时，我会感到失望和受伤", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 16, text: "我倾向于将关系的质量完全归因于自己的努力和表现", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 17, text: "我很难在关系中保持理智，经常被情绪主导", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 18, text: "我会因为担心关系破裂而过度敏感和小心翼翼", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 19, text: "我认为在关系中应该完全透明，没有秘密", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 20, text: "我会因为伴侣的行为而怀疑自己的价值和吸引力", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 21, text: "我倾向于过度解读伴侣的行为和话语，寻找潜在含义", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 22, text: "当关系出现矛盾时，我会优先考虑修复关系，而非自己的感受", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 24, text: "我会因为伴侣的赞美和认可而感到极度满足和自信", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 25, text: "我认为在关系中应该完全依赖对方的情感支持", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 26, text: "我会因为担心失去关系而不敢表达真实的想法和需求", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 27, text: "我倾向于将关系的成功视为个人价值的体现", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 28, text: "当伴侣需要个人空间时，我会感到被拒绝和不安", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 29, text: "我会因为关系中的小问题而过度反应和担心", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 30, text: "我认为真正的爱情应该能够解决所有问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 31, text: "我倾向于在关系中完全投入，忽略其他重要的人际关系", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 32, text: "当关系出现危机时，我会感到世界崩塌，无法正常生活", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 33, text: "我会因为伴侣的选择和决定而改变自己的计划和目标", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 34, text: "我很难接受关系中存在的不完美和矛盾", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 35, text: "我会因为担心关系的发展而过度规划和期待未来", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 36, text: "我认为在关系中应该完全融合，成为一体", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 37, text: "我会因为伴侣的冷淡而怀疑关系的稳定性和未来", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 38, text: "我倾向于将关系的失败视为个人的失败", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 39, text: "我会因为关系中的不确定性而感到焦虑和不安", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 40, text: "我认为在关系中应该完全牺牲个人利益，以对方为重", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
-            { id: 23, text: "我很难接受关系中存在的不确定性", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] }
+            { id: 1, text: "我经常能想出别人没想到的创意解决方案", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 2, text: "我擅长分析复杂问题并找出规律", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 3, text: "我很容易理解和感受他人的情绪", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 4, text: "我能快速掌握新技能和知识", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 5, text: "我擅长组织和协调团队活动", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 6, text: "我喜欢尝试新事物和新体验", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 7, text: "我擅长逻辑推理和数学问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 8, text: "我能很好地与不同类型的人沟通", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 9, text: "我对周围的事物观察得很仔细", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 10, text: "我擅长制定和执行计划", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 11, text: "我有很强的想象力和创造力", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 12, text: "我能快速理解抽象概念", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 13, text: "我擅长解决人际冲突", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 14, text: "我喜欢阅读和学习新的知识", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 15, text: "我能激励他人发挥潜力", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 16, text: "我擅长艺术创作（如绘画、音乐、写作等）", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 17, text: "我擅长快速计算和处理数字", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 18, text: "我能很好地适应新环境和变化", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 19, text: "我有很好的记忆力", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 20, text: "我擅长领导和管理团队", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 21, text: "我经常有新的想法和创意", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 22, text: "我擅长系统性思考和规划", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 23, text: "我很容易与他人建立信任关系", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 24, text: "我能快速适应新的技术和工具", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 25, text: "我擅长解决复杂的问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 26, text: "我喜欢挑战传统观念和做法", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 27, text: "我擅长批判性思维和分析论证", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 28, text: "我能很好地理解他人的观点和立场", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 29, text: "我擅长快速学习和应用新知识", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 30, text: "我擅长组织和管理资源", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 31, text: "我有很强的审美能力和艺术感", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 32, text: "我擅长解决逻辑难题和智力游戏", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 33, text: "我擅长说服和影响他人", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 34, text: "我对新鲜事物充满好奇心", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 35, text: "我擅长团队合作和协作", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 36, text: "我擅长创新和改进现有流程", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 37, text: "我擅长分析数据和信息", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 38, text: "我能很好地处理和调节自己的情绪", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 39, text: "我擅长快速决策和解决问题", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] },
+            { id: 40, text: "我有很强的责任感和执行力", options: ["完全不符合", "不太符合", "一般", "比较符合", "完全符合"] }
         ];
 
         let userAnswers = {};
@@ -1050,7 +1070,16 @@
                 item.classList.remove('active');
             });
 
-            const analysis = getScoreLevelDetails(totalScore);
+            // 计算各维度得分
+            const dimScores = {
+                '创造力': getDimScore([1,6,11,16,21,26,31,36]),
+                '逻辑思维': getDimScore([2,7,12,17,22,27,32,37]),
+                '人际交往': getDimScore([3,8,13,15,23,28,33,35]),
+                '学习能力': getDimScore([4,14,18,19,24,29,34,38]),
+                '领导力': getDimScore([5,10,20,25,30,39,40,37])
+            };
+
+            const analysis = getScoreLevelDetails(totalScore, dimScores);
             document.getElementById('scoreLevel').textContent = analysis.level;
             document.getElementById('scoreDescription').textContent = analysis.description;
             document.getElementById('analysisContent').innerHTML = analysis.analysis;
@@ -1061,111 +1090,113 @@
             renderRadarChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        function getScoreLevelDetails(score) {
-            if (score <= 10) return { 
-                level: '🌟 理性成熟型 (独立自主)', 
-                description: '您在亲密关系中展现出卓越的独立性与成熟的自我认知。', 
-                analysis: '<p><b>核心特征：</b>您深谙个人边界的重要性，即便身处亲密关系，亦能保持清晰的自我身份和独立思考能力。您视亲密关系为相互支持与成长的平台，而非个人价值的唯一来源。在情感互动中，您能够理性分析问题，不易被情绪左右，这使得您的关系基础更为稳固。</p><p><b>优势体现：</b>拥有健康的自尊水平，不易产生过度依赖或牺牲自我的行为。您能有效管理自身情绪，并鼓励伴侣共同成长。这种模式有助于建立平等、尊重且充满活力的长期关系。</p>', 
+        function getScoreLevelDetails(score, dimScores) {
+            // 分析各维度得分，找出最强和最弱的天赋
+            const sortedDims = Object.entries(dimScores).sort((a, b) => b[1] - a[1]);
+            const strongest = sortedDims.slice(0, 2).map(d => d[0]);
+            const weakest = sortedDims.slice(-2).map(d => d[0]);
+            
+            // 生成维度分析文本
+            const dimAnalysis = `<p><b>天赋分布：</b>您在<b>${strongest.join('</b>和<b>')}</b>方面展现出较强的天赋，而在<b>${weakest.join('</b>和<b>')}</b>方面还有提升空间。</p>`;
+            
+            if (score >= 90) return { 
+                level: '🌟 天赋卓越型 (全面发展)', 
+                description: '您拥有卓越的天赋能力，在多个领域展现出显著优势。', 
+                analysis: `<p><b>核心特征：</b>您在创造力、逻辑思维、人际交往、学习能力和领导力等多个维度都表现出色，展现出全面发展的天赋优势。您具备快速学习新技能的能力，能够创造性地解决复杂问题，同时拥有良好的人际交往能力和领导潜力。</p>${dimAnalysis}<p><b>优势体现：</b>这种全面发展的天赋使您在各种环境中都能脱颖而出，无论是学术研究、职业发展还是团队合作，您都能展现出非凡的能力。您的天赋优势为您提供了广阔的发展空间和多种可能性。</p>`, 
                 suggestions: [
-                    '<b>持续深化自我认知：</b>定期进行自我反思，探索个人核心价值观与成长目标，这有助于您在关系中保持内心的笃定。',
-                    '<b>增进情感深度连结：</b>尽管理性，但情感的流动同样重要。主动与伴侣分享更深层次的情感体验，而非仅限于问题解决，以丰富关系的内在维度。',
-                    '<b>积极实践共同成长：</b>与伴侣共同规划并参与有意义的活动，不仅能创造共同回忆，也能在互动中增进彼此的理解与情感连结。'
+                    `<b>聚焦核心天赋：</b>建议您聚焦于<b>${strongest[0]}</b>和<b>${strongest[1]}</b>这两个您最擅长的领域，深入发展，成为该领域的专家。`,
+                    '<b>持续挑战自我：</b>寻找能够充分发挥您天赋的挑战性任务和项目，不断突破自己的能力边界，实现更高层次的成长。',
+                    `<b>提升薄弱领域：</b>虽然您各方面能力都很出色，但可以适当关注<b>${weakest[0]}</b>和<b>${weakest[1]}</b>的提升，使您的天赋更加全面。`
                 ] 
             };
-            if (score <= 20) return { 
-                level: '💚 平衡稳定型 (健康依恋)', 
-                description: '您在亲密关系中展现出健康的依恋模式，能够在独立与亲密之间取得和谐。', 
-                analysis: '<p><b>核心特征：</b>您拥有较为完善的自我价值感，不将个人幸福完全寄托于伴侣。在关系中，您既能享受彼此的亲密联结，也尊重并维护个人空间与独立性。当关系面临挑战时，您能以建设性的方式沟通，并共同寻求解决方案。</p><p><b>优势体现：</b>这种平衡有助于建立互信、互助且充满支持的关系。您和伴侣都能在关系中感到安全和自由，能够各自成长，同时为关系注入活力。</p>', 
+            if (score >= 80) return { 
+                level: '💫 天赋突出型 (明显优势)', 
+                description: '您在多个领域表现出色，拥有明显的天赋优势。', 
+                analysis: `<p><b>核心特征：</b>您在多个维度都展现出较强的天赋，尤其是在某些特定领域表现突出。您具备良好的学习能力和问题解决能力，能够快速适应新环境和新挑战。您的人际交往能力和领导潜力也较为明显。</p>${dimAnalysis}<p><b>优势体现：</b>这种突出的天赋使您在自己感兴趣的领域能够取得优异的成绩，无论是学习、工作还是生活，您都能展现出较强的竞争力。您的天赋优势为您的职业发展和个人成长提供了有力支撑。</p>`, 
                 suggestions: [
-                    '<b>维持开放坦诚的沟通：</b>持续与伴侣分享彼此的感受、需求和期望，确保双方在情感上保持同步，并共同应对生活中的变化。',
-                    '<b>共同探索与成长：</b>积极参与伴侣的兴趣爱好，或共同培养新的兴趣，这能增强关系的趣味性与深度。',
-                    '<b>定期评估关系满意度：</b>主动与伴侣讨论对关系的满意度，及时发现并解决潜在问题，保持关系的活力。'
+                    `<b>强化优势领域：</b>重点强化您在<b>${strongest[0]}</b>和<b>${strongest[1]}</b>方面的天赋，通过系统学习和实践，进一步提升自己的专业水平和竞争力。`,
+                    '<b>拓展相关技能：</b>围绕您的优势领域，拓展学习相关的技能和知识，形成完整的能力体系，增强自己的综合实力。',
+                    `<b>提升薄弱环节：</b>针对<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面的不足，制定有针对性的提升计划，使您的能力更加全面。`
                 ] 
             };
-            if (score <= 30) return { 
-                level: '💙 适度投入型 (渐进发展)', 
-                description: '您在亲密关系中投入适中，能够享受亲密，但也需留意潜在的情感波动。', 
-                analysis: '<p><b>核心特征：</b>您愿意为关系付出，并重视与伴侣的联结。您拥有一定的个人空间意识，但有时可能会在情感上略显被动或容易受到伴侣情绪的影响。在关系发展过程中，您可能偶尔会因为外部因素或伴侣的态度变化而产生情绪上的波动。</p><p><b>潜在挑战：</b>在面临冲突或不确定性时，可能会出现短暂的焦虑或不安。您需要进一步提升在关系中的主动性和情绪调节能力。</p>', 
+            if (score >= 70) return { 
+                level: '✨ 天赋良好型 (均衡发展)', 
+                description: '您拥有良好的天赋基础，各方面能力均衡发展。', 
+                analysis: `<p><b>核心特征：</b>您在各个维度都具备良好的天赋基础，没有明显的短板。您的学习能力、问题解决能力、人际交往能力等都处于良好水平，能够适应各种不同的环境和挑战。</p>${dimAnalysis}<p><b>优势体现：</b>这种均衡发展的天赋使您在各种情况下都能表现得较为出色，无论是学习新技能、解决问题还是与他人合作，您都能胜任。您的均衡发展为您提供了多种发展方向和可能性。</p>`, 
                 suggestions: [
-                    '<b>提升情绪觉察与管理：：</b>学习识别自身情绪的触发点，并通过深呼吸、冥想或记录情绪日记等方式，更有效地管理情绪波动。',
-                    '<b>主动表达个人需求：</b>鼓励自己在关系中更清晰、更自信地表达自己的想法、感受和需求，而非被动等待伴侣揣测。',
-                    '<b>拓展多元支持系统：</b>除了伴侣，也积极维护与家人、朋友的良好关系，建立多层次的情感支持网络，以分散情感依赖。'
+                    `<b>探索兴趣领域：</b>基于您在<b>${strongest[0]}</b>和<b>${strongest[1]}</b>方面的优势，尝试深入探索相关领域，培养自己的特长。`,
+                    `<b>提升核心能力：</b>针对<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面的相对薄弱环节，进行有针对性的训练和提升，进一步增强自己的综合实力。`,
+                    '<b>建立学习习惯：</b>保持持续学习的习惯，不断更新自己的知识和技能，适应快速变化的社会环境。'
                 ] 
             };
-            if (score <= 40) return { 
-                level: '💛 情感丰富型 (敏感共情)', 
-                description: '您对亲密关系抱有较高的情感投入，但需警惕过度关注可能带来的情绪困扰。', 
-                analysis: '<p><b>核心特征：</b>您通常是富有同情心且情感细腻的伴侣，能够深刻感知伴侣的情绪变化。您对关系投入较多心力，渴望深刻的情感连接。然而，这种高投入也可能导致您对伴侣的一举一动过度解读，容易受关系波动的影响，从而产生焦虑或患得患失的情绪。</p><p><b>潜在挑战：</b>过度共情可能让您忽略自身需求，并将伴侣的情绪责任揽到自己身上。边界感可能会在不知不觉中模糊，导致情绪被关系深度捆绑。</p>', 
+            if (score >= 60) return { 
+                level: '🎯 天赋发展型 (潜力待挖掘)', 
+                description: '您拥有一定的天赋潜力，需要进一步挖掘和发展。', 
+                analysis: `<p><b>核心特征：</b>您在某些维度展现出一定的天赋潜力，但整体发展还不够充分。您具备基本的学习能力和问题解决能力，但在某些领域还需要进一步提升。您的人际交往能力和领导潜力也有一定的发展空间。</p>${dimAnalysis}<p><b>发展建议：</b>这种天赋潜力需要通过系统的学习和实践来挖掘和发展。通过有针对性的训练和培养，您可以在自己感兴趣的领域取得更大的进步。</p>`, 
                 suggestions: [
-                    '<b>培养情绪的“钝感力”：</b>认识到伴侣的情绪是其个体体验，而非总与您直接相关。学习在情感上适当抽离，减少过度归因。',
-                    '<b>发展健康的自我安抚机制：</b>当情绪波动时，尝试通过运动、阅读、兴趣爱好等方式进行自我调节，而非立即寻求伴侣的安慰。',
-                    '<b>设定明确的情感边界：</b>与伴侣沟通，明确彼此在情感支持上的界限和责任，避免过度承担或过度期待。'
+                    `<b>明确发展目标：</b>基于您在<b>${strongest[0]}</b>方面的优势，设定明确的个人发展目标，制定详细的学习和发展计划。`,
+                    `<b>系统学习提升：</b>针对<b>${strongest[0]}</b>和<b>${strongest[1]}</b>领域，进行系统的学习和训练，进一步挖掘您的天赋潜力。`,
+                    `<b>针对性提升薄弱领域：</b>重点关注<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面的提升，通过刻意练习和学习，弥补不足。`
                 ] 
             };
-            if (score <= 50) return { 
-                level: '🧡 深度投入型 (依恋增强)', 
-                description: '您在亲密关系中展现出较强的情感依赖，个人边界可能已开始模糊。', 
-                analysis: '<p><b>核心特征：</b>您倾向于将亲密关系的重要性置于个人需求、兴趣甚至职业发展之上。您的情绪状态与伴侣的反馈高度关联，容易因伴侣的情绪或行为而产生显著波动。为了维系关系，您可能会不自觉地调整自己的行为模式，以迎合伴侣。</p><p><b>潜在挑战：</b>过度的情感投入和依赖可能导致自我牺牲感增强，长期以往会削弱您的独立性和决策能力。个人生活重心逐渐向伴侣倾斜，可能引发内心的失衡和不满足。</p>', 
+            if (score >= 50) return { 
+                level: '🔍 天赋探索型 (寻找方向)', 
+                description: '您正在探索自己的天赋，需要更多的尝试和实践。', 
+                analysis: `<p><b>核心特征：</b>您对自己的天赋还不够了解，正在探索和寻找适合自己的发展方向。您具备基本的学习能力和适应能力，但在某些领域还需要更多的尝试和实践来确定自己的兴趣和优势。</p>${dimAnalysis}<p><b>发展建议：</b>这种探索阶段是正常的，通过广泛的尝试和实践，您可以逐渐发现自己的天赋和兴趣所在，找到适合自己的发展方向。</p>`, 
                 suggestions: [
-                    '<b>主动划定并维护个人边界：</b>从小处着手，明确哪些是您的个人事务，哪些需要与伴侣共同协商。例如，安排独立的社交活动，保留个人独处时间。',
-                    '<b>重新审视个人价值观与目标：</b>回顾并确认对您而言重要的个人目标和生活意义，不让它们被关系完全取代。可以制定一些短期和长期目标并为之努力。',
-                    '<b>培养非依恋性爱好与兴趣：：</b>发展至少一项完全属于自己的爱好，让您在关系之外也能找到乐趣和成就感，从而丰富个人生活。',
-                    '<b>学习识别并表达自身需求：</b>在关系中，学会区分“我想要什么”和“我能为伴侣做什么”，并以温和而坚定的方式表达自己的合理需求。'
+                    `<b>重点探索优势领域：</b>基于您在<b>${strongest[0]}</b>方面的初步优势，重点探索相关领域，深入了解自己的兴趣和潜力。`,
+                    '<b>自我反思：</b>定期进行自我反思，分析自己在不同活动中的表现和感受，识别自己的兴趣和优势领域。',
+                    `<b>针对性提升：</b>针对<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面的不足，进行有针对性的学习和训练。`
                 ] 
             };
-            if (score <= 60) return { 
-                level: '❤️ 高度投入型 (自我消融)', 
-                description: '亲密关系已成为您生活的绝对重心，个人需求常被忽略甚至牺牲。', 
-                analysis: '<p><b>核心特征：</b>您将大部分精力、时间和情感投注于伴侣和关系之中，导致个人原有的社交圈、兴趣爱好乃至职业发展都可能被边缘化。您的自我价值感与关系的稳定程度和伴侣的认可度高度绑定。一旦关系出现问题，您会感受到巨大的失落和自我怀疑。</p><p><b>潜在挑战：</b>这种“以伴侣为中心”的模式极易导致失衡。您可能在关系中感到疲惫，却难以自拔。伴侣也可能因为承受过大的期待和责任而感到压力。长期下去，关系本身也容易陷入不健康循环。</p>', 
+            if (score >= 40) return { 
+                level: '📚 天赋基础型 (扎实根基)', 
+                description: '您拥有基本的天赋基础，需要扎实打好根基。', 
+                analysis: `<p><b>核心特征：</b>您具备基本的天赋基础，但各方面能力都需要进一步加强和提升。您的学习能力、问题解决能力、人际交往能力等都处于基础水平，需要通过系统的学习和训练来提升。</p>${dimAnalysis}<p><b>发展建议：</b>这种基础阶段是发展的重要时期，通过扎实的学习和训练，您可以逐步提升自己的能力水平，为未来的发展打下坚实的基础。</p>`, 
                 suggestions: [
-                    '<b>制定个人生活重建计划：</b>主动规划并执行与伴侣无关的个人活动，例如重拾旧爱好、发展新技能或定期与朋友聚会。循序渐进地扩大个人生活半径。',
-                    '<b>练习独处与自我对话：</b>刻意安排独处时间，在这段时间内专注于自身感受和需求。可以进行冥想、写作或安静思考，重新找回与自我的连接。',
-                    '<b>重新界定个人责任与伴侣责任：</b>明确在关系中哪些是您自己的责任，哪些是伴侣的责任。避免过度承担，也要鼓励伴侣承担其应有的部分。',
-                    '<b>寻求外部视角与支持：</b>与信任的朋友、家人或导师交流，听取他们对您和关系的看法。有时旁观者清，他们的建议能为您提供新的思路。'
+                    `<b>优先发展优势领域：</b>优先发展您在<b>${strongest[0]}</b>方面的天赋，通过系统学习和实践，打好基础。`,
+                    '<b>培养学习习惯：</b>建立良好的学习习惯，提高学习效率和质量，持续提升自己的知识和技能水平。',
+                    `<b>逐步提升薄弱领域：</b>针对<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面，制定长期的提升计划，循序渐进地提升。`
                 ] 
             };
-            if (score <= 70) return { 
-                level: '💜 强烈依赖型 (关系捆绑)', 
-                description: '您已将个人价值和幸福感与亲密关系深度绑定，对关系外的世界感知力减弱。', 
-                analysis: '<p><b>核心特征：</b>您的情绪、决策和行为都高度受制于伴侣和关系的状态。当关系出现裂痕或伴侣表现出任何独立倾向时，您会体验到强烈的被抛弃感和深层焦虑。您的自我认同感严重依赖伴侣的肯定，一旦脱离关系，可能会感到迷茫和无所适从。</p><p><b>潜在挑战：</b>这种强烈依赖模式不仅会给您带来巨大的心理负担，也可能让伴侣感到窒息和压力。关系很容易陷入一方不断付出、另一方逐渐退缩的恶性循环，最终可能导致关系破裂或双方痛苦。</p>', 
+            if (score >= 30) return { 
+                level: '🌱 天赋萌芽型 (初步显现)', 
+                description: '您的天赋开始萌芽，需要适当的引导和培养。', 
+                analysis: `<p><b>核心特征：</b>您的天赋开始初步显现，但还不够明显和稳定。您在某些特定情境下可能会展现出一定的能力，但整体发展还不够充分。您需要适当的引导和培养来激发自己的天赋潜力。</p>${dimAnalysis}<p><b>发展建议：</b>这种萌芽阶段需要得到适当的关注和引导，通过针对性的培养和训练，您的天赋可以得到更好的发展和展现。</p>`, 
                 suggestions: [
-                    '<b>寻求专业心理咨询与支持：</b>强烈建议寻求专业的心理咨询师的帮助。通过认知行为疗法（CBT）或依恋理论指导的咨询，系统性地探索依赖模式的根源，并学习健康的应对策略。',
-                    '<b>系统性重建个人边界：</b>在咨询师的指导下，逐步明确并建立健康的个人边界。这包括情感边界（不为伴侣的情绪完全负责）、时间边界（安排独立活动）和空间边界（拥有个人独处空间）。',
-                    '<b>拓宽生活意义与自我价值来源：：</b>积极培养关系之外的兴趣、爱好、学习或志愿服务，通过多元化的活动来获取成就感和满足感，降低关系在生活中的唯一性地位。',
-                    '<b>练习正念与自我关怀：</b>学习正念冥想，提升对当下感受的觉察，并培养自我关怀的能力，在内心深处给予自己肯定和支持。'
+                    `<b>发现并培养兴趣：</b>关注您在<b>${strongest[0]}</b>方面的兴趣，积极参与相关活动，培养自己的能力。`,
+                    '<b>积极参与：</b>积极参与各种活动和实践，在实践中培养和发展自己的能力。',
+                    `<b>寻求指导：</b>针对<b>${weakest[0]}</b>方面的不足，寻求专业人士或有经验的人的指导和帮助。`
                 ] 
             };
-            if (score <= 80) return { 
-                level: '💗 极度投入型 (边缘消融)', 
-                description: '您在亲密关系中展现出极端的投入，常为维系关系而无条件牺牲自我。', 
-                analysis: '<p><b>核心特征：</b>您的“恋爱脑”倾向已非常显著，个人边界几乎完全消失。为了伴侣的满意和关系的存续，您可能会无底线地妥协、迁就，甚至放弃自己的原则和尊严。您极度害怕失去伴侣，因此对伴侣的任何一点疏远都反应强烈，并可能采取过度补偿行为。</p><p><b>潜在挑战：</b>这种模式下，您的自我正在快速消融，个人身份变得模糊不清。您可能在关系中感到精疲力尽，长期处于不平等的地位。这种极端的不平衡极易滋生 resentfulness（怨恨）和控制欲，最终可能导致关系的崩溃，并对您的心理健康造成严重伤害。</p>', 
+            if (score >= 20) return { 
+                level: '🚀 天赋待发型 (潜力无限)', 
+                description: '您的天赋尚未充分发挥，潜力有待开发。', 
+                analysis: `<p><b>核心特征：</b>您的天赋尚未充分发挥，各方面能力都有很大的发展空间。您可能对自己的天赋还不够了解，或者缺乏适当的机会和环境来展现自己的能力。</p>${dimAnalysis}<p><b>发展建议：</b>这种待发阶段意味着您拥有无限的潜力，通过适当的培养和训练，您可以发掘自己的天赋，实现更大的成长和发展。</p>`, 
                 suggestions: [
-                    '<b>立即建立紧急社交支持网络：</b>联系并寻求至少三位信任的家人或朋友的支持，让他们了解您的困境，并在必要时提供情感和实际帮助。避免在情感危机中孤立无援。',
-                    '<b>学习识别并挑战依赖模式：</b>在专业指导下，深入理解“恋爱脑”的行为模式，如过度讨好、害怕冲突、自我牺牲等，并有意识地尝试改变这些行为。',
-                    '<b>重建“自爱”的核心理念：</b>认识到您自身是值得被爱和尊重的，而无需通过牺牲来换取关系。练习自我肯定，关注自身感受和需求，并给予自己适当的满足。',
-                    '<b>谨慎评估关系现状：</b>如果您的伴侣利用了您的这种依赖进行操控或情感虐待，请务必寻求专业帮助，并考虑关系的健康性。'
+                    `<b>尝试优势领域：</b>基于您在<b>${strongest[0]}</b>方面的微弱优势，尝试相关领域的活动，发现自己的兴趣。`,
+                    '<b>勇于挑战：</b>勇于面对挑战，克服困难，在挑战中锻炼和提升自己的能力。',
+                    `<b>全面提升：</b>针对<b>${weakest[0]}</b>和<b>${weakest[1]}</b>方面，进行基础能力的提升训练。`
                 ] 
             };
-            if (score <= 90) return { 
-                level: '💝 完全融合型 (失去自我)', 
-                description: '您在亲密关系中已完全失去自我边界，个人身份与伴侣高度重叠。', 
-                analysis: '<p><b>核心特征：</b>这是一种高度危险的“恋爱脑”状态，您的个人身份、价值观、目标和兴趣已几乎完全与伴侣融合，甚至失去独立思考和做决定的能力。您的整个生活重心和幸福感完全取决于伴侣的反馈和关系的存续。您对伴侣的依赖达到了病态的程度，无法忍受短暂的分离或伴侣的任何独立行为。</p><p><b>潜在挑战：</b>这种完全融合不仅扼杀了您的个人成长空间，也可能导致伴侣感到极度压抑和窒息。关系极易演变为一方对另一方的精神控制，或一方彻底沦为另一方的附庸。长期下去，对双方的心理健康都会造成毁灭性的打击，并可能导致关系的破裂，给您带来巨大的心理创伤。</p>', 
+            if (score >= 10) return { 
+                level: '💡 天赋觉醒型 (开始认知)', 
+                description: '您开始认知自己的天赋，需要更多的自我探索。', 
+                analysis: `<p><b>核心特征：</b>您开始逐渐认知自己的天赋，但还处于初步阶段。您可能对自己的能力和潜力有一定的了解，但还不够清晰和全面。您需要更多的自我探索和实践来进一步了解自己的天赋。</p>${dimAnalysis}<p><b>发展建议：</b>这种觉醒阶段是自我认知的重要时期，通过深入的自我探索和实践，您可以更好地了解自己的天赋和潜力。</p>`, 
                 suggestions: [
-                    '<b>迫切需要专业心理干预：</b>请务必立即寻求专业的心理治疗师（如心理医生或精神科医生）的帮助。这可能需要系统性的心理咨询或结合药物治疗，以帮助您重建自我。',
-                    '<b>尝试短期空间隔离：</b>在专业指导下，尝试与伴侣进行短期的物理隔离，以创造一个独立思考和感受个人存在的空间。这并非意味着结束关系，而是为重建自我争取时间和空间。',
-                    '<b>系统重建自我认同：</b>在治疗师的协助下，重新探索“我是谁”、“我想要什么”、“我的价值在哪里”。从最基本的生活选择开始，逐步重建个人意志和决策能力。',
-                    '<b>寻求法律或社会支持：</b>如果关系中存在任何形式的虐待或控制，请务必联系相关法律援助机构或社会支持组织，保护自己的合法权益和人身安全。'
+                    '<b>广泛尝试：</b>尝试不同的领域和活动，拓展自己的视野，发现自己的兴趣和优势。',
+                    '<b>自我探索：</b>通过各种方式进行自我探索，如心理测试、兴趣评估等，深入了解自己的天赋和潜力。',
+                    `<b>重点关注优势：</b>重点关注您在<b>${strongest[0]}</b>方面的表现，深入探索相关领域。`
                 ] 
             };
             return { 
-                level: '💖 恋爱脑末期 (世界崩塌)', 
-                description: '您的亲密关系已彻底占据生活的全部，失去伴侣将导致您感受世界崩塌。', 
-                analysis: '<p><b>核心特征：</b>这是“恋爱脑”最极端的表现，您的幸福感、安全感、自我价值甚至生存意义都完全依附于伴侣。您可能已经放弃了所有个人生活、社交关系和职业发展，将伴侣视为生命的唯一支柱。一旦关系面临结束，您会体验到如同世界末日般的绝望，可能伴随严重的抑郁、焦虑甚至自我伤害的倾向。</p><p><b>潜在挑战：</b>这种状态下的关系已不再是健康的亲密关系，而是一种病态的共生。您不仅完全失去了自我，也可能将伴侣压垮。如果不立即进行干预，可能会对您的身心健康造成不可逆转的损害，甚至危及生命安全。</p>', 
+                level: '🌟 天赋启蒙型 (刚刚起步)', 
+                description: '您的天赋之旅刚刚起步，需要激发和引导。', 
+                analysis: `<p><b>核心特征：</b>您的天赋之旅刚刚起步，对自己的能力和潜力还缺乏清晰的认知。您可能还没有找到自己真正感兴趣的方向，或者缺乏适当的机会来展现自己的能力。</p>${dimAnalysis}<p><b>发展建议：</b>这种启蒙阶段是发展的起点，通过适当的激发和引导，您可以逐渐发现自己的天赋，开启自己的天赋之旅。</p>`, 
                 suggestions: [
-                    '<b>立即寻求紧急心理和医疗干预：</b>鉴于您的严重状况，请务必立即寻求专业的心理危机干预，或前往精神专科医院进行评估和治疗。这可能需要住院治疗，以确保您的安全和稳定。',
-                    '<b>全方位重建生活体系：</b>在专业团队的指导下，制定并执行一个全面的生活重建计划，包括恢复基本生活技能、重建社交网络、发展新的兴趣爱好、甚至寻求职业规划指导。',
-                    '<b>强制执行独立活动：</b>在有支持系统（家人、朋友或专业人士）的监督下，强制自己参与独立活动，哪怕是最初感到痛苦和不适。逐步建立脱离伴侣也能正常生活的信心。',
-                    '<b>寻求法律保护：</b>如果您的伴侣在关系中存在任何形式的操控、虐待或威胁，请务必寻求法律援助，保护自己的人身安全。'
+                    '<b>保持开放：</b>保持开放的心态，接受新的挑战和机会，不要轻易否定自己的能力和潜力。',
+                    `<b>从优势入手：</b>从您在<b>${strongest[0]}</b>方面的微弱优势入手，尝试相关活动，培养兴趣。`,
+                    '<b>寻求支持：</b>寻求家人、朋友和老师的支持和鼓励，获得积极的反馈和指导。'
                 ] 
             };
         }
@@ -1190,24 +1221,24 @@
             window.myRadar = new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: ['情感依赖', '边界感', '情绪敏感', '自我价值', '关系理想化'],
+                    labels: ['创造力', '逻辑思维', '人际交往', '学习能力', '领导力'],
                     datasets: [{
                         label: '维度评估',
                         data: [
-                            getDimScore([1,2,3,4,5,11,21,31]),
-                            getDimScore([6,7,8,12,13,22,23,32]),
-                            getDimScore([9,10,14,15,16,24,25,33]),
-                            getDimScore([17,18,19,20,26,27,28,34]),
-                            getDimScore([29,30,35,36,37,38,39,40])
+                            getDimScore([1,6,11,16,21,26,31,36]),
+                            getDimScore([2,7,12,17,22,27,32,37]),
+                            getDimScore([3,8,13,15,23,28,33,35]),
+                            getDimScore([4,14,18,19,24,29,34,38]),
+                            getDimScore([5,10,20,25,30,39,40,37])
                         ],
-                        backgroundColor: 'rgba(147, 51, 234, 0.2)', // 主题色背景
-                        borderColor: '#9333ea', // 主题色边框
-                        borderWidth: 3, // 加粗边框
-                        pointBackgroundColor: '#9333ea', // 主题色点
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)', // 蓝绿色渐变背景
+                        borderColor: 'rgba(59, 130, 246, 0.5)', // 蓝色边框
+                        borderWidth: 3, // 适当线宽
+                        pointBackgroundColor: 'rgba(59, 130, 246, 0.5)', // 绿色点
                         pointBorderColor: '#fff', // 白色点边框
-                        pointBorderWidth: 1, // 减小点边框宽度
-                        pointRadius: 3, // 减小点大小
-                        pointHoverRadius: 5 // 减小悬停时点大小
+                        pointBorderWidth: 2, // 点边框宽度
+                        pointRadius: 4, // 点大小
+                        pointHoverRadius: 6 // 悬停时点大小
                     }]
                 },
                 options: {
@@ -1216,10 +1247,10 @@
                             beginAtZero: true, 
                             max: 100, 
                             ticks: { display: false },
-                            grid: { color: '#e2e8f0' }, // 网格线颜色
-                            angleLines: { color: '#e2e8f0' }, // 角度线颜色
+                            grid: { color: 'rgba(59, 130, 246, 0.2)' }, // 使用蓝绿色主题的网格线
+                            angleLines: { color: 'rgba(34, 197, 94, 0.3)' }, // 使用蓝绿色主题的角度线
                             pointLabels: { 
-                                color: '#475569', // 标签颜色
+                                color: '#3b82f6', // 蓝绿色标签颜色
                                 font: { 
                                     size: 14, // 标签字体大小
                                     weight: '600' // 标签字重
@@ -1230,10 +1261,10 @@
                     plugins: { 
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)', // 提示框背景
+                            backgroundColor: 'rgba(59, 130, 246, 0.9)', // 蓝绿色渐变背景
                             titleColor: '#fff', // 提示框标题颜色
                             bodyColor: '#fff', // 提示框内容颜色
-                            borderColor: '#9333ea', // 提示框边框颜色
+                            borderColor: '#22c55e', // 绿色边框
                             borderWidth: 1, // 提示框边框宽度
                             padding: 12, // 提示框内边距
                             borderRadius: 8 // 提示框圆角

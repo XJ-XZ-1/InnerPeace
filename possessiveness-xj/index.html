@@ -12,10 +12,11 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', 'Microsoft YaHei', serif;
             background: #121212;
             color: #EAEAEA;
-            line-height: 1.8;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
             scroll-behavior: smooth; /* 添加平滑滚动 */
         }
 
@@ -95,15 +96,20 @@
 
         .header h1 {
             font-size: 24px;
-            color: #7D0022;
-            font-weight: 700;
-            letter-spacing: -1px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
             margin-bottom: 2px;
+            background: linear-gradient(135deg, #7D0022 0%, #DC2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         .header p {
-            font-size: 12px;
+            font-size: 13px;
             color: #B0B0B0;
+            font-weight: 400;
         }
 
         .header-badges {
@@ -236,11 +242,12 @@
         }
 
         .question-text {
-            font-size: 16px; /* 减小字体大小 */
-            font-weight: 600;
-            color: #EAEAEA;
-            line-height: 1.4;
+            font-size: 16px;
+            font-weight: 500;
+            color: #F3F4F6;
+            line-height: 1.5;
             flex-grow: 1;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .options-grid {
@@ -252,17 +259,18 @@
 
         .option-capsule {
             padding: 10px 18px; /* 减小选项按钮padding */
-            background: #1A1A1A;
+            background: #1F1F1F;
             border: 2px solid #444444;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 13px; /* 减小选项字体大小 */
-            color: #B0B0B0;
+            font-size: 13px;
+            color: #D1D5DB;
+            font-weight: 400;
             transition: all 0.3s ease;
             user-select: none;
             flex-grow: 1;
             text-align: center;
-            min-width: 100px; /* 减小最小宽度 */
+            min-width: 100px;
             position: relative;
             overflow: hidden;
         }
@@ -470,18 +478,23 @@
         }
         
         .score-level { 
-            font-size: 22px; /* 缩小字体 */
-            font-weight: 700; 
-            color: #7D0022; /* 与主题色一致 */
-            margin-bottom: 8px; /* 减小间距 */
+            font-size: 22px; 
+            font-weight: 600; 
+            background: linear-gradient(135deg, #7D0022 0%, #DC2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .score-desc { 
-            font-size: 14px; /* 缩小字体 */
-            color: #B0B0B0; 
-            line-height: 1.5; /* 减小行高 */
+            font-size: 15px; 
+            color: #D1D5DB; 
+            line-height: 1.6; 
             max-width: 500px;
             margin: 0 auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .chart-container { 

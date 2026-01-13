@@ -12,18 +12,20 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Helvetica Rounded', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', 'Microsoft YaHei', serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            color: #2d3748;
+            color: #f8fafc;
             position: relative;
             overflow-x: hidden;
             background-attachment: fixed;
             background-size: cover;
+            line-height: 1.7;
+            letter-spacing: 0.02em;
         }
 
         /* 背景装饰元素 */
@@ -114,44 +116,48 @@
         }
 
         .logo {
-            font-size: 4.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+            font-size: 4rem;
+            font-weight: 600;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #ffffff 0%, #ffeaa7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
-            animation: bounce 2s ease-in-out infinite;
+            letter-spacing: 0.05em;
+            text-shadow: 0 6px 20px rgba(255, 234, 167, 0.3);
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes bounce {
+        @keyframes float {
             0%, 100% {
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
         }
 
         .subtitle {
-            font-size: 1.8rem;
-            color: #fff8dc;
+            font-size: 1.6rem;
+            color: #ffffff;
             margin-bottom: 30px;
-            font-weight: 600;
-            opacity: 0.95;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-weight: 400;
+            opacity: 0.98;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .description {
-            font-size: 1.2rem;
-            color: #f0f8ff;
+            font-size: 1.1rem;
+            color: #e0f2fe;
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.8;
-            opacity: 0.9;
-            font-weight: 500;
+            opacity: 0.95;
+            font-weight: 300;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
+            letter-spacing: 0.02em;
         }
 
         .nav-grid {
@@ -255,23 +261,26 @@
         }
 
         .nav-card h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 18px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .nav-card:hover h2 {
-            transform: translateY(-5px) scale(1.05);
+            transform: translateY(-5px) scale(1.02);
         }
 
         .nav-card p {
-            margin-bottom: 35px;
-            line-height: 1.8;
-            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 1rem;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 400;
+            opacity: 0.95;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .nav-card:hover p {
@@ -280,18 +289,18 @@
 
         .nav-card a {
             display: inline-block;
-            padding: 20px 50px;
+            padding: 16px 40px;
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-weight: 700;
+            font-weight: 600;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 1.2rem;
+            font-size: 1rem;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.02em;
             position: relative;
             overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         .nav-card a::before {
@@ -401,16 +410,37 @@
         .nav-card-romantic a {
             background: linear-gradient(135deg, #8A2BE2 0%, #7b1fa2 100%);
         }
+        
+        /* 天赋测试 - 绿色主题 */
+        .nav-card-talent {
+            background: rgba(34, 197, 94, 0.5);
+        }
+        .nav-card-talent::before {
+            background: #22c55e;
+        }
+        .nav-card-talent .nav-card-icon {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
+        .nav-card-talent h2 {
+            color: white;
+        }
+        .nav-card-talent p {
+            color: white;
+        }
+        .nav-card-talent a {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        }
 
         footer {
             text-align: center;
-            color: #fff8dc;
+            color: #e0f2fe;
             margin-top: auto;
             padding: 30px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
-            font-weight: 500;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
         }
 
         @media (max-width: 768px) {
@@ -561,6 +591,15 @@
                     <h2>恋爱人格</h2>
                     <p>探索你的爱情模式</p>
                     <a href="romantic-presonality-xj/index.html"><span>进入测试</span></a>
+                </div>
+            </div>
+            <!-- 天赋测试 - 绿色主题 -->
+            <div class="nav-card nav-card-talent">
+                <div class="nav-card-inner">
+                    <div class="nav-card-icon">🌟</div>
+                    <h2>天赋测试</h2>
+                    <p>探索你的核心能力与潜在优势</p>
+                    <a href="talent-test-xj/index.html"><span>进入测试</span></a>
                 </div>
             </div>
         </div>
