@@ -546,6 +546,41 @@
             border-color: #7D0022; /* 与主题色一致的边框 */
         }
 
+        /* 严重程度指示器 */
+        .severity-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .severity-level {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .severity-level.active {
+            opacity: 1;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .severity-1 { background: #d1fae5; color: #065f46; }
+        .severity-2 { background: #dcfce7; color: #166534; }
+        .severity-3 { background: #ecfccb; color: #3f6212; }
+        .severity-4 { background: #fef9c3; color: #854d0e; }
+        .severity-5 { background: #fef08a; color: #a16207; }
+        .severity-6 { background: #fed7aa; color: #9a3412; }
+        .severity-7 { background: #fecaca; color: #b91c1c; }
+        .severity-8 { background: #fca5a5; color: #991b1b; }
+        .severity-9 { background: #f87171; color: #7f1d1d; }
+        .severity-10 { background: #7D0022; color: #ffffff; }
+
         /* 答案查看项 */
         .answer-item {
             padding: 12px 0; /* 减小内边距 */
@@ -850,6 +885,19 @@
                 <div class="score-desc" id="scoreDescription" style="color: #B0B0B0;"></div>
             </div>
 
+            <div class="severity-indicator" id="severityIndicator">
+                <span class="severity-level severity-1">自由和谐</span>
+                <span class="severity-level severity-2">适度信任</span>
+                <span class="severity-level severity-3">偶尔审视</span>
+                <span class="severity-level severity-4">密切关注</span>
+                <span class="severity-level severity-5">渐强控制</span>
+                <span class="severity-level severity-6">强力掌控</span>
+                <span class="severity-level severity-7">边界侵蚀</span>
+                <span class="severity-level severity-8">独占狂热</span>
+                <span class="severity-level severity-9">极端控制</span>
+                <span class="severity-level severity-10">危险失控</span>
+            </div>
+
             <div class="results-main-content">
                 <div class="score-circle-wrapper">
                     <div class="score-circle-box">
@@ -1038,6 +1086,33 @@
             totalScore = Math.round((sum / (questions.length * 4)) * 100);
         }
 
+        function updateSeverityIndicator(score) {
+            const levels = document.querySelectorAll('.severity-level');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score <= 10) {
+                document.querySelector('.severity-1').classList.add('active');
+            } else if (score <= 20) {
+                document.querySelector('.severity-2').classList.add('active');
+            } else if (score <= 30) {
+                document.querySelector('.severity-3').classList.add('active');
+            } else if (score <= 40) {
+                document.querySelector('.severity-4').classList.add('active');
+            } else if (score <= 50) {
+                document.querySelector('.severity-5').classList.add('active');
+            } else if (score <= 60) {
+                document.querySelector('.severity-6').classList.add('active');
+            } else if (score <= 70) {
+                document.querySelector('.severity-7').classList.add('active');
+            } else if (score <= 80) {
+                document.querySelector('.severity-8').classList.add('active');
+            } else if (score <= 90) {
+                document.querySelector('.severity-9').classList.add('active');
+            } else {
+                document.querySelector('.severity-10').classList.add('active');
+            }
+        }
+
         function showResultsPage() {
             document.getElementById('quizPage').style.display = 'none';
             document.getElementById('answerPage').style.display = 'none';
@@ -1056,6 +1131,9 @@
             
             const sList = document.getElementById('suggestionList');
             sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            // 更新严重程度指示器
+            updateSeverityIndicator(totalScore);
             
             renderRadarChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });

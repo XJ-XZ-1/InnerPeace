@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>焦虑自测 - 专业心理评估量表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', 'Microsoft YaHei', serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdfa 100%);
+            background-image: radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.08) 0, transparent 50%), 
+                              radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.08) 0, transparent 50%),
+                              radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.05) 0, transparent 50%);
+            color: #334155;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 答题页面容器 */
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.08), 0 0 0 1px rgba(14, 165, 233, 0.05);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 220px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 结果页面和答案页面容器 */
+        .result-container, .answer-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 20px 20px 40px;
+            box-shadow: 0 10px 40px rgba(14, 165, 233, 0.08), 0 0 0 1px rgba(14, 165, 233, 0.05);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.8s ease forwards;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-header-fixed {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1050;
+            padding: 20px 20px;
+            box-shadow: 0 8px 32px rgba(14, 165, 233, 0.1);
+            border-radius: 20px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            max-width: 850px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部样式 */
+        .header {
+            margin-bottom: 8px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #0891b2;
+            font-weight: 400;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge-blue { background: #ecfeff; color: #0891b2; border: 1px solid #cffafe; }
+        .badge-green { background: #f0fdfa; color: #14b8a6; border: 1px solid #ccfbf1; }
+
+        .disclaimer {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f0fdfa 100%);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #475569;
+            margin-bottom: 8px;
+            border: 1px solid rgba(14, 165, 233, 0.1);
+        }
+
+        .disclaimer i {
+            color: #f59e0b;
+            margin-right: 3px;
+            font-style: normal;
+        }
+
+        /* 进度条区域 */
+        .progress-section {
+            background: white;
+            z-index: 9;
+            padding: 8px 20px 12px;
+            margin-bottom: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.08);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-stats {
+            font-size: 14px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .hint-tag {
+            background: linear-gradient(135deg, #ecfeff 0%, #f0fdfa 100%);
+            color: #0891b2;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            border: 1px solid #cffafe;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9 0%, #14b8a6 50%, #6366f1 100%);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
+        }
+
+        /* 题目样式 */
+        .question-item {
+            padding: 15px 0;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #e2e8f0;
+            transition: all 0.3s ease;
+            scroll-margin-top: 15px;
+            position: relative;
+        }
+
+        .question-item:hover,
+        .question-item.active {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f0fdfa 100%);
+            border-radius: 16px;
+            padding: 15px 15px;
+            margin: 5px -15px 15px;
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.12), 0 0 0 1px rgba(14, 165, 233, 0.1);
+            transform: scale(1.005) translateY(-2px);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            z-index: 2;
+        }
+
+        .question-item:last-child {
+            border-bottom: none;
+        }
+
+        .question-item.active + .question-item {
+            margin-top: 15px;
+        }
+
+        .question-title-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+
+        .question-index {
+            flex-shrink: 0;
+            font-size: 16px;
+            font-weight: 800;
+            color: #0891b2;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #0f172a;
+            line-height: 1.5;
+            flex-grow: 1;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Serif SC', serif;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-left: 35px;
+        }
+
+        .option-capsule {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #0891b2;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            user-select: none;
+            flex-grow: 1;
+            text-align: center;
+            min-width: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-capsule:hover {
+            background: #f0f9ff;
+            border-color: #7dd3fc;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected {
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .option-capsule.selected:hover {
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .option-capsule input {
+            display: none;
+        }
+
+        .questions-scroll-wrapper {
+            padding: 0;
+            overflow-y: visible;
+        }
+
+        /* 提交按钮 */
+        .submit-wrapper {
+            background: white;
+            z-index: 10;
+            padding: 20px 40px;
+            box-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            border-radius: 0;
+        }
+
+        .submit-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 170px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.3px;
+        }
+
+        /* 主按钮样式 */
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary) {
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+            color: white;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+        }
+        
+        .submit-btn:not(.btn-back-to-top):not(.btn-secondary):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.5);
+        }
+
+        /* 回到顶部按钮样式 */
+        .btn-back-to-top {
+            background: #ffffff;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-back-to-top:hover {
+            background: #f0f9ff;
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 次要按钮样式 */
+        .btn-secondary {
+            background: #ffffff;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f9ff;
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 按钮图标样式 */
+        .btn-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* 按钮装饰效果 */
+        .btn-decoration {
+            font-size: 18px;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.85;
+            }
+        }
+
+        /* Loading页面样式 */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.15);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .loading-container.show { display: flex; }
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f1f5f9;
+            border-top-color: #0ea5e9;
+            border-right-color: #14b8a6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 结果页面布局 */
+        .score-display { text-align: center; margin-bottom: 20px; }
+        
+        /* 结果主内容区 - 左右布局 */
+        .results-main-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .score-circle-wrapper {
+            flex: 0 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .score-circle-box {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+            border-radius: 50%;
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.35);
+        }
+        
+        .score-value { 
+            font-size: 42px;
+            font-weight: 800; 
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        
+        .score-level { 
+            font-size: 22px;
+            font-weight: 600; 
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .score-desc { 
+            font-size: 15px;
+            color: #0891b2; 
+            line-height: 1.6;
+            max-width: 500px; 
+            margin: 0 auto; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .chart-container { 
+            margin: 0; 
+            height: 250px;
+            width: 300px;
+            max-width: 300px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex: 0 0 auto;
+        }
+        .section-title { 
+            font-size: 18px;
+            font-weight: 600; 
+            margin-bottom: 15px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
+            color: white;
+            border-radius: 12px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .analysis-content { 
+            font-size: 14px;
+            line-height: 1.7;
+            color: #475569; 
+            padding: 16px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #f0fdfa 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.06);
+            margin-bottom: 20px;
+            border: 1px solid rgba(14, 165, 233, 0.08);
+        }
+        .suggestion-list { list-style: none; padding: 0; }
+        .suggestion-list li { 
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            background: white;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #475569; 
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0ea5e9;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        
+        .suggestion-list li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.12);
+            border-color: #7dd3fc;
+        }
+
+        /* 答案查看项 */
+        .answer-item {
+            padding: 12px 0;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+        
+        .answer-q {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .answer-v {
+            color: #0891b2;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* 严重程度指示器 */
+        .severity-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .severity-level {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .severity-level.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .severity-excellent { background: #d1fae5; color: #065f46; }
+        .severity-normal { background: #dcfce7; color: #166534; }
+        .severity-slight { background: #ecfccb; color: #3f6212; }
+        .severity-mild { background: #fef9c3; color: #854d0e; }
+        .severity-mild-moderate { background: #fef08a; color: #a16207; }
+        .severity-moderate { background: #fed7aa; color: #9a3412; }
+        .severity-moderate-severe { background: #fecaca; color: #b91c1c; }
+        .severity-severe { background: #fca5a5; color: #991b1b; }
+
+        /* 平板设备 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .quiz-header-fixed {
+                max-width: 100%;
+            }
+            
+            .quiz-container {
+                margin-top: 220px;
+            }
+        }
+        
+        /* 移动端 */
+        @media (max-width: 640px) {
+            .quiz-header-fixed {
+                padding: 15px 15px;
+                max-width: 100%;
+                border-radius: 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header-badges {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .badge {
+                font-size: 9px;
+                padding: 3px 8px;
+            }
+            
+            .progress-section {
+                padding: 8px 15px;
+            }
+            
+            .quiz-container {
+                margin-top: 220px;
+                padding: 15px 15px 30px;
+            }
+            
+            .question-item {
+                margin: 5px -10px 12px;
+                padding: 12px 12px;
+                scroll-margin-top: 200px;
+            }
+            
+            .question-title-row {
+                gap: 8px;
+            }
+            
+            .question-index {
+                font-size: 14px;
+            }
+            
+            .question-text {
+                font-size: 15px;
+            }
+            
+            .options-grid {
+                padding-left: 0;
+                gap: 8px;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .option-capsule {
+                padding: 10px 15px;
+                font-size: 13px;
+                min-width: auto;
+                width: 100%;
+                max-width: none;
+                flex: 1;
+            }
+            
+            .results-main-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .chart-container {
+                width: 100%;
+                max-width: 100%;
+                height: 320px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .score-circle-box {
+                width: 140px;
+                height: 140px;
+                margin: 0 auto;
+            }
+            
+            .score-value {
+                font-size: 40px;
+            }
+            
+            .score-level {
+                font-size: 20px;
+            }
+            
+            .answer-container {
+                margin-top: 15px;
+                padding: 15px 15px 30px;
+            }
+            
+            .answer-item {
+                padding: 10px 0;
+            }
+            
+            .answer-q {
+                font-size: 13px;
+            }
+            
+            .answer-v {
+                font-size: 12px;
+            }
+            
+            .submit-btn {
+                padding: 12px 16px;
+                font-size: 13px;
+                min-width: auto;
+                width: calc(50% - 5px);
+                gap: 5px;
+            }
+            
+            .submit-wrapper {
+                padding: 15px 20px;
+                gap: 10px;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        
+        /* 小屏手机 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px;
+            }
+            
+            .score-circle-box {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .score-value {
+                font-size: 38px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .submit-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+                width: calc(50% - 4px);
+            }
+            
+            .submit-wrapper {
+                gap: 8px;
+                padding: 10px 15px;
+            }
+        }
+
+        /* 抖动动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake { animation: shake 0.5s; }
+
+        /* 顶部Tip */
+        @keyframes tipFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* 呼吸动画装饰 */
+        .breathing-circle {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: breatheCircle 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes breatheCircle {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quizPage">
+        <div class="quiz-header-fixed">
+            <div class="header">
+                <div class="header-top">
+                    <div class="header-left">
+                        <h1>🧘 焦虑自测</h1>
+                        <p>科学评估您的焦虑状态与心理健康</p>
+                    </div>
+                    <div class="header-badges">
+                        <div class="badge badge-blue">● 21 题 · GAD-7 扩展版</div>
+                        <div class="badge badge-green">● 约 5 分钟完成</div>
+                    </div>
+                </div>
+                <div class="disclaimer">
+                    <i>⚠</i> 免责声明：本测试基于专业焦虑评估量表设计，仅供自我参考，不能替代专业医学诊断。如有严重困扰，请及时寻求专业帮助。
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-stats" id="progressText">已完成 0 / 21 题</div>
+                    <div class="hint-tag">回顾过去两周的感受</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <form id="quizForm" style="display: flex; flex-direction: column; flex-grow: 1;">
+                <div class="questions-scroll-wrapper">
+                    <div id="questionsContainer"></div>
+                </div>
+
+                <div class="submit-wrapper">
+                    <button type="button" class="submit-btn btn-back-to-top" onclick="scrollToTop()">
+                        <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        回到顶部
+                    </button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-decoration">🌿</span>
+                        生成评估报告
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading页面 -->
+    <div class="loading-container" id="loadingPage">
+        <div class="loader"></div>
+        <div style="margin-top: 25px; font-size: 22px; font-weight: 700; color: #334155; letter-spacing: -0.5px;">
+            智能分析中<span id="loadingDots">...</span>
+        </div>
+        <p style="margin-top: 10px; color: #64748b; font-size: 15px;">正在综合评估您的焦虑状态</p>
+    </div>
+
+    <!-- 结果页面 -->
+    <div class="container" id="resultPage" style="display:none">
+        <div class="result-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #0ea5e9;">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    焦虑评估报告
+                </h1>
+            </div>
+
+            <div class="score-display">
+                <div class="score-level" id="scoreLevel"></div>
+                <div class="score-desc" id="scoreDescription"></div>
+            </div>
+
+            <div class="severity-indicator" id="severityIndicator">
+                <span class="severity-level severity-excellent">心态极佳</span>
+                <span class="severity-level severity-normal">正常状态</span>
+                <span class="severity-level severity-slight">轻微波动</span>
+                <span class="severity-level severity-mild">轻度焦虑</span>
+                <span class="severity-level severity-mild-moderate">轻中度</span>
+                <span class="severity-level severity-moderate">中度焦虑</span>
+                <span class="severity-level severity-moderate-severe">中重度</span>
+                <span class="severity-level severity-severe">重度焦虑</span>
+            </div>
+
+            <div class="results-main-content">
+                <div class="score-circle-wrapper">
+                    <div class="score-circle-box">
+                        <div class="score-value" id="scoreValue">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    专业分析
+                </h2>
+                <div class="analysis-content" id="analysisContent"></div>
+            </div>
+
+            <div class="analysis-section">
+                <h2 class="section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    调节建议
+                </h2>
+                <ul class="suggestion-list" id="suggestionList"></ul>
+            </div>
+
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="restartQuiz()">重新评估</button>
+                <button class="submit-btn btn-secondary" onclick="viewAnswers()">查看答案</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答案查看页面 -->
+    <div class="container" id="answerPage" style="display:none">
+        <div class="answer-container">
+            <div class="header">
+                <h1>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: -4px; color: #0ea5e9;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    我的答案回执
+                </h1>
+            </div>
+            <div id="answersContainer"></div>
+            <div class="submit-wrapper">
+                <button class="submit-btn" onclick="showResultsPage()">返回评估报告</button>
+                <button class="submit-btn btn-secondary" onclick="restartQuiz()">重新评估</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const questions = [
+            // 核心焦虑表现 (基于GAD-7)
+            { id: 1, text: "感到紧张、焦虑或烦躁不安", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 2, text: "无法停止或控制担忧", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 3, text: "对各种各样的事情担忧过多", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 4, text: "很难放松下来", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 5, text: "由于不安而无法静坐", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 6, text: "变得容易烦恼或急躁", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 7, text: "感到似乎将有可怕的事情发生而害怕", category: "core", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            
+            // 躯体症状
+            { id: 8, text: "心跳加速、心悸或心慌", category: "physical", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 9, text: "出汗、手心潮湿或发抖", category: "physical", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 10, text: "肌肉紧张、身体僵硬或疼痛", category: "physical", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 11, text: "呼吸困难或感觉喘不过气", category: "physical", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            
+            // 睡眠与疲劳
+            { id: 12, text: "入睡困难、睡眠不安稳或早醒", category: "sleep", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 13, text: "感到疲倦、精力不足或容易疲劳", category: "sleep", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 14, text: "即使休息后仍感到疲惫不堪", category: "sleep", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            
+            // 认知症状
+            { id: 15, text: "难以集中注意力或头脑一片空白", category: "cognitive", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 16, text: "反复思考同一件事情，难以停止", category: "cognitive", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 17, text: "对未来感到悲观或总是往坏处想", category: "cognitive", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            
+            // 社交与回避
+            { id: 18, text: "回避可能引起焦虑的情境或活动", category: "social", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 19, text: "在社交场合感到不自在或紧张", category: "social", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 20, text: "因焦虑而影响工作、学习或人际关系", category: "social", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] },
+            { id: 21, text: "感到孤独或与他人疏离", category: "social", options: ["完全没有", "偶尔几天", "一半以上时间", "几乎每天"] }
+        ];
+
+        let userAnswers = {};
+        let totalScore = 0;
+
+        function initQuiz() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            questions.sort((a,b) => a.id - b.id);
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.id = `question-${q.id}`;
+                const displayId = (index + 1).toString().padStart(2, '0');
+
+                questionDiv.innerHTML = `
+                    <div class="question-title-row">
+                        <div class="question-index">${displayId}.</div>
+                        <div class="question-text">${q.text}</div>
+                    </div>
+                    <div class="options-grid">
+                        ${q.options.map((option, optIndex) => `
+                            <label class="option-capsule">
+                                <input type="radio" name="q${q.id}" value="${optIndex}" onchange="selectOption(${q.id}, ${optIndex})">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(qId, val) {
+            userAnswers[qId] = val;
+            const labels = document.querySelectorAll(`#question-${qId} .option-capsule`);
+            labels.forEach((l, idx) => {
+                l.classList.toggle('selected', idx === val);
+            });
+            updateProgress();
+            
+            const nextId = questions[questions.findIndex(q => q.id === qId) + 1]?.id;
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            if (nextId) {
+                setTimeout(() => {
+                    const nextEl = document.getElementById(`question-${nextId}`);
+                    if(nextEl) {
+                        nextEl.classList.add('active');
+                        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            } else {
+                document.getElementById(`question-${qId}`).classList.add('active');
+            }
+        }
+
+        function updateProgress() {
+            const count = Object.keys(userAnswers).length;
+            const percent = (count / questions.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `已完成 ${count} / ${questions.length} 题`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (Object.keys(userAnswers).length < questions.length) {
+                const firstUn = questions.find(q => userAnswers[q.id] === undefined);
+                const el = document.getElementById(`question-${firstUn.id}`);
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('shake');
+                showUnansweredTip(firstUn.id);
+                setTimeout(() => el.classList.remove('shake'), 500);
+                return;
+            }
+            
+            calculateScore();
+            document.getElementById('loadingPage').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('loadingPage').classList.remove('show');
+                showResultsPage();
+            }, 2000);
+        });
+
+        function calculateScore() {
+            let sum = 0;
+            Object.values(userAnswers).forEach(v => sum += v);
+            totalScore = sum;
+        }
+
+        function showResultsPage() {
+            document.getElementById('quizPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('resultPage').style.display = 'block';
+            document.getElementById('scoreValue').textContent = totalScore;
+
+            document.querySelectorAll('.question-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            const analysis = getScoreLevelDetails(totalScore);
+            document.getElementById('scoreLevel').textContent = analysis.level;
+            document.getElementById('scoreDescription').textContent = analysis.description;
+            document.getElementById('analysisContent').innerHTML = analysis.analysis;
+            
+            // 更新严重程度指示器
+            updateSeverityIndicator(totalScore);
+            
+            const sList = document.getElementById('suggestionList');
+            sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+            
+            renderRadarChart();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateSeverityIndicator(score) {
+            const levels = document.querySelectorAll('.severity-level');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score <= 5) {
+                document.querySelector('.severity-excellent').classList.add('active');
+            } else if (score <= 10) {
+                document.querySelector('.severity-normal').classList.add('active');
+            } else if (score <= 18) {
+                document.querySelector('.severity-slight').classList.add('active');
+            } else if (score <= 26) {
+                document.querySelector('.severity-mild').classList.add('active');
+            } else if (score <= 35) {
+                document.querySelector('.severity-mild-moderate').classList.add('active');
+            } else if (score <= 45) {
+                document.querySelector('.severity-moderate').classList.add('active');
+            } else if (score <= 54) {
+                document.querySelector('.severity-moderate-severe').classList.add('active');
+            } else {
+                document.querySelector('.severity-severe').classList.add('active');
+            }
+        }
+
+        function getScoreLevelDetails(score) {
+            // 0-5分：心态极佳
+            if (score <= 5) return { 
+                level: '🌟 心态极佳', 
+                description: '您的心理状态非常健康，几乎没有焦虑困扰，展现出卓越的情绪管理能力。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平处于<b>极低水平</b>（得分：${score}/63分）。这是一个非常理想的结果，表明您在过去两周内几乎没有经历焦虑相关的困扰，心理状态非常健康稳定。</p>
+                <p><b>状态解读：</b>您展现出了卓越的情绪调节能力和心理韧性。您能够从容面对生活中的各种挑战，保持内心的平静与稳定。这种心理状态是长期良好生活习惯和积极心态的体现。</p>
+                <p><b>优势分析：</b>您可能具备以下心理优势：良好的自我认知、有效的压力应对策略、健康的生活方式、稳定的社会支持系统。这些都是维护心理健康的重要保护因素。</p>`, 
+                suggestions: [
+                    '<b>继续保持现有的生活方式：</b>您目前的生活方式和应对策略非常有效，请继续保持。规律的作息、健康的饮食、适度的运动都是您心理健康的基石。',
+                    '<b>分享您的经验：</b>您的心理健康状态可以成为身边人的榜样。如果有机会，可以与朋友或家人分享您保持良好心态的方法和经验。',
+                    '<b>定期自我检视：</b>即使目前状态良好，也建议定期关注自己的情绪变化。生活中的重大变化可能会带来压力，及时觉察有助于预防问题的发生。',
+                    '<b>培养更多积极体验：</b>在保持稳定的基础上，可以尝试探索新的兴趣爱好、学习新技能，为生活增添更多乐趣和意义感。'
+                ] 
+            };
+            
+            // 6-10分：正常状态
+            if (score <= 10) return { 
+                level: '🌿 正常状态', 
+                description: '您的焦虑水平处于正常范围，心理状态健康稳定，能够良好应对日常压力。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平处于<b>正常范围</b>（得分：${score}/63分）。这表明您在过去两周内较少经历焦虑相关的困扰，能够较好地应对日常生活中的压力和挑战。</p>
+                <p><b>状态解读：</b>正常的焦虑反应是人类适应环境的重要机制，适度的紧张感有助于提高警觉性和工作效率。您目前展现出良好的情绪调节能力和心理韧性，能够有效管理日常压力。</p>
+                <p><b>维护建议：</b>继续保持当前的生活方式和应对策略。规律的作息、适度的运动、良好的社交支持都是维护心理健康的重要因素。建议您定期进行自我检视，关注自身的情绪变化。</p>`, 
+                suggestions: [
+                    '<b>保持健康生活习惯：</b>继续维持规律的作息时间、均衡的饮食和适度的体育锻炼。这些基础习惯是心理健康的重要保障，能够增强您的抗压能力。',
+                    '<b>培养正念意识：</b>可以尝试每天进行5-10分钟的正念冥想或深呼吸练习，这有助于提升自我觉察能力，在压力来临时能够更快地识别和调节情绪。',
+                    '<b>建立社交支持网络：</b>保持与家人、朋友的良好联系，定期进行社交活动。研究表明，良好的社会支持是预防焦虑的重要保护因素。',
+                    '<b>发展兴趣爱好：</b>培养能够带来愉悦感和成就感的兴趣活动，如阅读、绘画、园艺、音乐等，这些活动能够有效缓解日常压力，提升生活质量。'
+                ] 
+            };
+            
+            // 11-18分：轻微波动
+            if (score <= 18) return { 
+                level: '🌤️ 轻微波动', 
+                description: '您可能偶尔会感到一些轻微的焦虑，但整体状态良好，属于正常的情绪波动。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>轻微波动</b>（得分：${score}/63分）。这意味着您在过去两周内偶尔经历了一些轻微的焦虑感受，但这些感受的频率和强度都较低，属于正常的情绪波动范围。</p>
+                <p><b>状态解读：</b>生活中的各种事件——工作任务、人际交往、生活变化等——都可能引起短暂的紧张或担忧，这是完全正常的。您目前的状态表明您具备基本的情绪调节能力，能够在大多数时候保持心理平衡。</p>
+                <p><b>关注要点：</b>虽然目前状态良好，但建议您开始培养更多的自我觉察能力，学习识别可能引发焦虑的因素，以便在压力增加时能够及时调整。</p>`, 
+                suggestions: [
+                    '<b>提升自我觉察：</b>开始关注自己在什么情况下容易感到紧张或担忧。这种觉察能力有助于您在早期识别压力信号，及时采取应对措施。',
+                    '<b>学习基础放松技巧：</b>掌握一两种简单的放松方法，如腹式呼吸或身体扫描。在感到轻微紧张时，这些技巧可以帮助您快速恢复平静。',
+                    '<b>保持规律作息：</b>充足的睡眠是情绪稳定的基础。建议每晚保证7-8小时的睡眠，并尽量保持固定的作息时间。',
+                    '<b>适度运动：</b>规律的体育锻炼能够有效调节情绪、释放压力。建议每周进行3-5次中等强度的有氧运动，每次30分钟左右。',
+                    '<b>保持社交联系：</b>与家人朋友保持良好的沟通，在感到压力时能够倾诉和获得支持。'
+                ] 
+            };
+            
+            // 19-26分：轻度焦虑
+            if (score <= 26) return { 
+                level: '🌥️ 轻度焦虑', 
+                description: '您正在经历轻度焦虑，虽然尚在可控范围，但建议开始关注并学习调节方法。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>轻度焦虑</b>（得分：${score}/63分）。这意味着您在过去两周内经历了一些焦虑相关的症状，这些症状可能已经开始对您的日常生活产生轻微影响。</p>
+                <p><b>状态解读：</b>轻度焦虑是现代生活中较为常见的心理状态，通常与工作压力、人际关系、生活变化等因素相关。您可能会经常感到紧张、担忧或难以放松，有时可能出现轻微的身体症状如肌肉紧张或睡眠质量下降。</p>
+                <p><b>需要关注：</b>轻度焦虑如果不加以调节，可能会逐渐加重。建议您开始系统地学习压力管理和情绪调节技巧，并关注自身状态的变化。如果症状持续超过一个月或有加重趋势，建议咨询专业人士。</p>`, 
+                suggestions: [
+                    '<b>学习放松技巧：</b>掌握渐进性肌肉放松法、腹式呼吸等放松技术。每天抽出10-15分钟进行练习，可以有效降低身体的紧张水平，缓解焦虑情绪。',
+                    '<b>识别焦虑触发因素：</b>尝试记录焦虑日记，记录每次感到焦虑时的情境、想法和身体反应。这有助于您识别焦虑的触发因素，从而更有针对性地进行调节。',
+                    '<b>调整认知模式：</b>注意观察自己是否存在"灾难化思维"或"过度担忧"的倾向。当发现自己在想象最坏的结果时，尝试问自己："这种情况发生的可能性有多大？即使发生了，我能应对吗？"',
+                    '<b>保证充足睡眠：</b>睡眠不足会显著加重焦虑感。建议保持规律的睡眠时间，睡前避免使用电子设备，创造舒适的睡眠环境。每晚保证7-8小时的优质睡眠。',
+                    '<b>适度运动：</b>有氧运动如快走、游泳、骑自行车等能够有效释放压力，促进内啡肽分泌，改善情绪。建议每周进行3-5次，每次30分钟以上的中等强度运动。',
+                    '<b>减少刺激性物质：</b>咖啡因、酒精和尼古丁都可能加重焦虑感。建议适度减少咖啡和茶的摄入，避免饮酒和吸烟。'
+                ] 
+            };
+            
+            // 27-35分：轻中度焦虑
+            if (score <= 35) return { 
+                level: '⛅ 轻中度焦虑', 
+                description: '您的焦虑情绪已较为明显，开始影响日常生活，建议积极采取干预措施。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>轻中度焦虑</b>（得分：${score}/63分）。这表明您在过去两周内较频繁地经历焦虑相关的症状，这些症状可能已经开始明显影响您的日常生活质量。</p>
+                <p><b>状态解读：</b>在这个阶段，您可能经常感到紧张不安、难以控制担忧，容易疲劳或烦躁。您可能开始出现一些身体症状，如心跳加速、肌肉紧张、睡眠问题等。这些症状可能影响您的工作效率、学习能力或人际交往。</p>
+                <p><b>重要提示：</b>轻中度焦虑需要引起重视。单纯依靠自我调节可能效果有限，<b>建议您考虑寻求专业心理咨询</b>。心理咨询师可以帮助您更系统地理解焦虑的成因，学习更有效的应对策略。</p>`, 
+                suggestions: [
+                    '<b>考虑专业心理咨询：</b>建议预约心理咨询师进行评估。认知行为疗法（CBT）对缓解焦虑有很好的效果，可以帮助您识别和改变导致焦虑的思维模式。',
+                    '<b>建立规律的日常routine：</b>制定每日的生活计划，包括固定的起床和睡眠时间、规律的用餐、每日运动、放松练习等。规律的生活节奏能够为焦虑的心理提供稳定感。',
+                    '<b>练习正念冥想：</b>每天进行15-20分钟的正念冥想练习。可以使用冥想APP进行引导练习。正念能够帮助您与焦虑的想法保持距离，减少反刍思维。',
+                    '<b>建立"担忧时间"：</b>每天设定固定的15-30分钟作为"担忧时间"，在这段时间内集中处理担忧的事情。其他时间如果出现担忧，告诉自己"我会在担忧时间处理这个问题"。',
+                    '<b>限制咖啡因和酒精：</b>咖啡因会加重焦虑感，酒精虽然短期内可能让人放松，但长期会加重焦虑。建议减少或避免咖啡、浓茶、能量饮料和酒精的摄入。',
+                    '<b>与信任的人倾诉：</b>与家人或朋友分享您的感受。社会支持是应对焦虑的重要资源。不要独自承受，让身边的人了解您的状况。'
+                ] 
+            };
+            
+            // 36-45分：中度焦虑
+            if (score <= 45) return { 
+                level: '🌥️ 中度焦虑', 
+                description: '您正在经历明显的焦虑情绪，已显著影响生活质量，强烈建议寻求专业帮助。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>中度焦虑</b>（得分：${score}/63分）。这表明您在过去两周内频繁经历焦虑相关的症状，这些症状可能已经显著影响您的日常生活、工作效率或人际关系。</p>
+                <p><b>状态解读：</b>中度焦虑状态下，您可能经常感到紧张不安、难以控制担忧、容易疲劳、注意力难以集中，并出现明显的睡眠问题或身体不适（如心悸、肌肉紧张、呼吸困难等）。这些症状可能让您感到痛苦，并影响到生活的多个方面。</p>
+                <p><b>重要提示：</b>中度焦虑需要专业干预。<b>强烈建议您尽快预约心理咨询师或心理科医生</b>进行专业评估和治疗。专业人士可以帮助您制定个性化的治疗方案，可能包括心理治疗、生活方式调整，必要时可能需要药物辅助。</p>`, 
+                suggestions: [
+                    '<b>尽快寻求专业帮助：</b>建议预约心理咨询师或心理科医生进行专业评估。认知行为疗法（CBT）是缓解焦虑的一线心理治疗方法，能够帮助您识别和改变导致焦虑的思维模式和行为习惯。',
+                    '<b>建立稳定的自我照顾routine：</b>制定每日的自我照顾计划，包括固定的起床和睡眠时间、规律的用餐、每日运动、放松练习等。即使感到困难，也要尽量坚持基本的生活规律。',
+                    '<b>学习系统的放松技术：</b>在专业指导下学习渐进性肌肉放松、腹式呼吸、正念冥想等放松技术，并每天坚持练习。这些技术能够有效降低身体的紧张水平。',
+                    '<b>严格限制刺激性物质：</b>完全避免或严格限制咖啡因、酒精和尼古丁的摄入。这些物质会显著加重焦虑感，影响调节效果。',
+                    '<b>建立社会支持系统：</b>告知您信任的家人或朋友您目前的状况，让他们了解您正在经历的困难。社会支持是康复的重要资源。',
+                    '<b>调整工作/学习负担：</b>如果可能，与上司或老师沟通，适当减少工作或学习负担。给自己一些喘息的空间，专注于康复。',
+                    '<b>避免重大决定：</b>在焦虑严重时，判断力可能受到影响。如果可能，暂时推迟重要的人生决定，直到状态有所改善。'
+                ] 
+            };
+            
+            // 46-54分：中重度焦虑
+            if (score <= 54) return { 
+                level: '🌧️ 中重度焦虑', 
+                description: '您正在经历严重的焦虑情绪，已严重影响日常功能，请务必尽快寻求专业帮助。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>中重度焦虑</b>（得分：${score}/63分）。这是一个需要高度重视的结果，表明您在过去两周内几乎每天都在经历严重的焦虑情绪，这些情绪很可能已经严重影响了您的日常功能。</p>
+                <p><b>状态解读：</b>在这个阶段，您可能经历持续的、难以控制的担忧和恐惧，伴随明显的身体症状（如心悸、呼吸困难、颤抖、出汗等）。您可能感到精疲力竭，难以集中注意力，睡眠严重受损，可能出现回避行为，严重影响工作、学习和人际关系。</p>
+                <p><b>紧急建议：</b><span style="color: #dc2626; font-weight: 600;">请务必尽快寻求专业医疗帮助。</span>中重度焦虑需要专业的评估和治疗。请尽快预约精神科医生或心理科医生进行诊断，医生会根据您的具体情况制定个性化的治疗方案，可能包括心理治疗、药物治疗或两者结合。</p>`, 
+                suggestions: [
+                    '<b>立即预约专业医疗：</b>请尽快预约精神科或心理科医生。如果预约需要等待，可以先前往医院的心理门诊进行初步评估。不要独自面对，专业帮助是康复的关键。',
+                    '<b>告知家人或朋友：</b>让您信任的家人或朋友了解您目前的状况。他们可以在您就医时陪伴您，在日常生活中给予支持，并在必要时帮助您做出决定。',
+                    '<b>保持基本生活规律：</b>尽管很困难，但请尽量保持基本的生活规律：按时吃饭（即使没有食欲也要少量进食）、尝试休息（即使难以入睡也要躺下休息）、保持基本的个人卫生。',
+                    '<b>避免独处：</b>在症状严重时，尽量避免长时间独处。与家人或朋友待在一起，或者去公共场所，这可以提供安全感并减少过度担忧。',
+                    '<b>了解危机资源：</b>请保存心理援助热线号码（如：全国心理援助热线 400-161-9995，北京心理危机研究与干预中心 010-82951332）。如果感到无法承受，请立即拨打求助。',
+                    '<b>考虑请假休养：</b>如果可能，与您的上司或老师沟通，考虑申请病假进行休养和治疗。您的健康比任何事情都重要。',
+                    '<b>对自己保持耐心：</b>康复需要时间。请不要因为情况没有立即改善而气馁。焦虑是可以调节和改善的，通过专业帮助，大多数人都能获得显著改善。'
+                ] 
+            };
+            
+            // 55-63分：重度焦虑
+            return { 
+                level: '⛈️ 重度焦虑', 
+                description: '您正在经历非常严重的焦虑情绪，请立即寻求专业帮助，必要时前往医院咨询。', 
+                analysis: `<p><b>评估结果：</b>根据您的回答，您目前的焦虑水平为<b>重度焦虑</b>（得分：${score}/63分）。这是一个需要紧急关注的结果，表明您在过去两周内持续经历非常严重的焦虑情绪，这些情绪很可能已经严重损害了您的日常功能和生活质量。</p>
+                <p><b>状态解读：</b>重度焦虑状态下，您可能经历持续的、强烈的恐惧和担忧，伴随严重的身体症状。您可能感到极度疲惫，无法正常工作或学习，社交功能严重受损，睡眠和饮食都受到严重影响。您可能感到绝望或无助。</p>
+                <p><b>紧急建议：</b><span style="color: #dc2626; font-weight: 600;">请立即寻求专业医疗帮助。</span>如果您有自我伤害的想法，请立即拨打心理援助热线或前往最近的医院急诊。重度焦虑需要紧急的专业评估和治疗，可能需要药物治疗来快速缓解症状。</p>
+                <p><b>温馨提醒：</b>焦虑是可以调节和改善的。无论您现在感觉多么痛苦，请相信通过专业帮助，您的状况可以得到改善。您不是一个人在战斗，请让专业人士和您身边的人帮助您度过这个困难时期。</p>`, 
+                suggestions: [
+                    '<b>立即寻求医疗帮助：</b>请今天就联系精神科或心理科医生，或直接前往医院的心理门诊或急诊。如果您有自我伤害的想法，请立即拨打120或前往最近的医院急诊。',
+                    '<b>不要独自面对：</b>现在就告诉您信任的家人或朋友您的状况。让他们陪伴您就医，在日常生活中照顾您。您需要支持，请不要独自承受。',
+                    '<b>保存危机热线：</b>请立即保存以下号码：全国心理援助热线 400-161-9995，北京心理危机研究与干预中心 010-82951332，生命热线 400-821-1215。感到无法承受时，请立即拨打。',
+                    '<b>保持基本安全：</b>确保您所处的环境是安全的。如果有任何可能伤害自己的物品，请让家人帮您暂时移除或保管。',
+                    '<b>不要做任何重大决定：</b>在症状严重时，请不要做任何重要的人生决定。所有决定都可以等到您状态好转后再考虑。',
+                    '<b>接受专业治疗：</b>重度焦虑通常需要药物治疗来快速缓解症状。请信任医生的专业判断，按照医嘱服药。药物治疗配合心理治疗效果最佳。',
+                    '<b>相信康复是可能的：</b>无论现在感觉多么困难，请相信焦虑是可以调节和改善的。许多经历过重度焦虑的人通过专业帮助都恢复了正常生活。您也可以。',
+                    '<b>一步一步来：</b>现在您只需要做一件事：寻求帮助。其他的事情都可以以后再说。请现在就拿起电话，联系医生或告诉家人。'
+                ] 
+            };
+        }
+
+        function viewAnswers() {
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'block';
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+            questions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.className = 'answer-item';
+                div.innerHTML = `<div class="answer-q">${index + 1}. ${q.text}</div><div class="answer-v">您的选择：${q.options[userAnswers[q.id]]}</div>`;
+                container.appendChild(div);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderRadarChart() {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            if (window.myRadar) window.myRadar.destroy();
+            window.myRadar = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['核心焦虑', '躯体症状', '睡眠质量', '认知功能', '社交功能'],
+                    datasets: [{
+                        label: '维度评估',
+                        data: [
+                            getDimScore('core'),
+                            getDimScore('physical'),
+                            getDimScore('sleep'),
+                            getDimScore('cognitive'),
+                            getDimScore('social')
+                        ],
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)',
+                        borderColor: '#0ea5e9',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#0ea5e9',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }]
+                },
+                options: {
+                    scales: { 
+                        r: { 
+                            beginAtZero: true, 
+                            max: 100, 
+                            ticks: { display: false },
+                            grid: { color: '#e2e8f0' },
+                            angleLines: { color: '#e2e8f0' },
+                            pointLabels: { 
+                                color: '#475569',
+                                font: { 
+                                    size: 13,
+                                    weight: '600'
+                                }
+                            }
+                        } 
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#0ea5e9',
+                            borderWidth: 1,
+                            padding: 12,
+                            borderRadius: 8
+                        }
+                    }
+                }
+            });
+        }
+
+        function getDimScore(category) {
+            const categoryQuestions = questions.filter(q => q.category === category);
+            let sum = 0;
+            categoryQuestions.forEach(q => sum += (userAnswers[q.id] || 0));
+            return Math.round((sum / (categoryQuestions.length * 3)) * 100);
+        }
+
+        function showUnansweredTip(id) {
+            const existing = document.getElementById('unTip');
+            if(existing) existing.remove();
+            const tip = document.createElement('div');
+            tip.id = 'unTip';
+            tip.style.cssText = `position:fixed; top:40px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; box-shadow:0 10px 30px rgba(14, 165, 233, 0.2); border:1px solid #7dd3fc; z-index:10000; font-size:14px; animation:tipFadeIn 0.4s ease;`;
+            tip.innerHTML = `⚠️ 请先完成第 <b style="color:#0891b2">${id}</b> 题`;
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 3000);
+        }
+
+        function restartQuiz() {
+            userAnswers = {};
+            totalScore = 0;
+            
+            document.getElementById('resultPage').style.display = 'none';
+            document.getElementById('answerPage').style.display = 'none';
+            document.getElementById('quizPage').style.display = 'block';
+            
+            initQuiz();
+            updateProgress();
+            
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        initQuiz();
+    </script>
+    <footer style="text-align: center; padding: 20px; color: #475569; font-size: 1rem; font-weight: 500; margin-top: 20px;">
+        <p>Inner Peace | 专业·科学·关怀</p>
+    </footer>
+</body>
+</html>

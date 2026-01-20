@@ -549,6 +549,36 @@
             border-color: #8B5CF6; 
         }
 
+        /* 严重程度指示器 */
+        .severity-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .severity-level {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .severity-level.active {
+            opacity: 1;
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+        
+        .severity-1 { background: #d1fae5; color: #065f46; }
+        .severity-2 { background: #ddd6fe; color: #5b21b6; }
+        .severity-3 { background: #fef9c3; color: #854d0e; }
+        .severity-4 { background: #fed7aa; color: #9a3412; }
+        .severity-5 { background: #fecaca; color: #991b1b; }
+
         /* 答案查看项 */
         .answer-item {
             padding: 12px 0; /* 减小内边距 */
@@ -853,6 +883,14 @@
                 <div class="score-desc" id="scoreDescription" style="color: #8B5CF6;"></div>
             </div>
 
+            <div class="severity-indicator" id="severityIndicator">
+                <span class="severity-level severity-1">安全独立</span>
+                <span class="severity-level severity-2">平衡成长</span>
+                <span class="severity-level severity-3">情感依赖</span>
+                <span class="severity-level severity-4">焦虑敏感</span>
+                <span class="severity-level severity-5">极端恋爱脑</span>
+            </div>
+
             <div class="results-main-content">
                 <div class="score-circle-wrapper">
                     <div class="score-circle-box">
@@ -1073,9 +1111,30 @@
             const sList = document.getElementById('suggestionList');
             sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
             
+            // 更新严重程度指示器
+            updateSeverityIndicator(totalScore);
+            
             renderRadarChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        function updateSeverityIndicator(score) {
+            const levels = document.querySelectorAll('.severity-level');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score <= 20) {
+                document.querySelector('.severity-1').classList.add('active');
+            } else if (score <= 40) {
+                document.querySelector('.severity-2').classList.add('active');
+            } else if (score <= 60) {
+                document.querySelector('.severity-3').classList.add('active');
+            } else if (score <= 80) {
+                document.querySelector('.severity-4').classList.add('active');
+            } else {
+                document.querySelector('.severity-5').classList.add('active');
+            }
+        }
+
         function getScoreLevelDetails(score) {
             if (score <= 20) return { 
                 level: '🌟 安全独立型', 

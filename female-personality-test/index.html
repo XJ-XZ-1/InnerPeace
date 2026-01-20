@@ -545,6 +545,41 @@
             border-color: #fbbf24;
         }
 
+        /* 人格类型指示器 */
+        .personality-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .personality-level {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .personality-level.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .type-pure { background: #d1fae5; color: #065f46; }
+        .type-warm { background: #fef9c3; color: #a16207; }
+        .type-independent { background: #fce7f3; color: #be185d; }
+        .type-rational { background: #e0e7ff; color: #4338ca; }
+        .type-charming { background: #fee2e2; color: #b91c1c; }
+        .type-goal { background: #dbeafe; color: #1d4ed8; }
+        .type-flirty { background: #f3e8ff; color: #7c3aed; }
+        .type-material { background: #ccfbf1; color: #0d9488; }
+        .type-player { background: #fef3c7; color: #b45309; }
+        .type-playgirl { background: #fca5a5; color: #991b1b; }
+
         /* 答案查看项 */
         .answer-item {
             padding: 12px 0;
@@ -849,6 +884,19 @@
                 <div class="score-desc" id="scoreDescription"></div>
             </div>
 
+            <div class="personality-indicator" id="personalityIndicator">
+                <span class="personality-level type-pure">纯净小白型</span>
+                <span class="personality-level type-warm">温柔暖女型</span>
+                <span class="personality-level type-independent">独立自强型</span>
+                <span class="personality-level type-rational">理性成熟型</span>
+                <span class="personality-level type-charming">魅力四射型</span>
+                <span class="personality-level type-goal">目标明确型</span>
+                <span class="personality-level type-flirty">风情万种型</span>
+                <span class="personality-level type-material">物质现实型</span>
+                <span class="personality-level type-player">游戏人间型</span>
+                <span class="personality-level type-playgirl">魅力渣女型</span>
+            </div>
+
             <div class="results-main-content">
                 <div class="score-circle-wrapper">
                     <div class="score-circle-box">
@@ -1053,6 +1101,9 @@
             document.getElementById('scoreDescription').textContent = analysis.description;
             document.getElementById('analysisContent').innerHTML = analysis.analysis;
             
+            // 更新人格类型指示器
+            updatePersonalityIndicator(totalScore);
+            
             const sList = document.getElementById('suggestionList');
             sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
             
@@ -1153,7 +1204,7 @@
                 ]
             };
             if (score <= 80) return {
-                type: '� 物质现实型',
+                type: '💎 物质现实型',
                 description: '你是物质现实的女性，注重物质生活',
                 analysis: '<p><b>核心特征：</b>你认为经济基础是幸福生活的保障，注重物质条件和生活品质。你理性务实，清楚自己的需求和价值，不会被空洞的甜言蜜语所迷惑。你对未来有明确的规划，希望找一个能够匹配自己生活标准的伴侣。你善于理财和规划，懂得如何管理自己的财务和生活。</p><p><b>恋爱表现：</b>在选择伴侣时，你会认真考虑对方的经济状况、职业发展、家庭背景等现实因素。你希望对方能够为你提供稳定的生活和物质保障，愿意在感情中投入但也期待相应的回报。你不会轻易陷入一段没有物质基础的感情，认为爱情需要面包的支撑。你注重感情中的平等和公平，希望双方能够共同为未来努力。</p><p><b>生活态度：</b>你注重生活品质和物质享受，愿意为了更好的生活而努力奋斗。你有明确的人生目标和规划，知道自己想要什么样的生活。你理性务实，善于权衡利弊，做出明智的决策。</p>',
                 suggestions: [
@@ -1191,6 +1242,33 @@
                     '<b>承担责任：</b>对于自己的情感选择和行为，要勇于承担责任，不要逃避问题。'
                 ]
             };
+        }
+
+        function updatePersonalityIndicator(score) {
+            const levels = document.querySelectorAll('.personality-level');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score <= 10) {
+                document.querySelector('.type-pure').classList.add('active');
+            } else if (score <= 20) {
+                document.querySelector('.type-warm').classList.add('active');
+            } else if (score <= 30) {
+                document.querySelector('.type-independent').classList.add('active');
+            } else if (score <= 40) {
+                document.querySelector('.type-rational').classList.add('active');
+            } else if (score <= 50) {
+                document.querySelector('.type-charming').classList.add('active');
+            } else if (score <= 60) {
+                document.querySelector('.type-goal').classList.add('active');
+            } else if (score <= 70) {
+                document.querySelector('.type-flirty').classList.add('active');
+            } else if (score <= 80) {
+                document.querySelector('.type-material').classList.add('active');
+            } else if (score <= 90) {
+                document.querySelector('.type-player').classList.add('active');
+            } else {
+                document.querySelector('.type-playgirl').classList.add('active');
+            }
         }
 
         function viewAnswers() {

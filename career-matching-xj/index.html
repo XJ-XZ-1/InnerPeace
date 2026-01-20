@@ -543,6 +543,41 @@
             border-color: #60a5fa; /* 与主题色一致的边框 */
         }
 
+        /* 严重程度指示器 */
+        .level-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .level-item {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .level-item.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .level-tech { background: #dbeafe; color: #1d4ed8; }
+        .level-creative { background: #fce7f3; color: #be185d; }
+        .level-social { background: #d1fae5; color: #065f46; }
+        .level-manage { background: #fef3c7; color: #b45309; }
+        .level-practice { background: #e0e7ff; color: #4338ca; }
+        .level-achieve { background: #fee2e2; color: #b91c1c; }
+        .level-research { background: #f3e8ff; color: #7c3aed; }
+        .level-express { background: #ccfbf1; color: #0d9488; }
+        .level-art { background: #fef9c3; color: #a16207; }
+        .level-comprehensive { background: #f1f5f9; color: #475569; }
+
         /* 答案查看项 */
         .answer-item {
             padding: 12px 0; /* 减小内边距 */
@@ -847,6 +882,19 @@
                 <div class="score-desc" id="scoreDescription"></div>
             </div>
 
+            <div class="level-indicator" id="levelIndicator">
+                <span class="level-item level-tech">技术研发型</span>
+                <span class="level-item level-creative">创新创意型</span>
+                <span class="level-item level-social">人际交往型</span>
+                <span class="level-item level-manage">组织管理型</span>
+                <span class="level-item level-practice">实践操作型</span>
+                <span class="level-item level-achieve">目标成就型</span>
+                <span class="level-item level-research">学术研究型</span>
+                <span class="level-item level-express">沟通表达型</span>
+                <span class="level-item level-art">艺术表现型</span>
+                <span class="level-item level-comprehensive">综合发展型</span>
+            </div>
+
             <div class="results-main-content">
                 <div class="score-circle-wrapper">
                     <div class="score-circle-box">
@@ -1050,6 +1098,9 @@
             document.getElementById('scoreLevel').textContent = analysis.level;
             document.getElementById('scoreDescription').textContent = analysis.description;
             document.getElementById('analysisContent').innerHTML = analysis.analysis;
+            
+            // 更新等级指示器
+            updateLevelIndicator(totalScore);
             
             // 设置专家建议
             const sList = document.getElementById('suggestionList');
@@ -1258,6 +1309,33 @@
                     '<b>教育与培训方向：</b>企业培训师、职业规划师、跨界教育专家'
                 ] 
             };
+        }
+
+        function updateLevelIndicator(score) {
+            const levels = document.querySelectorAll('.level-item');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score <= 10) {
+                document.querySelector('.level-tech').classList.add('active');
+            } else if (score <= 20) {
+                document.querySelector('.level-creative').classList.add('active');
+            } else if (score <= 30) {
+                document.querySelector('.level-social').classList.add('active');
+            } else if (score <= 40) {
+                document.querySelector('.level-manage').classList.add('active');
+            } else if (score <= 50) {
+                document.querySelector('.level-practice').classList.add('active');
+            } else if (score <= 60) {
+                document.querySelector('.level-achieve').classList.add('active');
+            } else if (score <= 70) {
+                document.querySelector('.level-research').classList.add('active');
+            } else if (score <= 80) {
+                document.querySelector('.level-express').classList.add('active');
+            } else if (score <= 90) {
+                document.querySelector('.level-art').classList.add('active');
+            } else {
+                document.querySelector('.level-comprehensive').classList.add('active');
+            }
         }
 
         function viewAnswers() {

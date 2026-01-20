@@ -556,6 +556,41 @@
             border-color: #3b82f6; /* 与主题色一致的边框 */
         }
 
+        /* 天赋等级指示器 */
+        .talent-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .talent-level {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .talent-level.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .talent-excellent { background: #fef9c3; color: #a16207; }
+        .talent-outstanding { background: #fce7f3; color: #be185d; }
+        .talent-good { background: #d1fae5; color: #065f46; }
+        .talent-developing { background: #dbeafe; color: #1d4ed8; }
+        .talent-exploring { background: #e0e7ff; color: #4338ca; }
+        .talent-basic { background: #f3e8ff; color: #7c3aed; }
+        .talent-sprouting { background: #ccfbf1; color: #0d9488; }
+        .talent-pending { background: #fee2e2; color: #b91c1c; }
+        .talent-awakening { background: #fef3c7; color: #b45309; }
+        .talent-starting { background: #f1f5f9; color: #475569; }
+
         /* 答案查看项 */
         .answer-item {
             padding: 12px 0; /* 减小内边距 */
@@ -871,6 +906,19 @@
                 <div class="score-desc" id="scoreDescription"></div>
             </div>
 
+            <div class="talent-indicator" id="talentIndicator">
+                <span class="talent-level talent-excellent">天赋卓越型</span>
+                <span class="talent-level talent-outstanding">天赋突出型</span>
+                <span class="talent-level talent-good">天赋良好型</span>
+                <span class="talent-level talent-developing">天赋发展型</span>
+                <span class="talent-level talent-exploring">天赋探索型</span>
+                <span class="talent-level talent-basic">天赋基础型</span>
+                <span class="talent-level talent-sprouting">天赋萌芽型</span>
+                <span class="talent-level talent-pending">天赋待发型</span>
+                <span class="talent-level talent-awakening">天赋觉醒型</span>
+                <span class="talent-level talent-starting">天赋启蒙型</span>
+            </div>
+
             <div class="results-main-content">
                 <div class="score-circle-wrapper">
                     <div class="score-circle-box">
@@ -1084,6 +1132,9 @@
             document.getElementById('scoreDescription').textContent = analysis.description;
             document.getElementById('analysisContent').innerHTML = analysis.analysis;
             
+            // 更新天赋等级指示器
+            updateTalentIndicator(totalScore);
+            
             const sList = document.getElementById('suggestionList');
             sList.innerHTML = analysis.suggestions.map(s => `<li>${s}</li>`).join('');
             
@@ -1199,6 +1250,33 @@
                     '<b>寻求支持：</b>寻求家人、朋友和老师的支持和鼓励，获得积极的反馈和指导。'
                 ] 
             };
+        }
+
+        function updateTalentIndicator(score) {
+            const levels = document.querySelectorAll('.talent-level');
+            levels.forEach(l => l.classList.remove('active'));
+            
+            if (score >= 90) {
+                document.querySelector('.talent-excellent').classList.add('active');
+            } else if (score >= 80) {
+                document.querySelector('.talent-outstanding').classList.add('active');
+            } else if (score >= 70) {
+                document.querySelector('.talent-good').classList.add('active');
+            } else if (score >= 60) {
+                document.querySelector('.talent-developing').classList.add('active');
+            } else if (score >= 50) {
+                document.querySelector('.talent-exploring').classList.add('active');
+            } else if (score >= 40) {
+                document.querySelector('.talent-basic').classList.add('active');
+            } else if (score >= 30) {
+                document.querySelector('.talent-sprouting').classList.add('active');
+            } else if (score >= 20) {
+                document.querySelector('.talent-pending').classList.add('active');
+            } else if (score >= 10) {
+                document.querySelector('.talent-awakening').classList.add('active');
+            } else {
+                document.querySelector('.talent-starting').classList.add('active');
+            }
         }
 
         function viewAnswers() {
